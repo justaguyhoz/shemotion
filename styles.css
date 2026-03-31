@@ -1,0 +1,376 @@
+:root {
+  --header-bg: #ddd7d8;
+  --hero-strip-bg: #fef6f4;
+  --section-grey: #d6d4d4;
+  --section-light: #fef6f4;
+  --text-main: #66656a;
+  --text-soft: #cdb9bd;
+  --button-bg: #aba9aa;
+  --button-text: #ffffff;
+  --max-width: 1240px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text-main);
+  background: var(--section-light);
+}
+
+img,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+.container {
+  width: min(var(--max-width), calc(100% - 48px));
+  margin: 0 auto;
+}
+
+.narrow {
+  width: min(820px, calc(100% - 48px));
+}
+
+.site-header {
+  background: var(--header-bg);
+  border-bottom: 0;
+}
+
+.header-inner {
+  min-height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 220px;
+}
+
+.brand {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.brand img {
+  width: 165px;
+  height: auto;
+  display: block;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  flex-wrap: wrap;
+}
+
+.main-nav a {
+  color: var(--text-main);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.main-nav a:hover {
+  opacity: 0.72;
+}
+.hero-section {
+  background: var(--header-bg);
+}
+
+.hero-media {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: clamp(300px, 40vw, 500px);
+}
+
+.hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.hero-overlay-logo {
+  position: absolute;
+  left: 50%;
+  bottom: -55px;
+  transform: translateX(-50%);
+  width: min(94%, 1220px);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.slogan-strip {
+  background: #fef6f4;
+  padding: 18px 16px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slogan-strip img {
+  width: min(540px, 92%);
+  height: auto;
+}
+
+.about-section {
+  background: var(--section-grey);
+  text-align: center;
+  padding: 72px 0 250px;
+}
+
+.section-title {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.title-about-shemotion {
+  width: 230px;
+  margin-bottom: 22px;
+}
+
+.about-section p,
+.coach-section p {
+  margin: 0 auto 16px;
+  font-size: 17px;
+  line-height: 1.45;
+  max-width: 760px;
+}
+
+.read-more-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 18px;
+  min-width: 132px;
+  height: 54px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 6px;
+  background: #aba9aa;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.read-more-btn:hover {
+  opacity: 0.92;
+}
+
+.more-text {
+  margin-top: 28px;
+}
+
+.coach-section {
+  background: #fef6f4;
+  text-align: center;
+  margin-top: -150px;
+  padding: 55px 0 25px;
+  position: relative;
+  z-index: 4;
+}
+
+.coach-inner {
+  position: relative;
+  margin-top: 0;
+  z-index: 4;
+}
+
+.coach-image-wrap {
+  width: min(430px, 92vw);
+  margin: 0 auto 8px;
+  position: relative;
+  top: -180px;
+  z-index: 5;
+}
+
+.coach-image-wrap::before {
+  display: none;
+}
+
+.coach-image {
+  width: 100%;
+  aspect-ratio: 1 / 1.06;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 220px 220px 0 0;
+  display: block;
+}
+
+.title-about-me {
+  width: 165px;
+  margin-top: -200px;
+  margin-bottom: 16px;
+}
+
+.booking-section {
+  background: #cccccd;
+  text-align: center;
+  padding: 28px 0 30px;
+}
+
+.booking-inner h2 {
+  margin: 0;
+  color: var(--text-main);
+  font-family: inherit;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+.booking-inner p {
+  margin: 10px 0 0;
+  color: var(--text-main);
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+@media (max-width: 900px) {
+.header-inner {
+  min-height: 74px;
+  gap: 28px;
+}
+
+.brand img {
+  width: 145px;
+}
+
+.main-nav {
+  gap: 26px;
+}
+
+.main-nav a {
+  font-size: 15px;
+}
+  .hero-media {
+    height: clamp(250px, 52vw, 360px);
+  }
+
+  .hero-overlay-logo {
+    width: 110%;
+    bottom: -34px;
+  }
+
+  .about-section {
+    padding: 56px 0 250px;
+  }
+
+  .coach-section {
+    margin-top: -120px;
+    padding: 40px 0 50px;
+  }
+
+  .coach-inner {
+    margin-top: 0;
+  }
+
+  .coach-image-wrap {
+    width: min(360px, 86vw);
+    top: -110px;
+    margin-bottom: 6px;
+  }
+
+  .title-about-me {
+    width: 150px;
+    margin-top: -82px;
+    margin-bottom: 14px;
+  }
+
+  .booking-inner h2,
+  .booking-inner p {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .container,
+  .narrow {
+    width: calc(100% - 26px);
+  }
+
+.header-inner {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 14px 0 16px;
+  min-height: auto;
+  gap: 14px;
+}
+
+.main-nav {
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.main-nav a {
+  font-size: 15px;
+}
+
+  .hero-media {
+    height: clamp(220px, 62vw, 300px);
+  }
+
+  .hero-overlay-logo {
+    width: 118%;
+    bottom: -24px;
+  }
+
+  .slogan-strip {
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+
+  .title-about-shemotion {
+    width: 200px;
+  }
+
+  .about-section {
+    padding: 48px 0 210px;
+  }
+
+  .about-section p,
+  .coach-section p {
+    font-size: 16px;
+  }
+
+  .coach-section {
+    margin-top: -95px;
+    padding: 34px 0 44px;
+  }
+
+  .coach-inner {
+    margin-top: 0;
+  }
+
+  .coach-image-wrap {
+    width: min(340px, 96vw);
+    top: -95px;
+    margin-bottom: 4px;
+  }
+
+  .title-about-me {
+    width: 145px;
+    margin-top: -70px;
+    margin-bottom: 12px;
+  }
+
+  .booking-inner h2,
+  .booking-inner p {
+    font-size: 16px;
+    line-height: 1.45;
+  }
+}

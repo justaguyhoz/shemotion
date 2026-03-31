@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shemotion</title>
+
+  <link rel="icon" type="image/png" href="assets/shemotion-favicon.png" />
+  <link rel="apple-touch-icon" href="assets/shemotion-favicon.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+ <header class="site-header">
+  <div class="container header-inner">
+    <a href="#top" class="brand" aria-label="Shemotion home">
+      <img src="assets/shemotion_small-top-banner-logo.png" alt="Shemotion" />
+    </a>
+
+    <nav class="main-nav" aria-label="Primary">
+      <a href="#about-shemotion">About Shemotion</a>
+      <a href="#about-coach">About the Coach</a>
+      <a href="#booking">Booking</a>
+    </nav>
+  </div>
+</header>
+
+  <main id="top">
+    <section class="hero-section">
+      <div class="hero-media">
+        <video class="hero-video" autoplay muted loop playsinline>
+          <source src="assets/hero-banner.mp4" type="video/mp4" />
+        </video>
+
+        <img
+          class="hero-overlay-logo"
+          src="assets/shemotion_big-logo-video-banner-overlay.png"
+          alt="Shemotion"
+        />
+      </div>
+    </section>
+
+    <section class="slogan-strip" aria-label="Brand statement">
+      <img
+        src="assets/shemotion-slogan.png"
+        alt="Coaching. Movement. Self-Love."
+      />
+    </section>
+
+    <section id="about-shemotion" class="about-section">
+      <div class="container narrow">
+        <img
+          class="section-title title-about-shemotion"
+          src="assets/about-shemotion.png"
+          alt="About Shemotion"
+        />
+
+        <p>
+          Shemotion is a guided movement experience designed for women who want to reconnect
+          with their bodies, release stored tension, and step back into their natural feminine energy.
+        </p>
+
+        <p>
+          This is not about performance or getting the steps right. It is about feeling,
+          expressing, and coming back to yourself.
+        </p>
+
+        <button
+          id="readMoreBtn"
+          class="read-more-btn"
+          type="button"
+          aria-expanded="false"
+          aria-controls="aboutMoreText"
+        >
+          Read More
+        </button>
+
+        <div id="aboutMoreText" class="more-text" hidden>
+          <p>
+            The experience begins with guided, rhythmic movement inspired by belly dancing - one of the most powerful expressions of feminine movement. This stage activates the body, builds heat, and brings awareness to the natural flow of your hips and core.
+          </p>
+
+          <p>
+            Beyond the physical, this is where you reconnect with your feminine power. Through movement, you begin to soften, release, and return to the parts of yourself that may have been pushed aside by stress, routine, or self-judgement.
+          </p>
+
+          <p>
+            Shemotion is designed to feel safe, supportive, and freeing. You do not need to be a dancer. You do not need to know the steps. You are simply invited to move, feel, and reconnect with yourself in a way that feels natural.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="about-coach" class="coach-section">
+      <div class="container narrow coach-inner">
+        <div class="coach-image-wrap">
+          <img
+            src="assets/about-me-pic.png"
+            alt="Coach portrait"
+            class="coach-image"
+          />
+        </div>
+
+        <img
+          class="section-title title-about-me"
+          src="assets/about-me.png"
+          alt="About Me"
+        />
+
+        <p>
+          Shemotion is a guided movement experience designed for women who want to reconnect
+          with their bodies, release stored tension, and step back into their natural feminine energy.
+        </p>
+
+        <p>
+          This is not about performance or getting the steps right. It is about feeling,
+          expressing, and coming back to yourself.
+        </p>
+      </div>
+    </section>
+
+    <section id="booking" class="booking-section">
+      <div class="container narrow booking-inner">
+        <h2>Come and experience Shemotion at Hot Yoga Oxenford</h2>
+        <p>We will update this section with dates soon.</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
