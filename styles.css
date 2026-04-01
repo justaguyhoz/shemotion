@@ -207,7 +207,7 @@ video {
   width: min(430px, 92vw);
   margin: 0 auto 8px;
   position: relative;
-  top: -180px;
+  top: -120px;
   z-index: 5;
 }
 
@@ -226,7 +226,7 @@ video {
 
 .title-about-me {
   width: 165px;
-  margin-top: -200px;
+  margin-top: -130px;
   margin-bottom: 16px;
 }
 
