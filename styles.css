@@ -118,6 +118,13 @@ button {
   color: var(--text-main);
 }
 
+.section-arrow {
+  display: block;
+  margin: 0 auto 30px;   /* centers + space below */
+  width: 60px;           /* control size */
+  opacity: 0.35;         /* makes it “transparent white” feel */
+}
+
 /* ABOUT SHEMOTION */
 
 .about-section {
