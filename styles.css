@@ -432,10 +432,8 @@ button {
   }
 
 .title-about-me {
-  width: 150px;
-  margin: 40px auto 22px;
+  margin-top: 40px;
 }
-
   .read-more-btn {
     min-width: 150px;
     height: 58px;
