@@ -207,9 +207,16 @@ video {
   z-index: 4;
 }
 
+.coach-section p {
+  max-width: 560px;
+  margin: 0 auto 18px;
+  text-align: left;
+  line-height: 1.6;
+}
+
 .coach-inner {
   position: relative;
-  margin-top: -18px;
+  margin-top: -30px;
   z-index: 4;
 }
 
@@ -218,7 +225,7 @@ video {
   margin: 0 auto 14px;
   text-align: center;
   position: relative;
-  top: -30px;
+  top: -80px;
   z-index: 5;
 }
 
