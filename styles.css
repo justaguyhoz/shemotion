@@ -118,14 +118,13 @@ button {
   color: var(--text-main);
 }
 
+/* ABOUT SHEMOTION */
 .section-arrow {
   display: block;
-  margin: 0 auto 30px;   /* centers + space below */
-  width: 60px;           /* control size */
-  opacity: 0.35;         /* makes it “transparent white” feel */
+  margin: 0 auto 30px;
+  width: 60px;
+  opacity: 0.35;
 }
-
-/* ABOUT SHEMOTION */
 
 .about-section {
   background: var(--section-grey);
@@ -143,7 +142,7 @@ button {
   line-height: 0.9;
   color: var(--text-main);
   text-align: center;
-  margin: 28 auto;
+  margin: 0 auto;
 }
 
 .title-about-shemotion-text {
@@ -235,10 +234,9 @@ button {
 
 .coach-image-wrap {
   width: min(301px, 52vw);
-  margin: 0 auto -70px;
-  transform: translateY(-70px);
+  margin: 0 auto;
+  transform: translateY(-80px); /* was -70px */
 }
-
 .coach-image {
   width: 100%;
   border-radius: 220px 220px 0 0;
@@ -246,7 +244,7 @@ button {
 
 .title-about-me {
   width: 165px;
-  margin: 0 auto 28px;
+  margin: 0 28px;
 }
 
 .coach-section p {
