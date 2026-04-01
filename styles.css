@@ -211,7 +211,7 @@ video {
   text-align: center;
 
   position: relative;
-  top: -80px; /* adjust this */
+  top: -120px; /* adjust this */
 }
 
 .coach-image-wrap::before {
