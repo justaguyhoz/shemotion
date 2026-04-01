@@ -156,15 +156,6 @@ video {
   text-align: center;
 }
 
-.coach-section {
-  background: #fef6f4;
-  text-align: center;
-  margin-top: -110px;
-  padding: 0 0 25px;
-  position: relative;
-  z-index: 4;
-}
-
 .read-more-wrap {
   display: flex;
   flex-direction: column;
@@ -207,16 +198,9 @@ video {
   z-index: 4;
 }
 
-.coach-section p {
-  max-width: 560px;
-  margin: 0 auto 18px;
-  text-align: left;
-  line-height: 1.6;
-}
-
 .coach-inner {
   position: relative;
-  margin-top: -30px;
+  margin-top: 0;
   z-index: 4;
 }
 
@@ -225,7 +209,7 @@ video {
   margin: 0 auto 14px;
   text-align: center;
   position: relative;
-  top: -80px;
+  top: -45px;
   z-index: 5;
 }
 
@@ -247,6 +231,13 @@ video {
   width: 165px;
   margin: 0 auto 14px;
   display: block;
+}
+
+.coach-section p {
+  max-width: 560px;
+  margin: 0 auto 18px;
+  text-align: center;
+  line-height: 1.55;
 }
 
 .booking-section {
@@ -313,13 +304,20 @@ video {
 
   .coach-image-wrap {
     width: min(320px, 82vw);
-    top: -38px;
+    top: -34px;
     margin-bottom: 12px;
   }
 
   .title-about-me {
     width: 150px;
     margin: 0 auto 14px;
+  }
+
+  .coach-section p {
+    max-width: 540px;
+    margin: 0 auto 18px;
+    text-align: center;
+    line-height: 1.55;
   }
 
   .booking-inner h2,
@@ -403,13 +401,20 @@ video {
 
   .coach-image-wrap {
     width: min(250px, 72vw);
-    top: -34px;
+    top: -22px;
     margin-bottom: 10px;
   }
 
   .title-about-me {
     width: 145px;
     margin: 0 auto 12px;
+  }
+
+  .coach-section p {
+    max-width: 92%;
+    margin: 0 auto 16px;
+    text-align: center;
+    line-height: 1.5;
   }
 
   .booking-inner h2,
