@@ -153,7 +153,7 @@ video {
   margin: 0 auto 16px;
   font-size: 17px;
   line-height: 1.45;
-  max-width: 600px;
+  max-width: 560px;
 }
 
 .read-more-wrap {
@@ -209,7 +209,7 @@ video {
   margin: 0 auto 14px;
   text-align: center;
   position: relative;
-  top: -90px;
+  top: -70px;
   z-index: 5;
 }
 
