@@ -204,11 +204,11 @@ video {
 }
 
 .coach-image-wrap {
-  width: min(300px,702vw);
-  margin: 0 auto 8px;
-  position: relative;
-  top: -60px;
-  z-index: 5;
+  width: min(300px, 70vw);
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  text-align: center;
 }
 
 .coach-image-wrap::before {
@@ -222,6 +222,7 @@ video {
   object-position: center;
   border-radius: 220px 220px 0 0;
   display: block;
+  margin: 0 auto;
 }
 
 .title-about-me {
