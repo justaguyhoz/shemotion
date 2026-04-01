@@ -230,9 +230,10 @@ video {
 
 .title-about-me {
   width: 165px;
-  margin-top: -40px;
+  margin-top: -20px;
   margin-bottom: 16px;
 }
+
 .booking-section {
   background: #cccccd;
   text-align: center;
