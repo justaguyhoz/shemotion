@@ -1,12 +1,25 @@
-document.querySelectorAll('.read-more-btn').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    const targetId = btn.getAttribute('aria-controls');
-    const content = document.getElementById(targetId);
+document.addEventListener('DOMContentLoaded', function () {
+  function setupReadMore(buttonId, contentId) {
+    const button = document.getElementById(buttonId);
+    const content = document.getElementById(contentId);
 
-    const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+    if (!button || !content) return;
 
-    content.hidden = isExpanded;
-    btn.setAttribute('aria-expanded', !isExpanded);
-    btn.textContent = isExpanded ? 'Read More' : 'Read Less';
-  });
+    button.addEventListener('click', function () {
+      const isHidden = content.hasAttribute('hidden');
+
+      if (isHidden) {
+        content.removeAttribute('hidden');
+        button.textContent = 'Read Less';
+        button.setAttribute('aria-expanded', 'true');
+      } else {
+        content.setAttribute('hidden', '');
+        button.textContent = 'Read More';
+        button.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  setupReadMore('readMoreBtn', 'aboutMoreText');
+  setupReadMore('readMoreBtnCoach', 'aboutCoachMoreText');
 });
