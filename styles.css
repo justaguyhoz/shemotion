@@ -209,9 +209,8 @@ video {
   margin-right: auto;
   display: block;
   text-align: center;
-
   position: relative;
-  top: -200px; /* adjust this */
+  top: -70px;
 }
 
 .coach-image-wrap::before {
@@ -230,7 +229,7 @@ video {
 
 .title-about-me {
   width: 165px;
-  margin-top: -20px;
+  margin-top: 8px;
   margin-bottom: 16px;
 }
 
