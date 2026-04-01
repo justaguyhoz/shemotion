@@ -431,10 +431,10 @@ button {
     transform: translateY(-44px);
   }
 
-  .title-about-me {
-    width: 150px;
-    margin-bottom: 22px;
-  }
+.title-about-me {
+  width: 150px;
+  margin: 40px auto 22px;
+}
 
   .read-more-btn {
     min-width: 150px;
