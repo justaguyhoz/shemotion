@@ -415,20 +415,18 @@ button {
     margin-bottom: 10px;
   }
 
-  .about-section .list-title {
-    margin-top: 24px;
-    margin-bottom: 10px;
+  .about-section {
+    padding: 60px 0 130px;
   }
-
 .coach-section .section-title {
   margin-top: 30px;
 }
 
-.coach-image-wrap {
-  width: min(340px, 84vw);
-  margin: 0 auto -24px;
-  transform: translateY(-24px);
-}
+  .coach-image-wrap {
+    width: min(320px, 82vw);
+    margin: 0 auto -10px;
+    transform: translateY(-10px);
+  }
 
 .title-about-me-text {
   font-size: 48px;
@@ -442,7 +440,7 @@ button {
     min-width: 150px;
     height: 58px;
     font-size: 15px;
-    margin-top: 18px;
+    margin-top: 20px;
   }
 
   .booking-section {
