@@ -209,7 +209,7 @@ video {
   margin: 0 auto 14px;
   text-align: center;
   position: relative;
-  top: -30px;
+  top: 2px;
   z-index: 5;
 }
 
