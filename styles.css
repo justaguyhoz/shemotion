@@ -415,32 +415,32 @@ button {
     margin-bottom: 10px;
   }
 
-  .about-section .list-title {
-    margin-top: 24px;
-    margin-bottom: 10px;
+  .about-section {
+    padding: 60px 0 130px;
   }
-
-  .coach-section {
-    margin-top: 0;
-    padding: 56px 0 44px;
-  }
-
-.coach-image-wrap {
-  width: min(300px, 78vw);
-  margin: 0 auto -60px;
-  transform: translateY(-60px);
+.coach-section .section-title {
+  margin-top: 30px;
 }
 
-  .title-about-me {
-    width: 150px;
-    margin-bottom: 22px;
+  .coach-image-wrap {
+    width: min(320px, 82vw);
+    margin: 0 auto -10px;
+    transform: translateY(-10px);
   }
+
+.title-about-me-text {
+  font-size: 48px;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  font-weight: 300;
+  margin: 52px auto 22px;
+}
 
   .read-more-btn {
     min-width: 150px;
     height: 58px;
     font-size: 15px;
-    margin-top: 18px;
+    margin-top: 20px;
   }
 
   .booking-section {
