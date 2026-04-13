@@ -457,3 +457,17 @@ button {
     font-size: 16px;
   }
 }
+  .booking-link {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 12px 20px;
+  background: var(--button-bg);
+  color: var(--button-text);
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.booking-link:hover {
+  opacity: 0.9;
+}
