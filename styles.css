@@ -34,6 +34,16 @@ video {
 button {
   font: inherit;
 }
+.booking-btn {
+  text-decoration: none !important;
+  color: var(--button-text) !important;
+}
+
+.booking-btn:visited,
+.booking-btn:active {
+  color: var(--button-text) !important;
+  text-decoration: none !important;
+}
 
 /* LAYOUT */
 
