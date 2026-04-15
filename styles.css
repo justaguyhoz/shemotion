@@ -579,3 +579,11 @@ button {
     flex-wrap: wrap;
   }
 }
+.site-footer {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 12.5px;
+  letter-spacing: 0.3px;
+  color: var(--text-main);
+  opacity: 0.55;
+}
