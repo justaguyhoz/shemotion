@@ -4,7 +4,6 @@
   --section-light: #fef6f4;
   --booking-bg: #cfcfd1;
   --text-main: #66656a;
-  --button-bg: #aba9aa;
   --button-text: #ffffff;
   --max-width: 1240px;
   --paragraph-width: 560px;
@@ -33,16 +32,6 @@ video {
 
 button {
   font: inherit;
-}
-.booking-btn {
-  text-decoration: none !important;
-  color: var(--button-text) !important;
-}
-
-.booking-btn:visited,
-.booking-btn:active {
-  color: var(--button-text) !important;
-  text-decoration: none !important;
 }
 
 /* LAYOUT */
@@ -128,7 +117,8 @@ button {
   color: var(--text-main);
 }
 
-/* ABOUT SHEMOTION */
+/* ABOUT */
+
 .section-arrow {
   display: block;
   margin: 0 auto 30px;
@@ -140,130 +130,45 @@ button {
   background: var(--section-grey);
   text-align: center;
   padding: 76px 0 150px;
-  position: relative;
-  z-index: 1;
 }
 
 .title-about-shemotion-text,
 .title-about-me-text {
-  font-family: "Helvetica Neue", Arial, sans-serif;
   font-weight: 100;
   letter-spacing: -0.04em;
   line-height: 0.9;
-  color: var(--text-main);
-  text-align: center;
-  margin: 0 auto;
+  margin: 0 auto 28px;
 }
 
-.title-about-shemotion-text {
-  font-size: 55px;
-  margin-bottom: 28px;
-}
-
+.title-about-shemotion-text,
 .title-about-me-text {
   font-size: 55px;
-  margin-bottom: 28px;
 }
 
-.about-section .about-copy,
-.about-section .more-text,
-.about-section .simple-list,
-.about-section .read-more-wrap {
-  max-width: var(--paragraph-width);
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.about-section .about-copy p,
-.about-section .more-text p {
+.about-section p {
   max-width: var(--paragraph-width);
   margin: 0 auto 22px;
-  text-align: center;
   font-size: 16.5px;
   line-height: 1.65;
-  color: var(--text-main);
 }
 
-.about-section .list-title {
-  margin: 28px 0 16px;
-  text-align: center;
-  font-weight: 500;
-}
-
-.about-section .simple-list p {
-  margin: 0 0 12px;
-  text-align: center;
-}
-
-/* READ MORE */
-
-.read-more-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.more-text {
-  width: 100%;
-}
-
-.more-text[hidden] {
-  display: none !important;
-}
-
-.read-more-btn {
-  margin-top: 20px;
-  min-width: 160px;
-  height: 64px;
-  border: none;
-  border-radius: 6px;
-  background: var(--button-bg);
-  color: var(--button-text);
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.read-more-btn:hover {
-  opacity: 0.92;
-}
-
-/* ABOUT ME / COACH */
+/* COACH */
 
 .coach-section {
   background: var(--section-light);
   text-align: center;
-  margin-top: 0;
-  padding: 0 0 70px;
-  position: relative;
-  z-index: 2;
-}
-
-.coach-inner {
-  position: relative;
+  padding-bottom: 70px;
 }
 
 .coach-image-wrap {
   width: min(301px, 52vw);
   margin: 0 auto;
-  transform: translateY(-80px); /* was -70px */
+  transform: translateY(-80px);
 }
+
 .coach-image {
   width: 100%;
   border-radius: 220px 220px 0 0;
-}
-
-.title-about-me {
-  width: 165px;
-  margin: 0 28px;
-}
-
-.coach-section p {
-  max-width: var(--paragraph-width);
-  margin: 0 auto 20px;
-  text-align: center;
-  font-size: 16.5px;
-  line-height: 1.65;
-  color: var(--text-main);
 }
 
 /* BOOKING */
@@ -271,216 +176,82 @@ button {
 .booking-section {
   background: var(--booking-bg);
   text-align: center;
-  padding: 54px 0;
+  padding: 60px 0 70px;
 }
 
 .booking-section h2 {
-  font-size: 24px;
-  line-height: 1.25;
+  font-size: clamp(24px, 3vw, 32px);
+  line-height: 1.2;
   font-weight: 600;
-  max-width: 680px;
-  margin: 0 auto 14px;
-  color: var(--text-main);
+  max-width: 760px;
+  margin: 0 auto 18px;
 }
 
-.booking-section p {
-  margin: 0;
-  font-size: 17px;
-  line-height: 1.45;
-  color: var(--text-main);
+.booking-details {
+  margin: 0 auto 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: clamp(18px, 2vw, 24px);
+  line-height: 1.35;
 }
 
-/* TABLET */
-
-@media (max-width: 900px) {
-  .header-inner {
-    gap: 24px;
-  }
-
-  .main-nav {
-    gap: 24px;
-  }
-
-  .main-nav a {
-    font-size: 15px;
-  }
-
-  .about-section {
-    padding: 76px 0 170px;
-  }
-
-.coach-section {
-  margin-top: -85px;
-  padding-bottom: 54px;
+.booking-venue {
+  font-size: clamp(22px, 2.5vw, 30px);
 }
 
-.coach-image-wrap {
-  width: min(360px, 78vw);
+/* ✅ PREMIUM BUTTON */
+
+.booking-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 240px;
+  padding: 18px 40px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #d8a7b1, #b98c96);
+  color: #ffffff;
+  text-decoration: none;
+  font-size: clamp(18px, 2vw, 22px);
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.14);
+  transition: all 0.25s ease;
+}
+
+.booking-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(0,0,0,0.18);
+}
+
+.booking-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
 }
 
 /* MOBILE */
+
 @media (max-width: 640px) {
-  .container,
-  .narrow {
-    width: calc(100% - 26px);
-  }
-
-  .site-header {
-    overflow: hidden;
-  }
-
-  .header-inner {
-    min-height: auto;
-    padding: 10px 14px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .brand {
-    flex: 0 0 auto;
-  }
-
-  .brand img {
-    width: 96px;
-    max-width: none;
-  }
-
-  .main-nav {
-    flex: 1 1 auto;
-    min-width: 0;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding-bottom: 2px;
-  }
-
-  .main-nav::-webkit-scrollbar {
-    display: none;
-  }
-
-  .main-nav a {
-    flex: 0 0 auto;
-    font-size: 11px;
-    line-height: 1.2;
-    white-space: nowrap;
-  }
-
-  .hero-media {
-    height: 260px;
-  }
-
-  .hero-overlay-logo {
-    bottom: -18px;
-    width: min(96%, 540px);
-  }
-
-  .slogan-strip {
-    padding: 16px 14px 20px;
-  }
-
-  .slogan-text {
-    font-size: 18px;
-  }
-
-  .about-section {
-    padding: 60px 0 90px;
-  }
-
-  .title-about-shemotion-text,
-  .title-about-me-text {
-    font-size: 48px;
-    line-height: 0.95;
-    letter-spacing: -0.03em;
-    font-weight: 300;
-  }
-
-  .title-about-shemotion-text {
-    margin-bottom: 22px;
-  }
-
-  .about-section .about-copy,
-  .about-section .more-text,
-  .about-section .simple-list,
-  .about-section .read-more-wrap {
-    max-width: 92%;
-  }
-
-  .about-section .about-copy p,
-  .about-section .more-text p,
-  .coach-section p {
-    max-width: 92%;
-    font-size: 16px;
-    line-height: 1.55;
-    margin-bottom: 18px;
-    text-align: center;
-  }
-
-  .about-section .simple-list p {
-    margin-bottom: 10px;
-  }
-
-  .about-section {
-    padding: 60px 0 130px;
-  }
-.coach-section .section-title {
-  margin-top: 30px;
-}
-
-  .coach-image-wrap {
-    width: min(320px, 82vw);
-    margin: 0 auto -10px;
-    transform: translateY(-10px);
-  }
-
-.title-about-me-text {
-  font-size: 48px;
-  line-height: 0.95;
-  letter-spacing: -0.03em;
-  font-weight: 300;
-  margin: 52px auto 22px;
-}
-
-  .read-more-btn {
-    min-width: 150px;
-    height: 58px;
-    font-size: 15px;
-    margin-top: 20px;
-  }
-
   .booking-section {
-    padding: 40px 0;
+    padding: 40px 0 46px;
   }
 
   .booking-section h2 {
     font-size: 22px;
-    line-height: 1.15;
-    margin-bottom: 14px;
   }
 
-  .booking-section p {
+  .booking-details {
     font-size: 16px;
+    gap: 2px;
   }
-}
-.booking-btn {
-  display: inline-block;
-  margin-top: 16px;
-  padding: 14px 24px;
-  background: var(--button-bg);
-  color: var(--button-text);
-  text-decoration: none;
-  border-radius: 6px;
-  font-size: 16px;
-  font-weight: 500;
-  transition: 0.2s ease;
-}
 
-.booking-btn:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
+  .booking-venue {
+    font-size: 18px;
+  }
+
+  .booking-btn {
+    min-width: 180px;
+    padding: 14px 26px;
+    font-size: 17px;
+  }
 }
