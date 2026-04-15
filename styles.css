@@ -500,7 +500,7 @@ button {
   }
 
   .coach-section {
-    margin-top: -74px;
+    margin-top: -60px;
     padding: 0 0 60px;
   }
 
@@ -510,11 +510,12 @@ button {
 
   .coach-image-wrap {
     width: min(240px, 58vw);
-    margin: 0 auto -34px;
-    transform: translateY(-34px);
+    margin: 0 auto -20px;
+    transform: translateY(-20px);
   }
 
   .title-about-me {
+    margin-top: 16px;
     width: 150px;
     margin: 0 auto 22px;
   }
