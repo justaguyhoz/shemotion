@@ -510,14 +510,14 @@ button {
 
   .coach-image-wrap {
     width: min(240px, 58vw);
-    margin: 0 auto -20px;
+    margin: 0 auto 10px;
     transform: translateY(-20px);
   }
 
-.title-about-me {
-  width: 150px;
-  margin: 60px auto 22px;
-}
+  .title-about-me {
+    width: 150px;
+    margin: 0 auto 22px;
+  }
 
   .read-more-btn {
     min-width: 150px;
