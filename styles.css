@@ -532,14 +532,14 @@ button {
   }
 }
 .booking-alt {
-  margin-top: 14px;
+  margin-top: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   font-size: 13.5px;
   color: var(--text-main);
-  opacity: 0.8;
+  opacity: 0.75;
 }
 
 .booking-alt-text {
