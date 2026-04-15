@@ -274,6 +274,7 @@ button {
   text-align: center;
   padding: 54px 0 64px;
   margin-top: 24px;
+  margin-bottom: 10px; /* 👈 pulls footer up */
 }
 
 .booking-inner {
