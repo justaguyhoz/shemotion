@@ -167,7 +167,8 @@ button {
 }
 
 .about-section .about-copy p,
-.about-section .more-text p {
+.about-section .more-text p,
+.coach-section p {
   max-width: var(--paragraph-width);
   margin: 0 auto 22px;
   text-align: center;
@@ -234,30 +235,37 @@ button {
   position: relative;
 }
 
-  .coach-image-wrap {
-    width: min(240px, 32vw);
-    margin: 0 auto 16px;   /* 👈 reduced from 36px */
-    transform: translateY(-48px); /* 👈 slightly more overlap */
-  }
+.coach-image-wrap {
+  width: min(226px, 39vw);
+  margin: 0 auto -52px;
+  transform: translateY(-52px);
+}
 
 .coach-image {
   width: 100%;
   border-radius: 220px 220px 0 0;
 }
 
+.title-about-me {
+  width: 165px;
+  margin: 0 auto 28px;
+}
+
+/* DESKTOP COACH TWEAK */
+
+@media (min-width: 901px) {
+  .coach-image-wrap {
+    width: min(240px, 32vw);
+    margin: 0 auto 16px;
+    transform: translateY(-48px);
+  }
+
   .title-about-me {
-    margin-top: 8px; /* 👈 tighter to image */
+    width: 165px;
+    margin: 8px auto 28px;
   }
 }
 
-.coach-section p {
-  max-width: var(--paragraph-width);
-  margin: 0 auto 20px;
-  text-align: center;
-  font-size: 16.5px;
-  line-height: 1.65;
-  color: var(--text-main);
-}
 
 /* BOOKING */
 
