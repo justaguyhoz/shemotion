@@ -234,20 +234,20 @@ button {
   position: relative;
 }
 
-.coach-image-wrap {
-  width: min(226px, 39vw);
-  margin: 0 auto -52px;
-  transform: translateY(-52px);
-}
+  .coach-image-wrap {
+    width: min(240px, 32vw);
+    margin: 0 auto 16px;   /* 👈 reduced from 36px */
+    transform: translateY(-48px); /* 👈 slightly more overlap */
+  }
 
 .coach-image {
   width: 100%;
   border-radius: 220px 220px 0 0;
 }
 
-.title-about-me {
-  width: 165px;
-  margin: 0 auto 28px;
+  .title-about-me {
+    margin-top: 8px; /* 👈 tighter to image */
+  }
 }
 
 .coach-section p {
