@@ -581,9 +581,13 @@ button {
 }
 .site-footer {
   text-align: center;
-  padding: 40px 20px;
+  padding: 20px 16px; /* 👈 tighter vertical space */
   font-size: 12.5px;
-  letter-spacing: 0.3px;
   color: var(--text-main);
-  opacity: 0.55;
+  opacity: 0.6;
+  background: var(--section-light);
+}
+
+.site-footer p {
+  margin: 0;
 }
