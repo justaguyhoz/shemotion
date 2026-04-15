@@ -185,15 +185,15 @@
 </p>
   </div>
 </section>
-  </main>
+</main>
+
+  <footer class="site-footer">
+    <p>© <span id="year"></span> Shemotion. All rights reserved.</p>
+  </footer>
 
   <script src="script.js"></script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
-<footer class="site-footer">
-  <p>© <span id="year"></span> Shemotion. All rights reserved.</p>
-</footer>
-
-<script>
-  document.getElementById("year").textContent = new Date().getFullYear();
-</script>
