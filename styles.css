@@ -235,9 +235,9 @@ button {
 }
 
 .coach-image-wrap {
-  width: min(301px, 52vw);
-  margin: 0 auto -70px;
-  transform: translateY(-70px);
+  width: min(226px, 39vw);
+  margin: 0 auto -52px;
+  transform: translateY(-52px);
 }
 
 .coach-image {
@@ -329,6 +329,37 @@ button {
   opacity: 0.98;
 }
 
+.booking-alt {
+  margin-top: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: var(--text-main);
+  opacity: 0.75;
+}
+
+.booking-alt-text {
+  opacity: 0.6;
+}
+
+.booking-email {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-main);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  padding-bottom: 1px;
+  transition: all 0.2s ease;
+}
+
+.booking-email:hover {
+  opacity: 0.7;
+  border-bottom-color: rgba(0, 0, 0, 0.3);
+}
+
 /* TABLET */
 
 @media (max-width: 900px) {
@@ -345,16 +376,18 @@ button {
   }
 
   .about-section {
-    padding: 76px 0 170px;
+    padding: 76px 0 150px;
   }
 
   .coach-section {
-    margin-top: -85px;
+    margin-top: -62px;
     padding-bottom: 72px;
   }
 
   .coach-image-wrap {
-    width: min(360px, 78vw);
+    width: min(270px, 54vw);
+    margin: 0 auto -44px;
+    transform: translateY(-44px);
   }
 }
 
@@ -430,7 +463,7 @@ button {
   }
 
   .about-section {
-    padding: 60px 0 130px;
+    padding: 60px 0 110px;
   }
 
   .title-about-shemotion-text,
@@ -467,23 +500,23 @@ button {
   }
 
   .coach-section {
-    margin-top: 0;
-    padding: 36px 0 60px;
+    margin-top: -74px;
+    padding: 0 0 60px;
   }
 
   .coach-section .section-title {
-    margin-top: 30px;
+    margin-top: 0;
   }
 
   .coach-image-wrap {
-    width: min(320px, 82vw);
-    margin: 0 auto -10px;
-    transform: translateY(-10px);
+    width: min(240px, 58vw);
+    margin: 0 auto -34px;
+    transform: translateY(-34px);
   }
 
   .title-about-me {
     width: 150px;
-    margin-bottom: 22px;
+    margin: 0 auto 22px;
   }
 
   .read-more-btn {
@@ -520,44 +553,11 @@ button {
     padding: 14px 26px;
     font-size: 17px;
   }
-}
-@media (min-width: 641px) {
-  .coach-image-wrap {
-    transform: translateY(-55px);
-    margin-bottom: 20px; /* 👈 this is the key */
+
+  .booking-alt {
+    margin-top: 18px;
+    font-size: 13px;
+    gap: 6px;
+    flex-wrap: wrap;
   }
-
-  .title-about-me {
-    margin-top: 0;
-  }
-}
-.booking-alt {
-  margin-top: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-size: 13.5px;
-  color: var(--text-main);
-  opacity: 0.75;
-}
-
-.booking-alt-text {
-  opacity: 0.6;
-}
-
-.booking-email {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--text-main);
-  text-decoration: none;
-  border-bottom: 1px solid rgba(0,0,0,0.15);
-  padding-bottom: 1px;
-  transition: all 0.2s ease;
-}
-
-.booking-email:hover {
-  opacity: 0.7;
-  border-bottom-color: rgba(0,0,0,0.3);
 }
