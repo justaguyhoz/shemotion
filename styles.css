@@ -178,14 +178,24 @@ button {
 }
 
 .about-section .list-title {
-  margin: 28px 0 16px;
+  margin: 24px 0 10px;
   text-align: center;
   font-weight: 500;
 }
 
+.about-section .simple-list {
+  max-width: var(--paragraph-width);
+  margin: 0 auto 20px;
+}
+
 .about-section .simple-list p {
-  margin: 0 0 12px;
+  margin: 0 0 6px;
   text-align: center;
+  line-height: 1.4;
+}
+
+.about-section .simple-list p:last-child {
+  margin-bottom: 0;
 }
 
 /* READ MORE */
@@ -514,9 +524,19 @@ button {
     text-align: center;
   }
 
-  .about-section .simple-list p {
-    margin-bottom: 10px;
-  }
+.about-section .simple-list p {
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.about-section .simple-list p:last-child {
+  margin-bottom: 0;
+}
+
+.about-section .list-title {
+  margin-top: 24px;
+  margin-bottom: 10px;
+}
 
   .coach-section {
     margin-top: -60px;
