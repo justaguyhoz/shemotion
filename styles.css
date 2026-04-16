@@ -186,12 +186,14 @@ button {
 .about-section .simple-list {
   max-width: var(--paragraph-width);
   margin: 0 auto 20px;
+  text-align: center;
 }
 
 .about-section .simple-list p {
   margin: 0 0 6px;
   text-align: center;
   line-height: 1.4;
+  width: 100%;
 }
 
 .about-section .simple-list p:last-child {
@@ -524,9 +526,17 @@ button {
     text-align: center;
   }
 
+.about-section .simple-list {
+  max-width: 92%;
+  margin: 0 auto 20px;
+  text-align: center;
+}
+
 .about-section .simple-list p {
-  margin-bottom: 6px;
+  margin: 0 0 6px;
   line-height: 1.4;
+  text-align: center;
+  width: 100%;
 }
 
 .about-section .simple-list p:last-child {
