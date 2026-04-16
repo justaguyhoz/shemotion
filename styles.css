@@ -533,14 +533,21 @@ button {
 }
 
 .about-section .simple-list p {
-  margin: 0 0 6px;
-  line-height: 1.4;
-  text-align: center;
+  display: block;
   width: 100%;
+  max-width: none;
+  margin: 0 auto 6px;
+  text-align: center;
+  line-height: 1.4;
 }
 
 .about-section .simple-list p:last-child {
   margin-bottom: 0;
+}
+  .about-section .list-title {
+  max-width: none;
+  margin: 24px auto 10px;
+  text-align: center;
 }
 
 .about-section .list-title {
