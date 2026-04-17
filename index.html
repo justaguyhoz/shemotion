@@ -9,226 +9,100 @@
   <link rel="apple-touch-icon" href="assets/shemotion-favicon.png" />
   <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a href="#top" class="brand" aria-label="Shemotion home">
-        <img src="assets/shemotion_small-top-banner-logo.png" alt="Shemotion" />
-      </a>
 
-      <nav class="main-nav" aria-label="Primary">
-        <a href="#about-shemotion">About Shemotion</a>
-        <a href="#about-coach">About the Coach</a>
-        <a href="#booking">Booking</a>
-      </nav>
+<header class="site-header">
+  <div class="container header-inner">
+    <img src="assets/shemotion_small-top-banner-logo.png" class="logo" />
+
+    <nav class="main-nav">
+      <a href="#about-shemotion">About Shemotion</a>
+      <a href="#about-coach">About the Coach</a>
+      <a href="#booking">Booking</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero-section">
+  <div class="hero-media">
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="assets/hero-banner.mp4" type="video/mp4" />
+    </video>
+
+    <img src="assets/shemotion_big-logo-video-banner-overlay.png" class="hero-overlay-logo" />
+  </div>
+</section>
+
+<section class="slogan-strip">
+  <p class="slogan-text">Coaching. Movement. Self-Love.</p>
+</section>
+
+<section id="about-shemotion" class="about-section">
+  <div class="container narrow reveal">
+
+    <img src="assets/arrow-down.png" class="section-arrow" />
+
+    <h2 class="section-title">About<br>Shemotion</h2>
+
+    <div class="about-copy">
+      <p>Shemotion is a guided movement experience designed for women who want to reconnect with their bodies, release stored tension, and step back into their natural feminine energy.</p>
+
+      <p>This is not about performance. It is about feeling, expressing, and coming back to yourself.</p>
     </div>
-  </header>
 
-  <main id="top">
-    <section class="hero-section">
-      <div class="hero-media">
-        <video class="hero-video" autoplay muted loop playsinline>
-          <source src="assets/hero-banner.mp4" type="video/mp4" />
-        </video>
+    <div id="aboutMoreText" class="more-text">
+      <p>Shemotion is more than a class. It is a transformative mind, body, and soul experience designed to reconnect women with their feminine essence.</p>
+    </div>
 
-        <img
-          class="hero-overlay-logo"
-          src="assets/shemotion_big-logo-video-banner-overlay.png"
-          alt="Shemotion"
-        />
-      </div>
-    </section>
+    <button id="readMoreBtn" class="read-more-btn">Read More</button>
 
-    <section class="slogan-strip" aria-label="Brand statement">
-      <p class="slogan-text">Coaching. Movement. Self-Love.</p>
-    </section>
+  </div>
+</section>
 
-    <section id="about-shemotion" class="about-section">
-      <div class="container narrow">
-        <img src="assets/arrow-down.png" class="section-arrow reveal" alt="" />
-        <h2 class="section-title title-about-shemotion-text reveal">About<br />Shemotion</h2>
+<section id="about-coach" class="coach-section">
+  <div class="container narrow reveal">
 
-        <div class="about-copy reveal">
-          <p>
-            Shemotion is a guided movement experience designed for women who want to reconnect
-            with their bodies, release stored tension, and step back into their natural feminine
-            energy. This is not about performance or getting the steps right. It is about feeling,
-            expressing, and coming back to yourself.
-          </p>
+    <div class="coach-image-wrap">
+      <img src="assets/about-me-pic.jpg" class="coach-image" />
+    </div>
 
-          <p>
-            Shemotion is more than a class. It’s a transformative mind, body, and soul experience
-            designed to reconnect women with their feminine essence. Through a unique fusion of
-            sensual movement, cardio, freestyle expression, and guided meditation, Shemotion
-            creates a safe and empowering space where women can release tension, let go of stored
-            emotions, and return to their bodies. Each session is a journey.
-          </p>
-        </div>
+    <h2 class="section-title">About<br>Me</h2>
 
-        <div class="read-more-wrap reveal">
-          <div id="aboutMoreText" class="more-text" aria-hidden="true">
-            <div class="more-section">
-              <p>
-                We begin by awakening the body through feminine, fluid movements inspired by belly
-                dance and sensual flow, building strength, confidence, and connection. As the music
-                deepens, so does the experience. Through freestyle movement, you are guided to
-                release what no longer serves you - stress, frustration, emotional weight - allowing
-                your body to express what words cannot.
-              </p>
+    <p>Shemotion was born from a deeply personal journey of reconnecting with the body and rediscovering the power within.</p>
 
-              <p>
-                Every movement has meaning.<br />
-                Every flow is intentional.
-              </p>
-            </div>
+    <div id="aboutCoachMoreText" class="more-text">
+      <p>This is more than a class. It is a journey back to yourself.</p>
+    </div>
 
-            <div class="more-section">
-              <p>
-                We close with a grounding cool-down and a deeply restorative meditation, helping you
-                reconnect with your inner world, soften into your body, and create space for the
-                woman you are becoming.
-              </p>
+    <button id="readMoreBtnCoach" class="read-more-btn">Read More</button>
 
-              <p class="list-title">Shemotion is for any woman who:</p>
+  </div>
+</section>
 
-              <div class="simple-list">
-                <p>Feels disconnected from her body</p>
-                <p>Carries stress or emotional weight</p>
-                <p>Wants to reconnect with herself</p>
-                <p>Is ready to feel confident and alive</p>
-              </div>
+<section id="booking" class="booking-section reveal">
+  <div class="container narrow">
 
-              <p>
-                This is your space to move, to feel, to release, and to remember <br /> the power you
-                already hold within.
-              </p>
-            </div>
-          </div>
+    <h2>Come and experience Shemotion.</h2>
 
-          <button
-            id="readMoreBtn"
-            class="read-more-btn"
-            type="button"
-            aria-expanded="false"
-            aria-controls="aboutMoreText"
-          >
-            Read More
-          </button>
-        </div>
-      </div>
-    </section>
+    <p>Hot Yoga Oxenford<br>Saturday May 16th 10.00am</p>
 
-    <section id="about-coach" class="coach-section">
-      <div class="container narrow coach-inner">
-        <div class="coach-image-wrap reveal">
-          <img
-            src="assets/about-me-pic.jpg"
-            alt="About Me portrait"
-            class="coach-image"
-          />
-        </div>
+    <a href="https://hotyogaoxenford.com.au/" class="booking-btn" target="_blank">
+      Book Now
+    </a>
 
-        <h2 class="section-title title-about-me-text about-me-heading reveal">About<br />Me</h2>
+  </div>
+</section>
 
-        <div class="coach-copy reveal">
-          <p>
-            Shemotion was born from a deeply personal journey of reconnecting with the body,
-            embracing femininity, and rediscovering the power within.
-          </p>
+<footer class="site-footer">
+  <p>© <span id="year"></span> Shemotion</p>
+</footer>
 
-          <p>
-            From a young age, I was drawn to movement. I trained in ballroom dancing, later
-            exploring the sensuality of belly dancing and the strength and confidence of pole
-            dancing. Dance was always more than just movement for me, it was expression, release,
-            and a way to feel truly alive.
-          </p>
+<script src="script.js"></script>
 
-          <p>
-            But it wasn’t until I discovered embodiment work that everything shifted.
-          </p>
-        </div>
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+</script>
 
-        <div class="read-more-wrap reveal">
-          <div id="aboutCoachMoreText" class="more-text" aria-hidden="true">
-            <div class="more-section">
-              <p>
-                Through my training at the School of Embodiment Arts and my work as a feminine
-                embodiment coach, I learned how to truly be in my body, to listen, to feel, and to
-                trust my inner wisdom. I realised that when we connect to our bodies with intention,
-                movement becomes medicine.
-              </p>
-
-              <p>
-                Music and movement became my way back to myself. They helped me release stress,
-                process emotions, and reconnect with joy, sensuality, and self-worth. And that’s
-                when Shemotion was created. A fusion of my two worlds - dance and embodiment.
-              </p>
-            </div>
-
-            <div class="more-section">
-              <p>
-                I created Shemotion for women who feel stuck, disconnected, or overwhelmed by the
-                demands of everyday life. For women who have lost touch with their bodies. For women
-                who want to feel confident, sensual, and fully expressed in their bodies.
-              </p>
-
-              <p>
-                This is more than a class - it’s an experience. A journey back to yourself.
-                Because when a woman reconnects with her body, she doesn’t just move differently - she lives differently.
-              </p>
-            </div>
-          </div>
-
-          <button
-            id="readMoreBtnCoach"
-            class="read-more-btn"
-            type="button"
-            aria-expanded="false"
-            aria-controls="aboutCoachMoreText"
-          >
-            Read More
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <section id="booking" class="booking-section">
-      <div class="container narrow booking-inner reveal">
-        <h2>Come and experience Shemotion.</h2>
-
-        <p class="booking-details">
-          <span class="booking-venue">Hot Yoga Oxenford</span>
-          <span>Saturday May 16th 10.00am</span>
-          <span>Enter in rear of building,</span>
-          <span>5c/5 Cottonwood Pl, Oxenford QLD 4210</span>
-        </p>
-
-        <a
-          href="https://hotyogaoxenford.com.au/"
-          class="booking-btn"
-          target="_blank"
-          rel="noopener"
-        >
-          Book Now
-        </a>
-
-        <p class="booking-alt">
-          <span class="booking-alt-text">or</span>
-          <a href="mailto:kel@hotyogaoxenford.com.au" class="booking-email">
-            ✉ kel@hotyogaoxenford.com.au
-          </a>
-        </p>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <p>© <span id="year"></span> Shemotion. All rights reserved.</p>
-  </footer>
-
-  <script src="script.js"></script>
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
 </body>
 </html>
