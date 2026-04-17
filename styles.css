@@ -1,3 +1,4 @@
+
 :root {
   --header-bg: #ddd7d8;
   --section-grey: #d6d4d4;
@@ -23,6 +24,12 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   color: var(--text-main);
   background: var(--section-light);
+  opacity: 0;
+  animation: pageFade 1s ease forwards;
+}
+
+@keyframes pageFade {
+  to { opacity: 1; }
 }
 
 img,
@@ -35,8 +42,6 @@ button {
   font: inherit;
 }
 
-/* LAYOUT */
-
 .container {
   width: min(var(--max-width), calc(100% - 48px));
   margin: 0 auto;
@@ -45,8 +50,6 @@ button {
 .narrow {
   width: min(900px, calc(100% - 48px));
 }
-
-/* HEADER */
 
 .site-header {
   background: var(--header-bg);
@@ -77,8 +80,6 @@ button {
   white-space: nowrap;
 }
 
-/* HERO */
-
 .hero-section {
   background: var(--header-bg);
 }
@@ -102,9 +103,13 @@ button {
   transform: translateX(-50%);
   width: min(94%, 1220px);
   z-index: 2;
+  animation: heroFloat 6s ease-in-out infinite;
 }
 
-/* SLOGAN */
+@keyframes heroFloat {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, 6px); }
+}
 
 .slogan-strip {
   background: var(--section-light);
@@ -113,19 +118,43 @@ button {
 }
 
 .slogan-text {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
   margin: 0;
   font-size: clamp(20px, 2.3vw, 30px);
   font-style: italic;
   color: var(--text-main);
 }
 
-/* ABOUT SHEMOTION */
+.slogan-text::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -140%;
+  width: 120%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.48) 50%, transparent 100%);
+  animation: wavePass 4.8s ease-in-out infinite;
+}
+
+@keyframes wavePass {
+  0% { left: -140%; }
+  42% { left: 140%; }
+  100% { left: 140%; }
+}
 
 .section-arrow {
   display: block;
   margin: 0 auto 30px;
   width: 60px;
   opacity: 0.35;
+  animation: floatArrow 2.8s ease-in-out infinite;
+}
+
+@keyframes floatArrow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
 }
 
 .about-section {
@@ -160,7 +189,9 @@ button {
 .about-section .about-copy,
 .about-section .more-text,
 .about-section .simple-list,
-.about-section .read-more-wrap {
+.about-section .read-more-wrap,
+.coach-copy,
+.coach-section .more-text {
   max-width: var(--paragraph-width);
   margin-left: auto;
   margin-right: auto;
@@ -170,7 +201,7 @@ button {
 .about-section .more-text p,
 .coach-section p {
   max-width: var(--paragraph-width);
-  margin: 0 auto 22px;
+  margin: 0 auto 26px;
   text-align: center;
   font-size: 16.5px;
   line-height: 1.65;
@@ -185,7 +216,7 @@ button {
 
 .about-section .simple-list {
   max-width: var(--paragraph-width);
-  margin: 0 auto 20px;
+  margin: 0 auto 22px;
   text-align: center;
 }
 
@@ -196,11 +227,10 @@ button {
   width: 100%;
 }
 
-.about-section .simple-list p:last-child {
+.about-section .simple-list p:last-child,
+.coach-section p:last-child {
   margin-bottom: 0;
 }
-
-/* READ MORE */
 
 .read-more-wrap {
   display: flex;
@@ -210,10 +240,40 @@ button {
 
 .more-text {
   width: 100%;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.7s ease, opacity 0.45s ease, margin-top 0.45s ease;
+  margin-top: 0;
+  pointer-events: none;
 }
 
-.more-text[hidden] {
-  display: none !important;
+.more-text.open {
+  max-height: 1200px;
+  opacity: 1;
+  margin-top: 12px;
+  pointer-events: auto;
+}
+
+.more-section {
+  padding: 0;
+}
+
+.more-section + .more-section {
+  margin-top: 26px;
+  padding-top: 26px;
+  position: relative;
+}
+
+.more-section + .more-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 44px;
+  height: 1px;
+  background: rgba(102, 101, 106, 0.24);
 }
 
 .read-more-btn {
@@ -226,13 +286,13 @@ button {
   color: #111111;
   cursor: pointer;
   font-size: 16px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.25s ease;
 }
 
 .read-more-btn:hover {
-  opacity: 0.92;
+  opacity: 0.95;
+  transform: translateY(-1px);
 }
-
-/* ABOUT ME / COACH */
 
 .coach-section {
   background: var(--section-light);
@@ -256,14 +316,18 @@ button {
 .coach-image {
   width: 100%;
   border-radius: 220px 220px 0 0;
+  transition: transform 0.65s ease, box-shadow 0.65s ease;
+}
+
+.coach-image:hover {
+  transform: scale(1.025);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
 }
 
 .title-about-me {
   width: 165px;
   margin: 0 auto 28px;
 }
-
-/* DESKTOP COACH TWEAK */
 
 @media (min-width: 901px) {
   .coach-image-wrap {
@@ -278,15 +342,12 @@ button {
   }
 }
 
-
-/* BOOKING */
-
 .booking-section {
   background: var(--booking-bg);
   text-align: center;
   padding: 24px 0 14px;
   margin-top: 24px;
-  margin-bottom: 0px; /* 👈 pulls footer up */
+  margin-bottom: 0;
 }
 
 .booking-inner {
@@ -335,7 +396,7 @@ button {
   font-weight: 500;
   letter-spacing: 0.2px;
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.14);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, opacity 0.25s ease;
 }
 
 .booking-btn:visited,
@@ -345,9 +406,9 @@ button {
 }
 
 .booking-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
-  opacity: 0.98;
+  transform: scale(1.05);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+  opacity: 0.99;
 }
 
 .booking-alt {
@@ -380,18 +441,17 @@ button {
   opacity: 0.7;
   border-bottom-color: rgba(0, 0, 0, 0.3);
 }
+
 @media (min-width: 901px) {
   .coach-image-wrap {
-    margin: 0 auto 24px;   /* 👈 fixes gap under image */
-    transform: translateY(-55px); /* keep overlap */
+    margin: 0 auto 24px;
+    transform: translateY(-55px);
   }
 
   .title-about-me {
     margin-top: 20px;
   }
 }
-
-/* TABLET */
 
 @media (max-width: 900px) {
   .header-inner {
@@ -421,8 +481,6 @@ button {
     transform: translateY(-44px);
   }
 }
-
-/* MOBILE */
 
 @media (max-width: 640px) {
   .container,
@@ -512,7 +570,9 @@ button {
   .about-section .about-copy,
   .about-section .more-text,
   .about-section .simple-list,
-  .about-section .read-more-wrap {
+  .about-section .read-more-wrap,
+  .coach-copy,
+  .coach-section .more-text {
     max-width: 92%;
   }
 
@@ -526,34 +586,30 @@ button {
     text-align: center;
   }
 
-.about-section .simple-list {
-  max-width: 92%;
-  margin: 0 auto 20px;
-  text-align: center;
-}
+  .about-section .simple-list {
+    max-width: 92%;
+    margin: 0 auto 20px;
+    text-align: center;
+  }
 
-.about-section .simple-list p {
-  display: block;
-  width: 100%;
-  max-width: none;
-  margin: 0 auto 6px;
-  text-align: center;
-  line-height: 1.4;
-}
+  .about-section .simple-list p {
+    display: block;
+    width: 100%;
+    max-width: none;
+    margin: 0 auto 6px;
+    text-align: center;
+    line-height: 1.4;
+  }
 
-.about-section .simple-list p:last-child {
-  margin-bottom: 0;
-}
+  .about-section .simple-list p:last-child {
+    margin-bottom: 0;
+  }
+
   .about-section .list-title {
-  max-width: none;
-  margin: 24px auto 10px;
-  text-align: center;
-}
-
-.about-section .list-title {
-  margin-top: 24px;
-  margin-bottom: 10px;
-}
+    max-width: none;
+    margin: 24px auto 10px;
+    text-align: center;
+  }
 
   .coach-section {
     margin-top: -60px;
@@ -580,6 +636,10 @@ button {
     height: 58px;
     font-size: 15px;
     margin-top: 20px;
+  }
+
+  .more-text.open {
+    max-height: 1450px;
   }
 
   .booking-section {
@@ -617,6 +677,7 @@ button {
     flex-wrap: wrap;
   }
 }
+
 .site-footer {
   display: flex;
   align-items: center;
@@ -632,4 +693,40 @@ button {
 
 .site-footer p {
   margin: 0;
+}
+
+.reveal {
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.reveal.active {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  body,
+  .hero-overlay-logo,
+  .section-arrow,
+  .slogan-text::after,
+  .reveal,
+  .more-text,
+  .booking-btn,
+  .coach-image {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  body,
+  .reveal {
+    opacity: 1 !important;
+  }
+
+  .more-text {
+    max-height: none;
+  }
 }
