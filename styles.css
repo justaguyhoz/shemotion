@@ -79,7 +79,7 @@ textarea {
 .brand {
   display: inline-flex;
   align-items: center;
-  width: clamp(116px, 12vw, 154px);
+  width: clamp(148px, 15vw, 220px);
   color: var(--charcoal);
   justify-self: start;
 }
@@ -573,7 +573,7 @@ blockquote:hover {
 }
 
 .site-footer .brand {
-  width: 132px;
+  width: 184px;
   color: var(--ivory);
 }
 
@@ -756,7 +756,7 @@ blockquote:hover {
   }
 
   .brand {
-    width: 122px;
+    width: 150px;
   }
 
   .hero {
