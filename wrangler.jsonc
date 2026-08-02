@@ -12,6 +12,8 @@
     }
   ],
   "vars": {
-    "ADMIN_EMAILS": "Justaguyh@gmail.com,shemotion.au@gmail.com"
+    "ADMIN_EMAILS": "Justaguyh@gmail.com,shemotion.au@gmail.com",
+    "ACCESS_TEAM_DOMAIN": "https://sweet-meadow-beb2.cloudflareaccess.com",
+    "ACCESS_AUD": "739d5d789414d38be7fc2bcc92a1d2ec43f2730fe00edab382189b8592b82346"
   }
 }
