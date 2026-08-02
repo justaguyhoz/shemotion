@@ -9,7 +9,7 @@ export async function onRequestGet({ env }) {
   try {
     const result = await env.DB.prepare(`
       SELECT * FROM events
-      ORDER BY start_at ASC, display_order ASC
+      ORDER BY CASE WHEN date_status = 'tbc' THEN 1 ELSE 0 END, start_at ASC, display_order ASC
     `).all();
     return jsonResponse({ events: result.results.map(rowToAdminEvent) });
   } catch {
@@ -31,10 +31,10 @@ export async function onRequestPost({ request, env }) {
   try {
     const result = await env.DB.prepare(`
       INSERT INTO events (
-        title, event_type, venue_name, suburb, address, start_at, end_at, timezone,
+        title, event_type, venue_name, suburb, address, date_status, start_at, end_at, timezone,
         audience, short_description, booking_label, booking_url, availability_status,
         is_published, display_order
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       RETURNING *
     `).bind(...eventValues(validation.event)).first();
     return jsonResponse({ event: rowToAdminEvent(result) }, 201);

@@ -4,12 +4,12 @@ export async function onRequestGet({ env }) {
   try {
     const now = new Date().toISOString();
     const result = await env.DB.prepare(`
-      SELECT id, title, event_type, venue_name, suburb, start_at, end_at, timezone,
+      SELECT id, title, event_type, venue_name, suburb, date_status, start_at, end_at, timezone,
              audience, short_description, booking_label, booking_url, availability_status
       FROM events
       WHERE is_published = 1
-        AND (start_at >= ?1 OR (end_at IS NOT NULL AND end_at >= ?1))
-      ORDER BY start_at ASC, display_order ASC
+        AND (date_status = 'tbc' OR start_at >= ?1 OR (end_at IS NOT NULL AND end_at >= ?1))
+      ORDER BY CASE WHEN date_status = 'tbc' THEN 1 ELSE 0 END, start_at ASC, display_order ASC
     `).bind(now).all();
 
     return jsonResponse(

@@ -35,8 +35,14 @@ export function announcementFor(events) {
     };
   }
   const event = events[0];
-  const date = new Date(event.startAt);
   const location = [event.venueName, event.suburb].filter(Boolean).join(", ");
+  if (event.dateStatus === "tbc") {
+    return {
+      text: `Upcoming Shemotion ${event.eventType} - ${location} - Date to be confirmed`,
+      action: "View Class",
+    };
+  }
+  const date = new Date(event.startAt);
   return {
     text: `Upcoming Shemotion ${event.eventType} - ${location} - ${announcementDateFormatter.format(date)} at ${compactTime(date)}`,
     action: "View Class",
@@ -66,14 +72,18 @@ export function createEventCard(event) {
   }
   if (event.availabilityStatus === "Cancelled") card.classList.add("is-cancelled");
 
-  const date = new Date(event.startAt);
   const content = element("span", { className: "event-pill-content" });
   const meta = element("span", { className: "event-pill-meta" });
-  meta.append(
-    element("span", { text: fullDateFormatter.format(date) }),
-    element("span", { text: compactTime(date) }),
-    element("span", { text: [event.venueName, event.suburb].filter(Boolean).join(", ") })
-  );
+  if (event.dateStatus === "tbc") {
+    meta.append(element("span", { text: "Date to be confirmed" }));
+  } else {
+    const date = new Date(event.startAt);
+    meta.append(
+      element("span", { text: fullDateFormatter.format(date) }),
+      element("span", { text: compactTime(date) })
+    );
+  }
+  meta.append(element("span", { text: [event.venueName, event.suburb].filter(Boolean).join(", ") }));
   content.append(element("span", { className: "event-pill-title", text: event.title }), meta);
   if (["Limited spaces", "Sold out", "Cancelled"].includes(event.availabilityStatus)) {
     content.append(element("span", {

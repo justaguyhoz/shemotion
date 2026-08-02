@@ -11,6 +11,7 @@ const baseEvent = {
   eventType: "Class",
   venueName: "Reinvigr8 Gym",
   suburb: "Helensvale",
+  dateStatus: "scheduled",
   startAt: "2026-08-18T23:15:00.000Z",
   endAt: null,
   timezone: "Australia/Brisbane",
@@ -51,6 +52,13 @@ test("admin validation rejects invalid URLs and dates", () => {
   assert.ok(invalid.errors.some((error) => error.includes("startAt")));
 });
 
+test("events can be published with a date to be confirmed", () => {
+  const result = validateEventInput({ ...baseEvent, dateStatus: "tbc", startAt: null });
+  assert.equal(result.event.dateStatus, "tbc");
+  assert.equal(result.event.startAt, null);
+  assert.match(announcementFor([result.event]).text, /Date to be confirmed/);
+});
+
 test("SQL injection-like text remains plain event data", () => {
   const title = "Class'); DROP TABLE events; --";
   const result = validateEventInput({ ...baseEvent, title });
@@ -74,7 +82,7 @@ test("public API uses future published filtering and ordered results", async () 
   let boundNow = "";
   const row = {
     id: 1, title: baseEvent.title, event_type: baseEvent.eventType, venue_name: baseEvent.venueName,
-    suburb: baseEvent.suburb, start_at: baseEvent.startAt, end_at: null, timezone: baseEvent.timezone,
+    suburb: baseEvent.suburb, date_status: baseEvent.dateStatus, start_at: baseEvent.startAt, end_at: null, timezone: baseEvent.timezone,
     audience: baseEvent.audience, short_description: baseEvent.shortDescription,
     booking_label: baseEvent.bookingLabel, booking_url: null, availability_status: baseEvent.availabilityStatus,
   };
@@ -96,7 +104,7 @@ test("public API uses future published filtering and ordered results", async () 
   assert.equal(response.status, 200);
   assert.equal(body.events.length, 1);
   assert.match(sql, /is_published = 1/);
-  assert.match(sql, /start_at >=/);
-  assert.match(sql, /ORDER BY start_at ASC, display_order ASC/);
+  assert.match(sql, /date_status = 'tbc'/);
+  assert.match(sql, /start_at ASC/);
   assert.ok(Number.isFinite(Date.parse(boundNow)));
 });

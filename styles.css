@@ -260,7 +260,7 @@ button:focus-visible {
 }
 
 .section-pad {
-  padding: clamp(70px, 9vw, 122px) clamp(20px, 5vw, 76px);
+  padding: clamp(38px, 5vw, 64px) clamp(20px, 5vw, 76px);
 }
 
 .reveal {
@@ -292,8 +292,8 @@ button:focus-visible {
 }
 
 .hero.section-pad {
-  padding-top: clamp(54px, 6vw, 84px);
-  padding-bottom: clamp(50px, 6vw, 88px);
+  padding-top: clamp(36px, 4vw, 52px);
+  padding-bottom: clamp(30px, 4vw, 46px);
 }
 
 .hero-content {
@@ -454,6 +454,14 @@ p:last-child {
 .events,
 .for-you {
   background: var(--white-soft);
+}
+
+.events {
+  padding-bottom: clamp(26px, 3.5vw, 44px);
+}
+
+.experience {
+  padding-top: clamp(30px, 4vw, 50px);
 }
 
 .event-grid {
@@ -969,7 +977,7 @@ blockquote:hover {
   }
 
   .section-pad {
-    padding-block: 70px;
+    padding-block: 40px;
   }
 
   .split,

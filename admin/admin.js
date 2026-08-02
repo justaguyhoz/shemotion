@@ -30,7 +30,7 @@ function element(tag, options = {}) {
 
 function eventStatuses(event) {
   const statuses = [];
-  const isPast = Date.parse(event.endAt || event.startAt) < Date.now();
+  const isPast = event.startAt && Date.parse(event.endAt || event.startAt) < Date.now();
   statuses.push(event.isPublished ? "Published" : "Draft");
   if (isPast) statuses.push("Past");
   if (event.availabilityStatus === "Sold out") statuses.push("Sold out");
@@ -54,8 +54,11 @@ function renderEvents() {
       meta.append(element("span", { className: `status ${className}`, text: status }));
     }
     content.append(meta, element("h3", { text: event.title }));
+    const eventDate = event.dateStatus === "tbc"
+      ? "Date to be confirmed"
+      : dateFormatter.format(new Date(event.startAt));
     content.append(element("p", {
-      text: `${event.venueName}${event.suburb ? `, ${event.suburb}` : ""} | ${dateFormatter.format(new Date(event.startAt))}`,
+      text: `${event.venueName}${event.suburb ? `, ${event.suburb}` : ""} | ${eventDate}`,
     }));
     content.append(element("p", {
       text: event.bookingUrl ? `Booking link: ${event.bookingUrl}` : "Booking link: not added",
@@ -121,6 +124,7 @@ function openForm(event = null) {
     form.elements.startTime.value = start.time;
     form.elements.endDate.value = end.date;
     form.elements.endTime.value = end.time;
+    form.elements.dateStatus.value = event.dateStatus || "scheduled";
     form.elements.isPublished.checked = event.isPublished;
   } else {
     form.elements.eventType.value = "Class";
@@ -128,7 +132,9 @@ function openForm(event = null) {
     form.elements.bookingLabel.value = "Book now";
     form.elements.availabilityStatus.value = "Available";
     form.elements.displayOrder.value = "0";
+    form.elements.dateStatus.value = "scheduled";
   }
+  updateDateFields();
   dialog.showModal();
 }
 
@@ -138,17 +144,21 @@ function toIso(date, time) {
 
 function formPayload() {
   const data = new FormData(form);
+  const dateStatus = data.get("dateStatus");
   const endDate = data.get("endDate");
   const endTime = data.get("endTime");
-  if ((endDate && !endTime) || (!endDate && endTime)) throw new Error("Add both an end date and end time, or leave both empty.");
+  if (dateStatus === "scheduled" && ((endDate && !endTime) || (!endDate && endTime))) {
+    throw new Error("Add both an end date and end time, or leave both empty.");
+  }
   return {
     title: data.get("title"),
     eventType: data.get("eventType"),
     venueName: data.get("venueName"),
     suburb: data.get("suburb"),
     address: data.get("address"),
-    startAt: toIso(data.get("startDate"), data.get("startTime")),
-    endAt: toIso(endDate, endTime),
+    dateStatus,
+    startAt: dateStatus === "tbc" ? null : toIso(data.get("startDate"), data.get("startTime")),
+    endAt: dateStatus === "tbc" ? null : toIso(endDate, endTime),
     timezone: "Australia/Brisbane",
     audience: data.get("audience"),
     shortDescription: data.get("shortDescription"),
@@ -159,6 +169,18 @@ function formPayload() {
     displayOrder: Number(data.get("displayOrder") || 0),
   };
 }
+
+function updateDateFields() {
+  const isTbc = form.elements.dateStatus.value === "tbc";
+  form.querySelectorAll("[data-date-field]").forEach((field) => {
+    field.disabled = isTbc;
+    if (isTbc) field.value = "";
+  });
+  form.elements.startDate.required = !isTbc;
+  form.elements.startTime.required = !isTbc;
+}
+
+form.elements.dateStatus.addEventListener("change", updateDateFields);
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();

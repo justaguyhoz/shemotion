@@ -53,10 +53,17 @@
           <label>Venue name<input name="venueName" maxlength="120" required></label>
           <label>Suburb<input name="suburb" maxlength="80"></label>
           <label>Address<input name="address" maxlength="200"></label>
-          <label>Start date<input name="startDate" type="date" required></label>
-          <label>Start time<input name="startTime" type="time" required></label>
-          <label>End date<input name="endDate" type="date"></label>
-          <label>End time<input name="endTime" type="time"></label>
+          <label>Date status
+            <select name="dateStatus" required>
+              <option value="scheduled">Scheduled</option>
+              <option value="tbc">Date to be confirmed</option>
+            </select>
+          </label>
+          <span aria-hidden="true"></span>
+          <label>Start date<input name="startDate" type="date" data-date-field required></label>
+          <label>Start time<input name="startTime" type="time" data-date-field required></label>
+          <label>End date<input name="endDate" type="date" data-date-field></label>
+          <label>End time<input name="endTime" type="time" data-date-field></label>
           <label>Audience<input name="audience" maxlength="80" value="Women only" required></label>
           <label>Availability
             <select name="availabilityStatus" required>

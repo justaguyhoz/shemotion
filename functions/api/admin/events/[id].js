@@ -27,7 +27,7 @@ export async function onRequestPut({ request, env, params }) {
   try {
     const result = await env.DB.prepare(`
       UPDATE events SET
-        title = ?, event_type = ?, venue_name = ?, suburb = ?, address = ?,
+        title = ?, event_type = ?, venue_name = ?, suburb = ?, address = ?, date_status = ?,
         start_at = ?, end_at = ?, timezone = ?, audience = ?, short_description = ?,
         booking_label = ?, booking_url = ?, availability_status = ?, is_published = ?,
         display_order = ?

@@ -6,6 +6,7 @@ export const AVAILABILITY_OPTIONS = [
 ];
 
 export const EVENT_TYPES = ["Class", "Workshop", "Retreat", "Private event"];
+export const DATE_STATUS_OPTIONS = ["scheduled", "tbc"];
 
 export const EVENT_FIELDS = [
   "title",
@@ -13,6 +14,7 @@ export const EVENT_FIELDS = [
   "venueName",
   "suburb",
   "address",
+  "dateStatus",
   "startAt",
   "endAt",
   "timezone",
@@ -31,6 +33,7 @@ const LIMITS = {
   venueName: 120,
   suburb: 80,
   address: 200,
+  dateStatus: 20,
   timezone: 80,
   audience: 80,
   shortDescription: 600,
@@ -60,7 +63,7 @@ export function validateEventInput(input) {
     "title",
     "eventType",
     "venueName",
-    "startAt",
+    "dateStatus",
     "audience",
     "shortDescription",
     "bookingLabel",
@@ -80,6 +83,8 @@ export function validateEventInput(input) {
 
   event.suburb = cleanText(event.suburb) || null;
   event.address = cleanText(event.address) || null;
+  event.dateStatus = cleanText(event.dateStatus) || "scheduled";
+  event.startAt = cleanText(event.startAt) || null;
   event.endAt = cleanText(event.endAt) || null;
   event.timezone = cleanText(event.timezone) || "Australia/Brisbane";
   event.bookingUrl = cleanText(event.bookingUrl) || null;
@@ -87,8 +92,13 @@ export function validateEventInput(input) {
   event.displayOrder = Number.isInteger(Number(event.displayOrder)) ? Number(event.displayOrder) : 0;
 
   if (!EVENT_TYPES.includes(event.eventType)) errors.push("eventType is invalid.");
+  if (!DATE_STATUS_OPTIONS.includes(event.dateStatus)) errors.push("dateStatus is invalid.");
   if (!AVAILABILITY_OPTIONS.includes(event.availabilityStatus)) errors.push("availabilityStatus is invalid.");
-  if (!validIsoDate(event.startAt)) errors.push("startAt must be a valid date and time.");
+  if (event.dateStatus === "scheduled" && !validIsoDate(event.startAt)) errors.push("startAt must be a valid date and time.");
+  if (event.dateStatus === "tbc") {
+    event.startAt = null;
+    event.endAt = null;
+  }
   if (event.endAt && !validIsoDate(event.endAt)) errors.push("endAt must be a valid date and time.");
   if (validIsoDate(event.startAt) && event.endAt && validIsoDate(event.endAt) && Date.parse(event.endAt) <= Date.parse(event.startAt)) {
     errors.push("endAt must be later than startAt.");
@@ -114,6 +124,7 @@ export function rowToPublicEvent(row) {
     eventType: row.event_type,
     venueName: row.venue_name,
     suburb: row.suburb,
+    dateStatus: row.date_status,
     startAt: row.start_at,
     endAt: row.end_at,
     timezone: row.timezone,
@@ -143,7 +154,8 @@ export function eventValues(event) {
     event.venueName,
     event.suburb,
     event.address,
-    new Date(event.startAt).toISOString(),
+    event.dateStatus,
+    event.startAt ? new Date(event.startAt).toISOString() : null,
     event.endAt ? new Date(event.endAt).toISOString() : null,
     event.timezone,
     event.audience,
