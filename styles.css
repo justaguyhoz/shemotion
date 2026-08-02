@@ -1007,6 +1007,14 @@ blockquote:hover {
     max-width: min(78%, 360px);
   }
 
+  .hero-image {
+    width: min(78%, 360px);
+  }
+
+  .hero-image img {
+    aspect-ratio: 4 / 5.45;
+  }
+
   .event-details {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1093,10 +1101,6 @@ blockquote:hover {
 
   .hero {
     padding-top: 58px;
-  }
-
-  .hero-image {
-    width: min(88vw, 390px);
   }
 
   .hero-actions {
