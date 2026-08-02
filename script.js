@@ -112,6 +112,35 @@ function setupReveal(items) {
   items.forEach((item) => observer.observe(item));
 }
 
+function setupPillRotator(container) {
+  const items = [...container.children];
+  if (!items.length) return;
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    items.forEach((item) => item.removeAttribute("aria-hidden"));
+    return;
+  }
+
+  let index = 0;
+  const showCurrent = () => {
+    const current = items[index];
+    current.classList.add("is-active");
+    current.setAttribute("aria-hidden", "false");
+
+    window.setTimeout(() => {
+      current.classList.remove("is-active");
+      current.setAttribute("aria-hidden", "true");
+      window.setTimeout(() => {
+        index = (index + 1) % items.length;
+        showCurrent();
+      }, 750);
+    }, 3600);
+  };
+
+  items.forEach((item) => item.setAttribute("aria-hidden", "true"));
+  window.requestAnimationFrame(showCurrent);
+}
+
 function renderAnnouncement(events) {
   const bar = document.querySelector(".announcement-bar");
   const content = announcementFor(events);
@@ -177,6 +206,7 @@ function initialisePage() {
   setupReveal([...document.querySelectorAll(
     ".events .section-heading, .experience .section-heading, .stage, .for-you .narrow, .feedback .section-heading, .quotes blockquote, .coach-grid, .contact-shell"
   )]);
+  document.querySelectorAll("[data-pill-rotator]").forEach(setupPillRotator);
   loadPublicEvents();
 }
 
