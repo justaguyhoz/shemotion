@@ -1,0 +1,18 @@
+{
+  "name": "shemotion-events",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "npm run build && wrangler pages dev dist --persist-to .wrangler/state",
+    "db:migrate:local": "wrangler d1 migrations apply shemotion-events --local --persist-to .wrangler/state",
+    "db:migrate:remote": "wrangler d1 migrations apply shemotion-events --remote",
+    "types": "wrangler types",
+    "test": "node --test",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name shemotion"
+  },
+  "devDependencies": {
+    "wrangler": "4.118.0"
+  }
+}

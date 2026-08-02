@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Shemotion Events Admin</title>
+    <link rel="icon" href="../assets/favicon_shemotion.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+  </head>
+  <body>
+    <header class="admin-header">
+      <a href="../" aria-label="View Shemotion website">
+        <img src="../assets/shemotion-logo.png" alt="Shemotion">
+      </a>
+      <button class="primary-button" type="button" data-new-event>Add Event</button>
+    </header>
+
+    <main>
+      <div class="page-heading">
+        <p class="eyebrow">Events manager</p>
+        <h1>Upcoming Experiences</h1>
+        <p>Create, edit and publish the classes shown on the Shemotion website.</p>
+      </div>
+
+      <p class="notice" data-notice role="status" aria-live="polite"></p>
+      <div class="event-list" data-event-list aria-live="polite">
+        <p>Loading events...</p>
+      </div>
+    </main>
+
+    <dialog data-event-dialog>
+      <form method="dialog" class="dialog-shell" data-event-form novalidate>
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">Event details</p>
+            <h2 data-form-title>Add Event</h2>
+          </div>
+          <button class="icon-button" type="button" data-close aria-label="Close">&#215;</button>
+        </div>
+
+        <input type="hidden" name="id">
+        <div class="form-grid">
+          <label class="field-wide">Event title<input name="title" maxlength="120" required></label>
+          <label>Event type
+            <select name="eventType" required>
+              <option>Class</option><option>Workshop</option><option>Retreat</option><option>Private event</option>
+            </select>
+          </label>
+          <label>Venue name<input name="venueName" maxlength="120" required></label>
+          <label>Suburb<input name="suburb" maxlength="80"></label>
+          <label>Address<input name="address" maxlength="200"></label>
+          <label>Start date<input name="startDate" type="date" required></label>
+          <label>Start time<input name="startTime" type="time" required></label>
+          <label>End date<input name="endDate" type="date"></label>
+          <label>End time<input name="endTime" type="time"></label>
+          <label>Audience<input name="audience" maxlength="80" value="Women only" required></label>
+          <label>Availability
+            <select name="availabilityStatus" required>
+              <option>Available</option><option>Limited spaces</option><option>Sold out</option><option>Cancelled</option>
+            </select>
+          </label>
+          <label class="field-wide">Short description<textarea name="shortDescription" maxlength="600" rows="4" required></textarea></label>
+          <label>Booking button text<input name="bookingLabel" maxlength="60" value="Book now" required></label>
+          <label>Booking URL<input name="bookingUrl" type="url" maxlength="500" placeholder="https://"></label>
+          <label>Display order<input name="displayOrder" type="number" min="-1000" max="1000" value="0"></label>
+          <label class="checkbox-field"><input name="isPublished" type="checkbox"> Published</label>
+        </div>
+
+        <p class="form-error" data-form-error role="alert"></p>
+        <div class="form-actions">
+          <button class="text-button danger-button" type="button" data-delete hidden>Delete Event</button>
+          <span class="action-spacer"></span>
+          <button class="text-button" type="button" data-close>Cancel</button>
+          <button class="primary-button" type="submit">Save Event</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script type="module" src="admin.js"></script>
+  </body>
+</html>

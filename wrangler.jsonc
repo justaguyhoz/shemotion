@@ -1,0 +1,17 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "shemotion",
+  "pages_build_output_dir": "./dist",
+  "compatibility_date": "2026-08-02",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "shemotion-events",
+      "database_id": "dc358014-6284-4aed-bd69-fca6502168c6",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "vars": {
+    "ADMIN_EMAILS": "Justaguyh@gmail.com,shemotion.au@gmail.com"
+  }
+}

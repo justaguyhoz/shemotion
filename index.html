@@ -12,9 +12,9 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <a class="announcement-bar" href="#upcoming-events" aria-label="View upcoming Shemotion class">
-      <span>Upcoming Shemotion Class - Reinvigr8 Gym, Helensvale - Wednesday 19 August at 9.15am</span>
-      <strong>View Class</strong>
+    <a class="announcement-bar" href="#upcoming-events" aria-label="View upcoming Shemotion experiences" hidden>
+      <span data-announcement-text></span>
+      <strong data-announcement-action>View Class</strong>
     </a>
 
     <header class="site-header" data-header>
@@ -25,7 +25,6 @@
       <nav class="site-nav" id="site-nav" aria-label="Main navigation">
         <a href="#upcoming-events">Upcoming</a>
         <a href="#experience">Experience</a>
-        <a href="#for-studios">For Venues</a>
         <a href="#coach">Meet Katty</a>
         <a href="mailto:shemotion.au@gmail.com">Contact</a>
 
@@ -45,7 +44,7 @@
       </nav>
 
       <div class="header-actions">
-        <a class="header-cta" href="#for-studios">Bring Shemotion to Your Space</a>
+        <a class="header-cta" href="mailto:shemotion.au@gmail.com">Contact Shemotion</a>
 
         <div class="social-links header-social-links" aria-label="Shemotion social media links">
           <a class="social-link" href="https://www.facebook.com/profile.php?id=61590301600564" target="_blank" rel="noopener noreferrer" aria-label="Shemotion on Facebook">
@@ -80,7 +79,7 @@
           <p class="hero-support">No dance experience required. All fitness levels welcome.</p>
           <div class="hero-actions" aria-label="Primary actions">
             <a class="button" href="#upcoming-events">View Upcoming Classes</a>
-            <a class="button button-ghost" href="#for-studios">Bring Shemotion to Your Space</a>
+            <a class="button button-ghost" href="mailto:shemotion.au@gmail.com">Email Shemotion</a>
           </div>
         </div>
 
@@ -91,58 +90,11 @@
 
       <section class="events section-pad" id="upcoming-events" aria-labelledby="events-title" data-events-section>
         <div class="section-heading">
-          <p class="eyebrow">Upcoming classes</p>
-          <h2 id="events-title">Upcoming Shemotion Experiences</h2>
-          <p>Join an upcoming women-only Shemotion class, workshop or special event.</p>
+          <h2 id="events-title">Upcoming Shemotion Classes</h2>
         </div>
 
-        <div class="event-grid">
-          <article class="event-card" data-event-id="reinvigr8-intro-2026-08-19" data-event-type="class" data-start-at="2026-08-19T09:15:00+10:00" data-timezone="Australia/Brisbane" data-published="true">
-            <div class="event-card-top">
-              <p class="eyebrow">Special Introductory Class</p>
-              <h3>Reinvigr8 Gym</h3>
-              <p>Helensvale</p>
-            </div>
-
-            <dl class="event-details">
-              <div>
-                <dt>Date</dt>
-                <dd>Wednesday 19 August 2026</dd>
-              </div>
-              <div>
-                <dt>Time</dt>
-                <dd>9.15am</dd>
-              </div>
-              <div>
-                <dt>Audience</dt>
-                <dd>Women only</dd>
-              </div>
-              <div>
-                <dt>Availability</dt>
-                <dd>Limited spaces</dd>
-              </div>
-            </dl>
-
-            <p>A supportive women-only movement experience designed to help you release tension, reconnect with your body and feel calmer, lighter and more grounded.</p>
-
-            <div class="event-actions">
-              <span class="button button-disabled" aria-disabled="true">Book with Reinvigr8</span>
-              <small>Booking link awaiting final URL.</small>
-            </div>
-          </article>
-        </div>
-
-        <p class="follow-line">Follow <a href="https://www.instagram.com/shemotion.au/" target="_blank" rel="noopener noreferrer">@shemotion.au</a> for upcoming classes.</p>
-      </section>
-
-      <section class="intro section-pad" aria-labelledby="intro-title">
-        <div class="narrow">
-          <p class="eyebrow">A different kind of movement class</p>
-          <h2 id="intro-title">More Than a Movement Class</h2>
-          <p>Shemotion is a supportive women-only movement experience for women who feel stressed, disconnected or stuck in their heads.</p>
-          <p>Each session combines guided feminine movement, intuitive free movement and grounding meditation to help you release tension, reconnect with your body and feel calmer, lighter and more confident.</p>
-          <p>There are no routines to perfect and no right way to move. You are supported to listen to your body, express yourself freely and move in a way that feels right for you.</p>
-          <p class="highlight-line">No dance experience required. All fitness levels welcome.</p>
+        <div class="event-grid" id="events-list" aria-live="polite" aria-busy="true">
+          <p class="events-loading">Loading upcoming classes...</p>
         </div>
       </section>
 
@@ -195,7 +147,7 @@
       <section class="for-you section-pad" aria-labelledby="for-you-title">
         <div class="narrow">
           <h2 id="for-you-title">Shemotion May Be for You If You:</h2>
-          <ul class="for-you-list">
+          <ul class="for-you-list animated-pills">
             <li>Feel stressed, overwhelmed or emotionally heavy</li>
             <li>Spend too much time in your head</li>
             <li>Feel disconnected from your body</li>
@@ -210,7 +162,7 @@
         <div class="section-heading">
           <p class="eyebrow">How you may feel</p>
           <h2 id="feedback-title">How You May Feel After Shemotion</h2>
-          <div class="outcomes" aria-label="Potential Shemotion outcomes">
+          <div class="outcomes animated-pills" aria-label="Potential Shemotion outcomes">
             <span>Less tense and overwhelmed</span>
             <span>More connected to your body</span>
             <span>Freer in your movement and expression</span>
@@ -225,33 +177,6 @@
           <blockquote>"The freestyle part helped me feel free."</blockquote>
           <blockquote>"I loved how the movement helped release emotion from the body."</blockquote>
           <blockquote>"The meditation was the perfect way to finish."</blockquote>
-        </div>
-      </section>
-
-      <section class="studios section-pad" id="for-studios" aria-labelledby="studios-title">
-        <div class="split">
-          <div>
-            <p class="eyebrow">For venues and groups</p>
-            <h2 id="studios-title">Bring Shemotion to Your Community</h2>
-            <a class="button section-button" href="mailto:shemotion.au@gmail.com">Enquire About Hosting Shemotion</a>
-          </div>
-
-          <div class="copy">
-            <p>Shemotion can be offered as a special introductory class, weekly women-only class, private group experience, workshop or retreat session.</p>
-            <p>It gives women a different kind of movement experience by combining feminine movement, light physical activity, free expression and mindfulness in one structured session.</p>
-
-            <div class="best-for">
-              <h3>Suitable for</h3>
-              <ul>
-                <li>Gyms and health clubs</li>
-                <li>Yoga and Pilates studios</li>
-                <li>Wellness spaces</li>
-                <li>Women's events</li>
-                <li>Private groups</li>
-                <li>Retreats and community programs</li>
-              </ul>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -329,6 +254,6 @@
       </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
   </body>
 </html>
