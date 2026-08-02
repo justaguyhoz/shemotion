@@ -1,8 +1,11 @@
 const header = document.querySelector("[data-header]");
 const navToggle = document.querySelector(".nav-toggle");
 const navLinks = document.querySelectorAll(".site-nav a");
+const announcementBar = document.querySelector(".announcement-bar");
+const eventsSection = document.querySelector("[data-events-section]");
+const publishedEventCards = document.querySelectorAll("[data-event-id]");
 const revealItems = document.querySelectorAll(
-  ".intro .narrow, .experience .section-heading, .stage, .feedback .section-heading, .quotes blockquote, .studios .split, .coach-grid, .contact-shell"
+  ".events .section-heading, .event-card, .intro .narrow, .experience .section-heading, .stage, .for-you .narrow, .feedback .section-heading, .quotes blockquote, .studios .split, .coach-grid, .contact-shell"
 );
 
 if (header && navToggle) {
@@ -17,6 +20,11 @@ if (header && navToggle) {
       navToggle.setAttribute("aria-expanded", "false");
     });
   });
+}
+
+if (!publishedEventCards.length) {
+  announcementBar?.setAttribute("hidden", "");
+  eventsSection?.setAttribute("hidden", "");
 }
 
 if (revealItems.length) {
