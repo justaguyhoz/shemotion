@@ -558,6 +558,12 @@ p:last-child {
   background: var(--clay);
 }
 
+.event-pill-address {
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
 .event-pill-status {
   padding: 3px 8px;
   border-radius: 999px;

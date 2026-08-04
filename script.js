@@ -85,6 +85,9 @@ export function createEventCard(event) {
   }
   meta.append(element("span", { text: [event.venueName, event.suburb].filter(Boolean).join(", ") }));
   content.append(element("span", { className: "event-pill-title", text: event.title }), meta);
+  if (event.address) {
+    content.append(element("span", { className: "event-pill-address", text: event.address }));
+  }
   if (["Limited spaces", "Sold out", "Cancelled"].includes(event.availabilityStatus)) {
     content.append(element("span", {
       className: `event-pill-status status-${event.availabilityStatus.toLowerCase().replaceAll(" ", "-")}`,

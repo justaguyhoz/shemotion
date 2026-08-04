@@ -59,6 +59,12 @@ test("events can be published with a date to be confirmed", () => {
   assert.match(announcementFor([result.event]).text, /Date to be confirmed/);
 });
 
+test("event descriptions are optional", () => {
+  const result = validateEventInput({ ...baseEvent, shortDescription: "" });
+  assert.equal(result.errors, undefined);
+  assert.equal(result.event.shortDescription, "");
+});
+
 test("SQL injection-like text remains plain event data", () => {
   const title = "Class'); DROP TABLE events; --";
   const result = validateEventInput({ ...baseEvent, title });
@@ -82,7 +88,8 @@ test("public API uses future published filtering and ordered results", async () 
   let boundNow = "";
   const row = {
     id: 1, title: baseEvent.title, event_type: baseEvent.eventType, venue_name: baseEvent.venueName,
-    suburb: baseEvent.suburb, date_status: baseEvent.dateStatus, start_at: baseEvent.startAt, end_at: null, timezone: baseEvent.timezone,
+    suburb: baseEvent.suburb, address: "1 Example Street, Helensvale QLD 4212", date_status: baseEvent.dateStatus,
+    start_at: baseEvent.startAt, end_at: null, timezone: baseEvent.timezone,
     audience: baseEvent.audience, short_description: baseEvent.shortDescription,
     booking_label: baseEvent.bookingLabel, booking_url: null, availability_status: baseEvent.availabilityStatus,
   };
@@ -103,6 +110,8 @@ test("public API uses future published filtering and ordered results", async () 
   const body = await response.json();
   assert.equal(response.status, 200);
   assert.equal(body.events.length, 1);
+  assert.equal(body.events[0].address, row.address);
+  assert.match(sql, /address/);
   assert.match(sql, /is_published = 1/);
   assert.match(sql, /date_status = 'tbc'/);
   assert.match(sql, /start_at ASC/);

@@ -4,7 +4,7 @@ export async function onRequestGet({ env }) {
   try {
     const now = new Date().toISOString();
     const result = await env.DB.prepare(`
-      SELECT id, title, event_type, venue_name, suburb, date_status, start_at, end_at, timezone,
+      SELECT id, title, event_type, venue_name, suburb, address, date_status, start_at, end_at, timezone,
              audience, short_description, booking_label, booking_url, availability_status
       FROM events
       WHERE is_published = 1

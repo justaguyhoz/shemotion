@@ -65,7 +65,6 @@ export function validateEventInput(input) {
     "venueName",
     "dateStatus",
     "audience",
-    "shortDescription",
     "bookingLabel",
     "availabilityStatus",
   ];
@@ -83,6 +82,7 @@ export function validateEventInput(input) {
 
   event.suburb = cleanText(event.suburb) || null;
   event.address = cleanText(event.address) || null;
+  event.shortDescription = cleanText(event.shortDescription);
   event.dateStatus = cleanText(event.dateStatus) || "scheduled";
   event.startAt = cleanText(event.startAt) || null;
   event.endAt = cleanText(event.endAt) || null;
@@ -124,6 +124,7 @@ export function rowToPublicEvent(row) {
     eventType: row.event_type,
     venueName: row.venue_name,
     suburb: row.suburb,
+    address: row.address,
     dateStatus: row.date_status,
     startAt: row.start_at,
     endAt: row.end_at,
@@ -139,7 +140,6 @@ export function rowToPublicEvent(row) {
 export function rowToAdminEvent(row) {
   return {
     ...rowToPublicEvent(row),
-    address: row.address,
     isPublished: row.is_published === 1,
     displayOrder: row.display_order,
     createdAt: row.created_at,

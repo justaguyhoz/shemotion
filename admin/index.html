@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="admin.css?v=20260804-1">
+    <link rel="stylesheet" href="admin.css?v=20260804-2">
   </head>
   <body>
     <header class="admin-header">
@@ -70,7 +70,7 @@
               <option>Available</option><option>Limited spaces</option><option>Sold out</option><option>Cancelled</option>
             </select>
           </label>
-          <label class="field-wide">Short description<textarea name="shortDescription" maxlength="600" rows="4" required></textarea></label>
+          <label class="field-wide"><span>Short description <span class="optional-label">Optional</span></span><textarea name="shortDescription" maxlength="600" rows="4"></textarea></label>
           <label>Booking button text<input name="bookingLabel" maxlength="60" value="Book now" required></label>
           <label>Booking URL<input name="bookingUrl" type="url" maxlength="500" placeholder="https://"></label>
           <label>Display order<input name="displayOrder" type="number" min="-1000" max="1000" value="0"></label>
