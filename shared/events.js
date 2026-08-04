@@ -1,3 +1,5 @@
+import { RECURRENCE_OPTIONS } from "../recurrence.js";
+
 export const AVAILABILITY_OPTIONS = [
   "Available",
   "Limited spaces",
@@ -25,6 +27,8 @@ export const EVENT_FIELDS = [
   "availabilityStatus",
   "isPublished",
   "displayOrder",
+  "recurrenceFrequency",
+  "recurrenceUntil",
 ];
 
 const LIMITS = {
@@ -39,6 +43,7 @@ const LIMITS = {
   shortDescription: 600,
   bookingLabel: 60,
   bookingUrl: 500,
+  recurrenceFrequency: 20,
 };
 
 function cleanText(value) {
@@ -47,6 +52,13 @@ function cleanText(value) {
 
 function validIsoDate(value) {
   return typeof value === "string" && value.length > 0 && Number.isFinite(Date.parse(value));
+}
+
+function brisbaneDate(value) {
+  if (!validIsoDate(value)) return null;
+  return new Intl.DateTimeFormat("en-CA", {
+    year: "numeric", month: "2-digit", day: "2-digit", timeZone: "Australia/Brisbane",
+  }).format(new Date(value));
 }
 
 export function validateEventInput(input) {
@@ -90,10 +102,18 @@ export function validateEventInput(input) {
   event.bookingUrl = cleanText(event.bookingUrl) || null;
   event.isPublished = event.isPublished === true || event.isPublished === 1;
   event.displayOrder = Number.isInteger(Number(event.displayOrder)) ? Number(event.displayOrder) : 0;
+  event.recurrenceFrequency = cleanText(event.recurrenceFrequency) || "none";
+  event.recurrenceUntil = cleanText(event.recurrenceUntil) || null;
 
   if (!EVENT_TYPES.includes(event.eventType)) errors.push("eventType is invalid.");
   if (!DATE_STATUS_OPTIONS.includes(event.dateStatus)) errors.push("dateStatus is invalid.");
   if (!AVAILABILITY_OPTIONS.includes(event.availabilityStatus)) errors.push("availabilityStatus is invalid.");
+  if (!RECURRENCE_OPTIONS.includes(event.recurrenceFrequency)) errors.push("recurrenceFrequency is invalid.");
+  if (event.recurrenceFrequency !== "none" && event.dateStatus === "tbc") errors.push("Recurring events require a scheduled date.");
+  if (event.recurrenceUntil && !/^\d{4}-\d{2}-\d{2}$/.test(event.recurrenceUntil)) errors.push("recurrenceUntil must be a valid date.");
+  if (event.recurrenceUntil && event.startAt && event.recurrenceUntil < brisbaneDate(event.startAt)) {
+    errors.push("recurrenceUntil must be on or after the first event date.");
+  }
   if (event.dateStatus === "scheduled" && !validIsoDate(event.startAt)) errors.push("startAt must be a valid date and time.");
   if (event.dateStatus === "tbc") {
     event.startAt = null;
@@ -134,6 +154,9 @@ export function rowToPublicEvent(row) {
     bookingLabel: row.booking_label,
     bookingUrl: row.booking_url,
     availabilityStatus: row.availability_status,
+    recurrenceFrequency: row.recurrence_frequency || "none",
+    recurrenceUntil: row.recurrence_until,
+    displayOrder: row.display_order || 0,
   };
 }
 
@@ -141,7 +164,6 @@ export function rowToAdminEvent(row) {
   return {
     ...rowToPublicEvent(row),
     isPublished: row.is_published === 1,
-    displayOrder: row.display_order,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -165,6 +187,8 @@ export function eventValues(event) {
     event.availabilityStatus,
     event.isPublished ? 1 : 0,
     event.displayOrder,
+    event.recurrenceFrequency,
+    event.recurrenceUntil,
   ];
 }
 

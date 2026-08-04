@@ -1,4 +1,5 @@
 import { eventDateKey, initialCalendarMonth, monthGrid, monthLabel, moveMonth } from "../calendar.js";
+import { expandRecurringEvents } from "../recurrence.js";
 
 const list = document.querySelector("[data-event-list]");
 const notice = document.querySelector("[data-notice]");
@@ -63,6 +64,10 @@ function renderEvents() {
     content.append(element("p", {
       text: `${event.venueName}${event.suburb ? `, ${event.suburb}` : ""} | ${eventDate}`,
     }));
+    if (event.recurrenceFrequency && event.recurrenceFrequency !== "none") {
+      const frequency = event.recurrenceFrequency === "fortnightly" ? "Every fortnight" : `Every ${event.recurrenceFrequency.replace("ly", "")}`;
+      content.append(element("p", { text: `${frequency}${event.recurrenceUntil ? ` until ${event.recurrenceUntil}` : ""}` }));
+    }
     content.append(element("p", {
       text: event.bookingUrl ? `Booking link: ${event.bookingUrl}` : "Booking link: not added",
     }));
@@ -83,30 +88,92 @@ function renderAdminCalendar() {
   adminCalendarMonth ||= initialCalendarMonth(events);
   label.textContent = monthLabel(adminCalendarMonth);
   grid.replaceChildren();
+  const days = monthGrid(adminCalendarMonth.year, adminCalendarMonth.month);
+  const rangeStart = `${days[0].key}T00:00:00.000Z`;
+  const rangeEnd = `${days[days.length - 1].key}T23:59:59.999Z`;
+  const occurrences = expandRecurringEvents(events, rangeStart, rangeEnd);
   const eventsByDate = new Map();
-  events.forEach((event) => {
+  occurrences.forEach((event) => {
     const key = event.dateStatus === "tbc" ? null : eventDateKey(event.startAt);
     if (!key) return;
     if (!eventsByDate.has(key)) eventsByDate.set(key, []);
     eventsByDate.get(key).push(event);
   });
 
-  monthGrid(adminCalendarMonth.year, adminCalendarMonth.month).forEach((day) => {
+  days.forEach((day) => {
     const cell = element("div", { className: `admin-calendar-day${day.inMonth ? "" : " is-outside"}` });
     const dateButton = element("button", { className: "admin-calendar-date", text: String(day.day) });
     dateButton.type = "button";
     dateButton.setAttribute("aria-label", `Add event on ${day.key}`);
     dateButton.addEventListener("click", () => openForm(null, day.key));
     cell.append(dateButton);
-    (eventsByDate.get(day.key) || []).forEach((event) => {
-      const marker = element("button", { className: "admin-calendar-event", text: event.title });
+    const dayEvents = eventsByDate.get(day.key) || [];
+    if (dayEvents.length) {
+      const marker = element("button", { className: "admin-calendar-event", text: String(dayEvents.length) });
       marker.type = "button";
-      marker.title = `${event.title} - ${event.venueName}${event.suburb ? `, ${event.suburb}` : ""}`;
-      marker.addEventListener("click", () => openForm(event));
+      marker.setAttribute("aria-label", `View ${dayEvents.length} event${dayEvents.length === 1 ? "" : "s"} on this date`);
+      marker.addEventListener("click", () => openAdminCalendarPopup(dayEvents));
       cell.append(marker);
-    });
+    }
     grid.append(cell);
   });
+}
+
+function openAdminCalendarPopup(dayEvents) {
+  const dialog = document.querySelector("[data-admin-calendar-dialog]");
+  const track = document.querySelector("[data-admin-calendar-dialog-track]");
+  const previous = document.querySelector("[data-admin-calendar-dialog-previous]");
+  const next = document.querySelector("[data-admin-calendar-dialog-next]");
+  const counter = document.querySelector("[data-admin-calendar-dialog-counter]");
+  if (!dialog || !track || !previous || !next || !counter) return;
+
+  const cards = dayEvents.map((occurrence) => {
+    const master = events.find((event) => String(event.id) === String(occurrence.seriesId || occurrence.id));
+    const card = element("article", { className: "admin-calendar-card" });
+    card.append(
+      element("p", { className: "eyebrow", text: occurrence.venueName }),
+      element("h3", { text: occurrence.title }),
+      element("p", { text: dateFormatter.format(new Date(occurrence.startAt)) }),
+      element("p", { text: [occurrence.suburb, occurrence.address].filter(Boolean).join(" | ") })
+    );
+    if (occurrence.shortDescription && occurrence.shortDescription !== "-") {
+      card.append(element("p", { text: occurrence.shortDescription }));
+    }
+    if (master) {
+      const edit = element("button", { className: "primary-button", text: occurrence.isRecurringOccurrence ? "Edit series" : "Edit event" });
+      edit.type = "button";
+      edit.addEventListener("click", () => {
+        dialog.close();
+        openForm(master);
+      });
+      card.append(edit);
+    }
+    return card;
+  });
+  track.replaceChildren(...cards);
+  let index = 0;
+  const update = () => {
+    counter.textContent = `${index + 1} / ${cards.length}`;
+    previous.disabled = index === 0;
+    next.disabled = index === cards.length - 1;
+  };
+  const goTo = (nextIndex) => {
+    index = Math.max(0, Math.min(cards.length - 1, nextIndex));
+    track.scrollTo({ left: cards[index].offsetLeft - track.offsetLeft, behavior: "smooth" });
+    update();
+  };
+  previous.onclick = () => goTo(index - 1);
+  next.onclick = () => goTo(index + 1);
+  track.onscroll = () => {
+    index = cards.reduce((closest, card, cardIndex) => {
+      const distance = Math.abs((card.offsetLeft - track.offsetLeft) - track.scrollLeft);
+      const closestDistance = Math.abs((cards[closest].offsetLeft - track.offsetLeft) - track.scrollLeft);
+      return distance < closestDistance ? cardIndex : closest;
+    }, 0);
+    update();
+  };
+  update();
+  dialog.showModal();
 }
 
 async function apiRequest(path, options = {}) {
@@ -154,7 +221,7 @@ function openForm(event = null, prefillDate = "") {
   if (event) {
     const start = brisbaneParts(event.startAt);
     const end = brisbaneParts(event.endAt);
-    for (const name of ["title", "eventType", "venueName", "suburb", "address", "audience", "shortDescription", "bookingLabel", "bookingUrl", "availabilityStatus", "displayOrder"]) {
+    for (const name of ["title", "eventType", "venueName", "suburb", "address", "audience", "shortDescription", "bookingLabel", "bookingUrl", "availabilityStatus", "displayOrder", "recurrenceFrequency", "recurrenceUntil"]) {
       form.elements[name].value = event[name] ?? "";
     }
     form.elements.startDate.value = start.date;
@@ -170,6 +237,7 @@ function openForm(event = null, prefillDate = "") {
     form.elements.availabilityStatus.value = "Available";
     form.elements.displayOrder.value = "0";
     form.elements.dateStatus.value = "scheduled";
+    form.elements.recurrenceFrequency.value = "none";
     form.elements.startDate.value = prefillDate;
   }
   updateDateFields();
@@ -205,6 +273,8 @@ function formPayload() {
     availabilityStatus: data.get("availabilityStatus"),
     isPublished: data.get("isPublished") === "on",
     displayOrder: Number(data.get("displayOrder") || 0),
+    recurrenceFrequency: data.get("recurrenceFrequency"),
+    recurrenceUntil: data.get("recurrenceUntil"),
   };
 }
 
@@ -216,6 +286,12 @@ function updateDateFields() {
   });
   form.elements.startDate.required = !isTbc;
   form.elements.startTime.required = !isTbc;
+  form.elements.recurrenceFrequency.disabled = isTbc;
+  form.elements.recurrenceUntil.disabled = isTbc;
+  if (isTbc) {
+    form.elements.recurrenceFrequency.value = "none";
+    form.elements.recurrenceUntil.value = "";
+  }
 }
 
 form.elements.dateStatus.addEventListener("change", updateDateFields);
@@ -273,5 +349,10 @@ document.querySelector("[data-admin-calendar-previous]").addEventListener("click
 document.querySelector("[data-admin-calendar-next]").addEventListener("click", () => {
   adminCalendarMonth = moveMonth(adminCalendarMonth || initialCalendarMonth(events), 1);
   renderAdminCalendar();
+});
+const adminCalendarDialog = document.querySelector("[data-admin-calendar-dialog]");
+document.querySelector("[data-admin-calendar-dialog-close]").addEventListener("click", () => adminCalendarDialog.close());
+adminCalendarDialog.addEventListener("click", (event) => {
+  if (event.target === adminCalendarDialog) adminCalendarDialog.close();
 });
 loadEvents();

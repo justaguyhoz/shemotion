@@ -33,8 +33,8 @@ export async function onRequestPost({ request, env }) {
       INSERT INTO events (
         title, event_type, venue_name, suburb, address, date_status, start_at, end_at, timezone,
         audience, short_description, booking_label, booking_url, availability_status,
-        is_published, display_order
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        is_published, display_order, recurrence_frequency, recurrence_until
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       RETURNING *
     `).bind(...eventValues(validation.event)).first();
     return jsonResponse({ event: rowToAdminEvent(result) }, 201);

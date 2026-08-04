@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="admin.css?v=20260804-3">
+    <link rel="stylesheet" href="admin.css?v=20260804-4">
   </head>
   <body>
     <header class="admin-header">
@@ -47,6 +47,18 @@
       </div>
     </main>
 
+    <dialog class="admin-calendar-dialog" data-admin-calendar-dialog>
+      <div class="admin-calendar-dialog-shell">
+        <button class="icon-button admin-calendar-dialog-close" type="button" data-admin-calendar-dialog-close aria-label="Close">&#215;</button>
+        <div class="admin-calendar-dialog-track" data-admin-calendar-dialog-track></div>
+        <div class="admin-calendar-dialog-controls">
+          <button type="button" data-admin-calendar-dialog-previous aria-label="Previous event">&#8592;</button>
+          <output data-admin-calendar-dialog-counter></output>
+          <button type="button" data-admin-calendar-dialog-next aria-label="Next event">&#8594;</button>
+        </div>
+      </div>
+    </dialog>
+
     <dialog data-event-dialog>
       <form method="dialog" class="dialog-shell" data-event-form novalidate>
         <div class="dialog-heading">
@@ -79,6 +91,15 @@
           <label>Start time<input name="startTime" type="time" data-date-field required></label>
           <label>End date<input name="endDate" type="date" data-date-field></label>
           <label>End time<input name="endTime" type="time" data-date-field></label>
+          <label>Repeats
+            <select name="recurrenceFrequency">
+              <option value="none">Does not repeat</option>
+              <option value="weekly">Every week</option>
+              <option value="fortnightly">Every fortnight</option>
+              <option value="monthly">Every month</option>
+            </select>
+          </label>
+          <label>Repeat until <span class="optional-label">Optional</span><input name="recurrenceUntil" type="date"></label>
           <label>Audience<input name="audience" maxlength="80" value="Women only" required></label>
           <label>Availability
             <select name="availabilityStatus" required>
@@ -102,6 +123,6 @@
       </form>
     </dialog>
 
-    <script type="module" src="admin.js?v=20260804-3"></script>
+    <script type="module" src="admin.js?v=20260804-4"></script>
   </body>
 </html>

@@ -5,6 +5,7 @@ import { validateEventInput } from "../shared/events.js";
 import { verifyAccessRequest } from "../shared/access.js";
 import { onRequestGet as getPublicEvents } from "../functions/api/events.js";
 import { eventDateKey, monthGrid, moveMonth } from "../calendar.js";
+import { expandRecurringEvents } from "../recurrence.js";
 
 const baseEvent = {
   id: 1,
@@ -23,6 +24,8 @@ const baseEvent = {
   availabilityStatus: "Limited spaces",
   isPublished: true,
   displayOrder: 0,
+  recurrenceFrequency: "none",
+  recurrenceUntil: null,
 };
 
 test("one event creates a detailed announcement", () => {
@@ -125,4 +128,24 @@ test("calendar utilities use Brisbane dates and Monday-first months", () => {
   assert.equal(days.length, 42);
   assert.equal(days[0].key, "2026-07-27");
   assert.deepEqual(moveMonth({ year: 2026, month: 11 }, 1), { year: 2027, month: 0 });
+});
+
+test("weekly recurring events expand into dated occurrences", () => {
+  const recurring = { ...baseEvent, recurrenceFrequency: "weekly", recurrenceUntil: "2026-09-02" };
+  const occurrences = expandRecurringEvents(
+    [recurring],
+    "2026-08-18T00:00:00.000Z",
+    "2026-09-03T00:00:00.000Z"
+  );
+  assert.equal(occurrences.length, 3);
+  assert.ok(occurrences.every((event) => event.seriesId === baseEvent.id));
+});
+
+test("recurrence validation rejects an end before the first event", () => {
+  const result = validateEventInput({
+    ...baseEvent,
+    recurrenceFrequency: "weekly",
+    recurrenceUntil: "2026-08-01",
+  });
+  assert.ok(result.errors.some((error) => error.includes("on or after")));
 });

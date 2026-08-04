@@ -92,6 +92,12 @@ export function createEventCard(event) {
       text: event.availabilityStatus,
     }));
   }
+  if (event.recurrenceFrequency && event.recurrenceFrequency !== "none") {
+    const label = event.recurrenceFrequency === "fortnightly"
+      ? "Fortnightly"
+      : `${event.recurrenceFrequency.charAt(0).toUpperCase()}${event.recurrenceFrequency.slice(1)}`;
+    content.append(element("span", { className: "event-pill-recurrence", text: `${label} series` }));
+  }
 
   const description = event.shortDescription?.trim() === "-" ? "" : event.shortDescription?.trim();
   const hasDetails = Boolean(event.address || description);
@@ -281,7 +287,7 @@ function setupEventCarousel(list, cards) {
   updateControls();
 }
 
-function setupPublicCalendar(events, cards) {
+function setupPublicCalendar(events) {
   const listView = document.querySelector("[data-events-list-view]");
   const calendarView = document.querySelector("[data-events-calendar-view]");
   const calendarGrid = document.querySelector("[data-calendar-grid]");
@@ -308,12 +314,43 @@ function setupPublicCalendar(events, cards) {
       button.setAttribute("aria-pressed", String(active));
     });
   };
-  const openEvent = (event) => {
-    showView("list");
-    const card = cards.find((item) => item.dataset.eventId === String(event.id));
-    const toggle = card?.querySelector(".event-details-toggle");
-    if (toggle?.getAttribute("aria-expanded") !== "true") toggle?.click();
-    card?.scrollIntoView({ behavior: "smooth", block: "center" });
+  const openCalendarPopup = (dayEvents) => {
+    const dialog = document.querySelector("[data-calendar-dialog]");
+    const track = document.querySelector("[data-calendar-dialog-track]");
+    const previous = document.querySelector("[data-calendar-dialog-previous]");
+    const next = document.querySelector("[data-calendar-dialog-next]");
+    const counter = document.querySelector("[data-calendar-dialog-counter]");
+    if (!dialog || !track || !previous || !next || !counter) return;
+    const popupCards = dayEvents.map((event) => {
+      const card = createEventCard(event);
+      card.classList.add("calendar-popup-card");
+      return card;
+    });
+    track.replaceChildren(...popupCards);
+    setupEventDetails(popupCards);
+    let index = 0;
+    const update = () => {
+      counter.textContent = `${index + 1} / ${popupCards.length}`;
+      previous.disabled = index === 0;
+      next.disabled = index === popupCards.length - 1;
+    };
+    const goTo = (nextIndex) => {
+      index = Math.max(0, Math.min(popupCards.length - 1, nextIndex));
+      track.scrollTo({ left: popupCards[index].offsetLeft - track.offsetLeft, behavior: "smooth" });
+      update();
+    };
+    previous.onclick = () => goTo(index - 1);
+    next.onclick = () => goTo(index + 1);
+    track.onscroll = () => {
+      index = popupCards.reduce((closest, card, cardIndex) => {
+        const distance = Math.abs((card.offsetLeft - track.offsetLeft) - track.scrollLeft);
+        const closestDistance = Math.abs((popupCards[closest].offsetLeft - track.offsetLeft) - track.scrollLeft);
+        return distance < closestDistance ? cardIndex : closest;
+      }, 0);
+      update();
+    };
+    update();
+    dialog.showModal();
   };
   const renderCalendar = () => {
     calendarLabel.textContent = monthLabel(currentMonth);
@@ -321,14 +358,14 @@ function setupPublicCalendar(events, cards) {
     monthGrid(currentMonth.year, currentMonth.month).forEach((day) => {
       const cell = element("div", { className: `calendar-day${day.inMonth ? "" : " is-outside"}` });
       cell.append(element("span", { className: "calendar-date", text: String(day.day) }));
-      (eventsByDate.get(day.key) || []).forEach((event) => {
-        const eventButton = element("button", { className: "calendar-event", text: event.title });
+      const dayEvents = eventsByDate.get(day.key) || [];
+      if (dayEvents.length) {
+        const eventButton = element("button", { className: "calendar-event-count", text: String(dayEvents.length) });
         eventButton.type = "button";
-        eventButton.title = `${event.title} - ${event.venueName}${event.suburb ? `, ${event.suburb}` : ""}`;
-        eventButton.setAttribute("aria-label", eventButton.title);
-        eventButton.addEventListener("click", () => openEvent(event));
+        eventButton.setAttribute("aria-label", `View ${dayEvents.length} event${dayEvents.length === 1 ? "" : "s"} on this date`);
+        eventButton.addEventListener("click", () => openCalendarPopup(dayEvents));
         cell.append(eventButton);
-      });
+      }
       calendarGrid.append(cell);
     });
   };
@@ -343,6 +380,11 @@ function setupPublicCalendar(events, cards) {
     renderCalendar();
   });
   renderCalendar();
+  const dialog = document.querySelector("[data-calendar-dialog]");
+  document.querySelector("[data-calendar-dialog-close]")?.addEventListener("click", () => dialog?.close());
+  dialog?.addEventListener("click", (event) => {
+    if (event.target === dialog) dialog.close();
+  });
 }
 
 async function loadPublicEvents() {
@@ -370,7 +412,7 @@ async function loadPublicEvents() {
     list.append(...cards);
     setupEventCarousel(list, cards);
     setupEventDetails(cards);
-    setupPublicCalendar(events, cards);
+    setupPublicCalendar(events);
   } catch {
     list.replaceChildren(element("p", {
       className: "events-empty",
