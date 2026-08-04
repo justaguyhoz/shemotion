@@ -135,15 +135,16 @@ export function createEventCard(event) {
   return card;
 }
 
+function closeEventDetails(card) {
+  const toggle = card.querySelector(".event-details-toggle");
+  const details = card.querySelector(".event-pill-details");
+  if (!toggle || !details) return;
+  toggle.setAttribute("aria-expanded", "false");
+  toggle.textContent = "Full details";
+  details.hidden = true;
+}
+
 function setupEventDetails(cards) {
-  const closeCard = (card) => {
-    const toggle = card.querySelector(".event-details-toggle");
-    const details = card.querySelector(".event-pill-details");
-    if (!toggle || !details) return;
-    toggle.setAttribute("aria-expanded", "false");
-    toggle.textContent = "Full details";
-    details.hidden = true;
-  };
 
   cards.forEach((card) => {
     const toggle = card.querySelector(".event-details-toggle");
@@ -151,7 +152,7 @@ function setupEventDetails(cards) {
     if (!toggle || !details) return;
     toggle.addEventListener("click", () => {
       const willOpen = toggle.getAttribute("aria-expanded") !== "true";
-      if (!willOpen) return closeCard(card);
+      if (!willOpen) return closeEventDetails(card);
       toggle.setAttribute("aria-expanded", "true");
       toggle.textContent = "Close details";
       details.hidden = false;
@@ -160,11 +161,11 @@ function setupEventDetails(cards) {
 
   document.addEventListener("click", (event) => {
     cards.forEach((card) => {
-      if (!card.contains(event.target)) closeCard(card);
+      if (!card.contains(event.target)) closeEventDetails(card);
     });
   });
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") cards.forEach(closeCard);
+    if (event.key === "Escape") cards.forEach(closeEventDetails);
   });
 }
 
@@ -267,6 +268,9 @@ function setupEventCarousel(list, cards) {
         const closestDistance = Math.abs((cards[closest].offsetLeft - list.offsetLeft) - list.scrollLeft);
         return distance < closestDistance ? index : closest;
       }, 0);
+      cards.forEach((card, index) => {
+        if (index !== activeIndex) closeEventDetails(card);
+      });
       updateControls();
     }, 80);
   }, { passive: true });

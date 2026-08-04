@@ -1255,7 +1255,7 @@ blockquote:hover {
 
   .event-grid {
     display: flex;
-    align-items: stretch;
+    align-items: flex-start;
     gap: 10px;
     margin-inline: -2px;
     padding-bottom: 14px;
@@ -1265,7 +1265,7 @@ blockquote:hover {
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
-    touch-action: pan-x;
+    touch-action: pan-x pan-y;
   }
 
   .event-pill {
