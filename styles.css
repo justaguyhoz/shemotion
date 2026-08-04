@@ -466,33 +466,34 @@ p:last-child {
 
 .event-grid {
   display: grid;
-  gap: 12px;
-  max-width: 780px;
+  gap: 14px;
+  max-width: 860px;
   margin: clamp(26px, 4vw, 42px) auto 0;
 }
 
 .event-pill {
   position: relative;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  min-height: 92px;
-  padding: 18px 24px 28px;
+  gap: 28px;
+  min-height: 110px;
+  padding: 24px 28px 24px 32px;
   overflow: hidden;
-  background: rgba(255, 250, 244, 0.74);
-  border: 1px solid var(--sand);
-  border-radius: 999px;
-  box-shadow: 0 12px 30px rgba(79, 74, 69, 0.07);
+  background: rgba(255, 250, 244, 0.9);
+  border: 1px solid rgba(201, 184, 166, 0.58);
+  border-radius: 8px;
+  box-shadow: 0 10px 28px rgba(79, 74, 69, 0.07);
   transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
 }
 
-.event-pill::after {
+.event-pill::before {
   content: "";
   position: absolute;
-  inset: auto 0 0;
-  height: 27px;
-  background: linear-gradient(to bottom, rgba(219, 227, 220, 0), rgba(219, 227, 220, 0.58));
+  inset: 18px auto 18px 0;
+  width: 3px;
+  background: var(--green);
+  border-radius: 0 2px 2px 0;
   pointer-events: none;
 }
 
@@ -507,18 +508,16 @@ p:last-child {
 }
 
 .event-pill-content {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px 16px;
+  display: grid;
+  justify-items: start;
+  gap: 10px;
   min-width: 0;
 }
 
 .event-pill-title {
-  flex-basis: 100%;
   color: var(--charcoal);
   font-family: var(--serif);
-  font-size: 1.25rem;
+  font-size: clamp(1.2rem, 2.2vw, 1.42rem);
   line-height: 1.2;
 }
 
@@ -531,9 +530,12 @@ p:last-child {
 }
 
 .event-pill-meta span + span::before {
-  content: "·";
+  content: "";
+  display: inline-block;
+  width: 1px;
+  height: 0.8em;
   margin-right: 16px;
-  color: var(--clay);
+  background: var(--clay);
 }
 
 .event-pill-status {
@@ -553,14 +555,13 @@ p:last-child {
 }
 
 .event-pill-action {
-  position: relative;
-  z-index: 1;
-  flex: 0 0 auto;
+  justify-self: end;
   color: var(--green);
   font-size: 0.72rem;
   font-weight: 600;
   text-align: right;
   text-transform: uppercase;
+  border-bottom: 1px solid rgba(47, 74, 61, 0.3);
 }
 
 .events-loading,
@@ -1118,15 +1119,16 @@ blockquote:hover {
   }
 
   .event-pill {
+    grid-template-columns: minmax(0, 1fr);
     align-items: flex-start;
-    flex-direction: column;
-    gap: 10px;
+    gap: 14px;
     min-height: 0;
-    padding: 18px 20px 30px;
-    border-radius: 28px;
+    padding: 22px 20px 22px 26px;
+    border-radius: 8px;
   }
 
   .event-pill-action {
+    justify-self: start;
     text-align: left;
   }
 }
