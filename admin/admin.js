@@ -1,3 +1,5 @@
+import { eventDateKey, initialCalendarMonth, monthGrid, monthLabel, moveMonth } from "../calendar.js";
+
 const list = document.querySelector("[data-event-list]");
 const notice = document.querySelector("[data-notice]");
 const dialog = document.querySelector("[data-event-dialog]");
@@ -5,6 +7,7 @@ const form = document.querySelector("[data-event-form]");
 const formError = document.querySelector("[data-form-error]");
 const deleteButton = document.querySelector("[data-delete]");
 let events = [];
+let adminCalendarMonth;
 
 const dateFormatter = new Intl.DateTimeFormat("en-AU", {
   weekday: "short",
@@ -70,6 +73,40 @@ function renderEvents() {
     article.append(content, edit);
     list.append(article);
   }
+  renderAdminCalendar();
+}
+
+function renderAdminCalendar() {
+  const grid = document.querySelector("[data-admin-calendar-grid]");
+  const label = document.querySelector("[data-admin-calendar-label]");
+  if (!grid || !label || !events.length) return;
+  adminCalendarMonth ||= initialCalendarMonth(events);
+  label.textContent = monthLabel(adminCalendarMonth);
+  grid.replaceChildren();
+  const eventsByDate = new Map();
+  events.forEach((event) => {
+    const key = event.dateStatus === "tbc" ? null : eventDateKey(event.startAt);
+    if (!key) return;
+    if (!eventsByDate.has(key)) eventsByDate.set(key, []);
+    eventsByDate.get(key).push(event);
+  });
+
+  monthGrid(adminCalendarMonth.year, adminCalendarMonth.month).forEach((day) => {
+    const cell = element("div", { className: `admin-calendar-day${day.inMonth ? "" : " is-outside"}` });
+    const dateButton = element("button", { className: "admin-calendar-date", text: String(day.day) });
+    dateButton.type = "button";
+    dateButton.setAttribute("aria-label", `Add event on ${day.key}`);
+    dateButton.addEventListener("click", () => openForm(null, day.key));
+    cell.append(dateButton);
+    (eventsByDate.get(day.key) || []).forEach((event) => {
+      const marker = element("button", { className: "admin-calendar-event", text: event.title });
+      marker.type = "button";
+      marker.title = `${event.title} - ${event.venueName}${event.suburb ? `, ${event.suburb}` : ""}`;
+      marker.addEventListener("click", () => openForm(event));
+      cell.append(marker);
+    });
+    grid.append(cell);
+  });
 }
 
 async function apiRequest(path, options = {}) {
@@ -107,7 +144,7 @@ function brisbaneParts(iso) {
   return { date: `${get("year")}-${get("month")}-${get("day")}`, time: `${get("hour")}:${get("minute")}` };
 }
 
-function openForm(event = null) {
+function openForm(event = null, prefillDate = "") {
   form.reset();
   formError.textContent = "";
   form.elements.id.value = event?.id || "";
@@ -133,6 +170,7 @@ function openForm(event = null) {
     form.elements.availabilityStatus.value = "Available";
     form.elements.displayOrder.value = "0";
     form.elements.dateStatus.value = "scheduled";
+    form.elements.startDate.value = prefillDate;
   }
   updateDateFields();
   dialog.showModal();
@@ -217,4 +255,23 @@ deleteButton.addEventListener("click", async () => {
 
 document.querySelector("[data-new-event]").addEventListener("click", () => openForm());
 document.querySelectorAll("[data-close]").forEach((button) => button.addEventListener("click", () => dialog.close()));
+document.querySelectorAll("[data-admin-view]").forEach((button) => button.addEventListener("click", () => {
+  const calendar = button.dataset.adminView === "calendar";
+  document.querySelector("[data-admin-list-view]").hidden = calendar;
+  document.querySelector("[data-admin-calendar-view]").hidden = !calendar;
+  document.querySelectorAll("[data-admin-view]").forEach((viewButton) => {
+    const active = viewButton === button;
+    viewButton.classList.toggle("is-active", active);
+    viewButton.setAttribute("aria-pressed", String(active));
+  });
+  if (calendar) renderAdminCalendar();
+}));
+document.querySelector("[data-admin-calendar-previous]").addEventListener("click", () => {
+  adminCalendarMonth = moveMonth(adminCalendarMonth || initialCalendarMonth(events), -1);
+  renderAdminCalendar();
+});
+document.querySelector("[data-admin-calendar-next]").addEventListener("click", () => {
+  adminCalendarMonth = moveMonth(adminCalendarMonth || initialCalendarMonth(events), 1);
+  renderAdminCalendar();
+});
 loadEvents();

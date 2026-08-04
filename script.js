@@ -1,3 +1,5 @@
+import { eventDateKey, initialCalendarMonth, monthGrid, monthLabel, moveMonth } from "./calendar.js";
+
 const BRISBANE_TIMEZONE = "Australia/Brisbane";
 
 const fullDateFormatter = new Intl.DateTimeFormat("en-AU", {
@@ -279,6 +281,70 @@ function setupEventCarousel(list, cards) {
   updateControls();
 }
 
+function setupPublicCalendar(events, cards) {
+  const listView = document.querySelector("[data-events-list-view]");
+  const calendarView = document.querySelector("[data-events-calendar-view]");
+  const calendarGrid = document.querySelector("[data-calendar-grid]");
+  const calendarLabel = document.querySelector("[data-calendar-label]");
+  const viewButtons = [...document.querySelectorAll("[data-events-view]")];
+  if (!listView || !calendarView || !calendarGrid || !calendarLabel) return;
+
+  let currentMonth = initialCalendarMonth(events);
+  const eventsByDate = new Map();
+  events.forEach((event) => {
+    const key = event.dateStatus === "tbc" ? null : eventDateKey(event.startAt);
+    if (!key) return;
+    if (!eventsByDate.has(key)) eventsByDate.set(key, []);
+    eventsByDate.get(key).push(event);
+  });
+
+  const showView = (view) => {
+    const showCalendar = view === "calendar";
+    listView.hidden = showCalendar;
+    calendarView.hidden = !showCalendar;
+    viewButtons.forEach((button) => {
+      const active = button.dataset.eventsView === view;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+  };
+  const openEvent = (event) => {
+    showView("list");
+    const card = cards.find((item) => item.dataset.eventId === String(event.id));
+    const toggle = card?.querySelector(".event-details-toggle");
+    if (toggle?.getAttribute("aria-expanded") !== "true") toggle?.click();
+    card?.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+  const renderCalendar = () => {
+    calendarLabel.textContent = monthLabel(currentMonth);
+    calendarGrid.replaceChildren();
+    monthGrid(currentMonth.year, currentMonth.month).forEach((day) => {
+      const cell = element("div", { className: `calendar-day${day.inMonth ? "" : " is-outside"}` });
+      cell.append(element("span", { className: "calendar-date", text: String(day.day) }));
+      (eventsByDate.get(day.key) || []).forEach((event) => {
+        const eventButton = element("button", { className: "calendar-event", text: event.title });
+        eventButton.type = "button";
+        eventButton.title = `${event.title} - ${event.venueName}${event.suburb ? `, ${event.suburb}` : ""}`;
+        eventButton.setAttribute("aria-label", eventButton.title);
+        eventButton.addEventListener("click", () => openEvent(event));
+        cell.append(eventButton);
+      });
+      calendarGrid.append(cell);
+    });
+  };
+
+  viewButtons.forEach((button) => button.addEventListener("click", () => showView(button.dataset.eventsView)));
+  document.querySelector("[data-calendar-previous]")?.addEventListener("click", () => {
+    currentMonth = moveMonth(currentMonth, -1);
+    renderCalendar();
+  });
+  document.querySelector("[data-calendar-next]")?.addEventListener("click", () => {
+    currentMonth = moveMonth(currentMonth, 1);
+    renderCalendar();
+  });
+  renderCalendar();
+}
+
 async function loadPublicEvents() {
   const list = document.querySelector("#events-list");
   if (!list) return;
@@ -304,6 +370,7 @@ async function loadPublicEvents() {
     list.append(...cards);
     setupEventCarousel(list, cards);
     setupEventDetails(cards);
+    setupPublicCalendar(events, cards);
   } catch {
     list.replaceChildren(element("p", {
       className: "events-empty",

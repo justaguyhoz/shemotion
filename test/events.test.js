@@ -4,6 +4,7 @@ import { announcementFor, eventDestination } from "../script.js";
 import { validateEventInput } from "../shared/events.js";
 import { verifyAccessRequest } from "../shared/access.js";
 import { onRequestGet as getPublicEvents } from "../functions/api/events.js";
+import { eventDateKey, monthGrid, moveMonth } from "../calendar.js";
 
 const baseEvent = {
   id: 1,
@@ -116,4 +117,12 @@ test("public API uses future published filtering and ordered results", async () 
   assert.match(sql, /date_status = 'tbc'/);
   assert.match(sql, /start_at ASC/);
   assert.ok(Number.isFinite(Date.parse(boundNow)));
+});
+
+test("calendar utilities use Brisbane dates and Monday-first months", () => {
+  assert.equal(eventDateKey("2026-08-18T23:15:00.000Z"), "2026-08-19");
+  const days = monthGrid(2026, 7);
+  assert.equal(days.length, 42);
+  assert.equal(days[0].key, "2026-07-27");
+  assert.deepEqual(moveMonth({ year: 2026, month: 11 }, 1), { year: 2027, month: 0 });
 });

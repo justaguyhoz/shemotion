@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=20260804-7">
+    <link rel="stylesheet" href="styles.css?v=20260804-8">
   </head>
   <body>
     <a class="announcement-bar" href="#upcoming-events" aria-label="View upcoming Shemotion experiences" hidden>
@@ -93,7 +93,12 @@
           <h2 id="events-title">Upcoming Shemotion Classes</h2>
         </div>
 
-        <div class="event-carousel">
+        <div class="event-view-switch" role="group" aria-label="Choose events view">
+          <button class="is-active" type="button" data-events-view="list" aria-pressed="true">List</button>
+          <button type="button" data-events-view="calendar" aria-pressed="false">Calendar</button>
+        </div>
+
+        <div class="event-carousel" data-events-list-view>
           <div class="event-grid" id="events-list" aria-live="polite" aria-busy="true">
             <p class="events-loading">Loading upcoming classes...</p>
           </div>
@@ -102,6 +107,18 @@
             <output class="event-counter" aria-live="polite">01 / 01</output>
             <button class="event-arrow event-arrow-next" type="button" aria-label="Next class" title="Next class">&#8594;</button>
           </div>
+        </div>
+
+        <div class="events-calendar" data-events-calendar-view hidden>
+          <div class="calendar-heading">
+            <button type="button" data-calendar-previous aria-label="Previous month" title="Previous month">&#8592;</button>
+            <h3 data-calendar-label></h3>
+            <button type="button" data-calendar-next aria-label="Next month" title="Next month">&#8594;</button>
+          </div>
+          <div class="calendar-weekdays" aria-hidden="true">
+            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+          </div>
+          <div class="calendar-grid" data-calendar-grid></div>
         </div>
       </section>
 
@@ -261,6 +278,6 @@
       </div>
     </footer>
 
-    <script type="module" src="script.js?v=20260804-7"></script>
+    <script type="module" src="script.js?v=20260804-8"></script>
   </body>
 </html>

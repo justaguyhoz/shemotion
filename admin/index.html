@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="admin.css?v=20260804-2">
+    <link rel="stylesheet" href="admin.css?v=20260804-3">
   </head>
   <body>
     <header class="admin-header">
@@ -27,8 +27,23 @@
       </div>
 
       <p class="notice" data-notice role="status" aria-live="polite"></p>
-      <div class="event-list" data-event-list aria-live="polite">
+      <div class="admin-view-switch" role="group" aria-label="Choose events view">
+        <button class="is-active" type="button" data-admin-view="list" aria-pressed="true">List</button>
+        <button type="button" data-admin-view="calendar" aria-pressed="false">Calendar</button>
+      </div>
+      <div class="event-list" data-event-list data-admin-list-view aria-live="polite">
         <p>Loading events...</p>
+      </div>
+      <div class="admin-calendar" data-admin-calendar-view hidden>
+        <div class="calendar-heading">
+          <button type="button" data-admin-calendar-previous aria-label="Previous month">&#8592;</button>
+          <h2 data-admin-calendar-label></h2>
+          <button type="button" data-admin-calendar-next aria-label="Next month">&#8594;</button>
+        </div>
+        <div class="calendar-weekdays" aria-hidden="true">
+          <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+        </div>
+        <div class="calendar-grid" data-admin-calendar-grid></div>
       </div>
     </main>
 
@@ -87,6 +102,6 @@
       </form>
     </dialog>
 
-    <script type="module" src="admin.js"></script>
+    <script type="module" src="admin.js?v=20260804-3"></script>
   </body>
 </html>

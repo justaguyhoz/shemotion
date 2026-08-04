@@ -469,6 +469,126 @@ p:last-child {
   margin: clamp(26px, 4vw, 42px) auto 0;
 }
 
+.event-view-switch {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  width: fit-content;
+  margin: 24px auto 0;
+  padding: 4px;
+  background: rgba(231, 222, 213, 0.55);
+  border-radius: 999px;
+}
+
+.event-view-switch button {
+  padding: 8px 18px;
+  color: var(--muted);
+  font-weight: 600;
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+}
+
+.event-view-switch button.is-active {
+  color: var(--white-soft);
+  background: var(--green);
+}
+
+.events-calendar {
+  max-width: 980px;
+  margin: 26px auto 0;
+}
+
+.events-calendar[hidden] {
+  display: none;
+}
+
+.calendar-heading {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) 40px;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.calendar-heading h3 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 400;
+  text-align: center;
+}
+
+.calendar-heading button {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: var(--green);
+  background: transparent;
+  border: 1px solid rgba(47, 74, 61, 0.3);
+  border-radius: 50%;
+}
+
+.calendar-weekdays,
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.calendar-weekdays span {
+  padding: 8px;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.calendar-grid {
+  overflow: hidden;
+  border-top: 1px solid var(--sand);
+  border-left: 1px solid var(--sand);
+  border-radius: 8px;
+}
+
+.calendar-day {
+  min-width: 0;
+  min-height: 108px;
+  padding: 9px;
+  background: rgba(255, 250, 244, 0.72);
+  border-right: 1px solid var(--sand);
+  border-bottom: 1px solid var(--sand);
+}
+
+.calendar-day.is-outside {
+  color: rgba(122, 113, 105, 0.45);
+  background: rgba(222, 216, 207, 0.24);
+}
+
+.calendar-date {
+  display: block;
+  margin-bottom: 7px;
+  font-family: var(--serif);
+  font-size: 0.82rem;
+}
+
+.calendar-event {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 5px 6px 5px 20px;
+  overflow: hidden;
+  color: var(--green);
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: var(--green-soft) url("assets/favicon_shemotion.png") 5px center / 12px 12px no-repeat;
+  border: 0;
+  border-radius: 4px;
+}
+
 .event-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1288,6 +1408,28 @@ blockquote:hover {
 
   .event-arrow {
     display: none;
+  }
+
+  .events-calendar {
+    margin-inline: -12px;
+  }
+
+  .calendar-weekdays span {
+    padding-inline: 2px;
+    font-size: 0.58rem;
+  }
+
+  .calendar-day {
+    min-height: 72px;
+    padding: 5px;
+  }
+
+  .calendar-event {
+    min-height: 24px;
+    padding: 4px;
+    color: transparent;
+    background-position: center;
+    background-size: 16px 16px;
   }
 }
 
