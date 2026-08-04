@@ -63,17 +63,12 @@ function element(tag, options = {}) {
 
 export function createEventCard(event) {
   const destination = eventDestination(event);
-  const card = element(destination ? "a" : "article", { className: "event-pill" });
+  const card = element("article", { className: "event-pill" });
   card.dataset.eventId = String(event.id);
-  if (destination) card.href = destination;
-  if (event.bookingUrl) {
-    card.target = "_blank";
-    card.rel = "noopener noreferrer";
-  }
   if (event.availabilityStatus === "Cancelled") card.classList.add("is-cancelled");
 
-  const content = element("span", { className: "event-pill-content" });
-  const meta = element("span", { className: "event-pill-meta" });
+  const content = element("div", { className: "event-pill-content" });
+  const meta = element("div", { className: "event-pill-meta" });
   if (event.dateStatus === "tbc") {
     meta.append(element("span", { text: "Date to be confirmed" }));
   } else {
@@ -83,11 +78,12 @@ export function createEventCard(event) {
       element("span", { text: compactTime(date) })
     );
   }
-  meta.append(element("span", { text: [event.venueName, event.suburb].filter(Boolean).join(", ") }));
-  content.append(element("span", { className: "event-pill-title", text: event.title }), meta);
-  if (event.address) {
-    content.append(element("span", { className: "event-pill-address", text: event.address }));
-  }
+  if (event.suburb) meta.append(element("span", { text: event.suburb }));
+  content.append(
+    element("p", { className: "event-pill-venue", text: event.venueName }),
+    element("h3", { className: "event-pill-title", text: event.title }),
+    meta
+  );
   if (["Limited spaces", "Sold out", "Cancelled"].includes(event.availabilityStatus)) {
     content.append(element("span", {
       className: `event-pill-status status-${event.availabilityStatus.toLowerCase().replaceAll(" ", "-")}`,
@@ -95,11 +91,81 @@ export function createEventCard(event) {
     }));
   }
 
-  const action = event.availabilityStatus === "Cancelled"
-    ? "Cancelled"
-    : event.bookingUrl ? "View venue details" : "Email Shemotion for details";
-  card.append(content, element("span", { className: "event-pill-action", text: action }));
+  const description = event.shortDescription?.trim() === "-" ? "" : event.shortDescription?.trim();
+  const hasDetails = Boolean(event.address || description);
+  const actions = element("div", { className: "event-pill-actions" });
+  let details;
+  if (hasDetails) {
+    const detailsId = `event-details-${event.id}`;
+    const toggle = element("button", { className: "event-details-toggle", text: "Full details" });
+    toggle.type = "button";
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.setAttribute("aria-controls", detailsId);
+    actions.append(toggle);
+
+    details = element("div", { className: "event-pill-details" });
+    details.id = detailsId;
+    details.hidden = true;
+    if (event.address) {
+      details.append(element("p", { className: "event-pill-address", text: event.address }));
+      const mapLink = element("a", { className: "event-map-link", text: "Open in Google Maps" });
+      mapLink.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.address)}`;
+      mapLink.target = "_blank";
+      mapLink.rel = "noopener noreferrer";
+      details.append(mapLink);
+    }
+    if (description) details.append(element("p", { className: "event-pill-description", text: description }));
+  }
+
+  if (destination) {
+    const action = element("a", {
+      className: "event-pill-action",
+      text: event.bookingUrl ? "Venue details" : "Email Shemotion",
+    });
+    action.href = destination;
+    if (event.bookingUrl) {
+      action.target = "_blank";
+      action.rel = "noopener noreferrer";
+    }
+    actions.append(action);
+  }
+
+  card.append(content, actions);
+  if (details) card.append(details);
   return card;
+}
+
+function setupEventDetails(cards) {
+  const closeCard = (card) => {
+    const toggle = card.querySelector(".event-details-toggle");
+    const details = card.querySelector(".event-pill-details");
+    if (!toggle || !details) return;
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.textContent = "Full details";
+    details.hidden = true;
+  };
+
+  cards.forEach((card) => {
+    const toggle = card.querySelector(".event-details-toggle");
+    const details = card.querySelector(".event-pill-details");
+    if (!toggle || !details) return;
+    toggle.addEventListener("click", () => {
+      const willOpen = toggle.getAttribute("aria-expanded") !== "true";
+      if (!willOpen) return closeCard(card);
+      toggle.setAttribute("aria-expanded", "true");
+      toggle.textContent = "Close details";
+      details.hidden = false;
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    cards.forEach((card) => {
+      if (!card.contains(event.target)) closeCard(card);
+    });
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") cards.forEach(closeCard);
+  });
 }
 
 function setupReveal(items) {
@@ -233,6 +299,7 @@ async function loadPublicEvents() {
     const cards = events.map(createEventCard);
     list.append(...cards);
     setupEventCarousel(list, cards);
+    setupEventDetails(cards);
   } catch {
     list.replaceChildren(element("p", {
       className: "events-empty",
