@@ -230,7 +230,6 @@ async function loadPublicEvents() {
     const cards = events.map(createEventCard);
     list.append(...cards);
     setupEventCarousel(list, cards);
-    setupReveal(cards);
   } catch {
     list.replaceChildren(element("p", {
       className: "events-empty",
