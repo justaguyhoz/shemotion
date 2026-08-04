@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=20260804-1">
+    <link rel="stylesheet" href="styles.css?v=20260804-2">
   </head>
   <body>
     <a class="announcement-bar" href="#upcoming-events" aria-label="View upcoming Shemotion experiences" hidden>
@@ -93,8 +93,15 @@
           <h2 id="events-title">Upcoming Shemotion Classes</h2>
         </div>
 
-        <div class="event-grid" id="events-list" aria-live="polite" aria-busy="true">
-          <p class="events-loading">Loading upcoming classes...</p>
+        <div class="event-carousel">
+          <div class="event-grid" id="events-list" aria-live="polite" aria-busy="true">
+            <p class="events-loading">Loading upcoming classes...</p>
+          </div>
+          <div class="event-carousel-controls" data-event-controls hidden>
+            <button class="event-arrow event-arrow-previous" type="button" aria-label="Previous class" title="Previous class">&#8592;</button>
+            <output class="event-counter" aria-live="polite">01 / 01</output>
+            <button class="event-arrow event-arrow-next" type="button" aria-label="Next class" title="Next class">&#8594;</button>
+          </div>
         </div>
       </section>
 
@@ -254,6 +261,6 @@
       </div>
     </footer>
 
-    <script type="module" src="script.js"></script>
+    <script type="module" src="script.js?v=20260804-2"></script>
   </body>
 </html>

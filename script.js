@@ -163,6 +163,49 @@ function renderAnnouncement(events) {
   bar.removeAttribute("hidden");
 }
 
+function setupEventCarousel(list, cards) {
+  const controls = document.querySelector("[data-event-controls]");
+  if (!controls || cards.length < 2) {
+    controls?.setAttribute("hidden", "");
+    return;
+  }
+
+  const previous = controls.querySelector(".event-arrow-previous");
+  const next = controls.querySelector(".event-arrow-next");
+  const counter = controls.querySelector(".event-counter");
+  let activeIndex = 0;
+  let scrollTimer;
+
+  const formatNumber = (value) => String(value).padStart(2, "0");
+  const updateControls = () => {
+    counter.textContent = `${formatNumber(activeIndex + 1)} / ${formatNumber(cards.length)}`;
+    previous.disabled = activeIndex === 0;
+    next.disabled = activeIndex === cards.length - 1;
+  };
+  const goTo = (index) => {
+    activeIndex = Math.max(0, Math.min(cards.length - 1, index));
+    list.scrollTo({ left: cards[activeIndex].offsetLeft - list.offsetLeft, behavior: "smooth" });
+    updateControls();
+  };
+
+  previous.addEventListener("click", () => goTo(activeIndex - 1));
+  next.addEventListener("click", () => goTo(activeIndex + 1));
+  list.addEventListener("scroll", () => {
+    window.clearTimeout(scrollTimer);
+    scrollTimer = window.setTimeout(() => {
+      activeIndex = cards.reduce((closest, card, index) => {
+        const distance = Math.abs((card.offsetLeft - list.offsetLeft) - list.scrollLeft);
+        const closestDistance = Math.abs((cards[closest].offsetLeft - list.offsetLeft) - list.scrollLeft);
+        return distance < closestDistance ? index : closest;
+      }, 0);
+      updateControls();
+    }, 80);
+  }, { passive: true });
+
+  controls.removeAttribute("hidden");
+  updateControls();
+}
+
 async function loadPublicEvents() {
   const list = document.querySelector("#events-list");
   if (!list) return;
@@ -186,6 +229,7 @@ async function loadPublicEvents() {
 
     const cards = events.map(createEventCard);
     list.append(...cards);
+    setupEventCarousel(list, cards);
     setupReveal(cards);
   } catch {
     list.replaceChildren(element("p", {
