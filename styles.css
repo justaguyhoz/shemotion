@@ -471,6 +471,7 @@ p:last-child {
 
 .event-grid {
   display: flex;
+  align-items: stretch;
   gap: 14px;
   width: 100%;
   margin: 0;
@@ -480,6 +481,7 @@ p:last-child {
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .event-grid::-webkit-scrollbar {
@@ -1201,10 +1203,12 @@ blockquote:hover {
     gap: 10px;
     margin-inline: -2px;
     padding-bottom: 14px;
+    touch-action: pan-x;
   }
 
   .event-pill {
-    flex-basis: calc(100% - 24px);
+    flex-basis: 100%;
+    scroll-snap-align: center;
   }
 
   .event-carousel-controls {
