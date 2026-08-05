@@ -229,6 +229,34 @@ function setupPillRotator(container) {
   window.requestAnimationFrame(showCurrent);
 }
 
+function setupQuoteRotator(container) {
+  if (!window.matchMedia("(max-width: 760px)").matches) return;
+  const items = [...container.children];
+  if (!items.length) return;
+  container.classList.add("is-rotating");
+
+  let index = 0;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const showCurrent = () => {
+    items.forEach((item, itemIndex) => {
+      const active = itemIndex === index;
+      item.classList.toggle("is-active", active);
+      item.setAttribute("aria-hidden", String(!active));
+    });
+  };
+  showCurrent();
+  if (reducedMotion || items.length === 1) return;
+
+  window.setInterval(() => {
+    items[index].classList.remove("is-active");
+    items[index].setAttribute("aria-hidden", "true");
+    window.setTimeout(() => {
+      index = (index + 1) % items.length;
+      showCurrent();
+    }, 700);
+  }, 4400);
+}
+
 function renderAnnouncement(events) {
   const bar = document.querySelector(".announcement-bar");
   const content = announcementFor(events);
@@ -443,6 +471,7 @@ function initialisePage() {
     ".events .section-heading, .experience .section-heading, .stage, .for-you .narrow, .feedback .section-heading, .coach-grid, .contact-shell"
   )]);
   document.querySelectorAll("[data-pill-rotator]").forEach(setupPillRotator);
+  document.querySelectorAll("[data-quote-rotator]").forEach(setupQuoteRotator);
   loadPublicEvents();
 }
 

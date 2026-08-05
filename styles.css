@@ -1358,28 +1358,30 @@ blockquote:hover {
   }
 
   .quotes {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
+    position: relative;
+    display: grid;
+    min-height: 190px;
     width: 100%;
     margin-inline: 0;
     padding-inline: 0;
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-x pan-y;
+    overflow: hidden;
   }
 
-  .quotes::-webkit-scrollbar {
-    display: none;
+  .quotes.is-rotating blockquote {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    min-height: 190px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+    transition: opacity 700ms ease, transform 700ms ease;
   }
 
-  .quotes blockquote {
-    flex: 0 0 100%;
-    scroll-snap-align: center;
-    scroll-snap-stop: always;
+  .quotes.is-rotating blockquote.is-active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
   }
 
   .quotes blockquote:hover {
