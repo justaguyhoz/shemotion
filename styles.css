@@ -1358,9 +1358,34 @@ blockquote:hover {
   }
 
   .quotes {
-    grid-template-columns: repeat(5, minmax(250px, 78vw));
-    margin-inline: -20px;
-    padding-inline: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    margin-inline: 0;
+    padding-inline: 0;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
+  }
+
+  .quotes::-webkit-scrollbar {
+    display: none;
+  }
+
+  .quotes blockquote {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
+  .quotes blockquote:hover {
+    transform: none;
+    border-color: var(--sand);
+    box-shadow: 0 18px 42px rgba(79, 74, 69, 0.14), 0 3px 9px rgba(47, 74, 61, 0.08);
   }
 
   .site-footer {

@@ -440,7 +440,7 @@ function initialisePage() {
   }
 
   setupReveal([...document.querySelectorAll(
-    ".events .section-heading, .experience .section-heading, .stage, .for-you .narrow, .feedback .section-heading, .quotes blockquote, .coach-grid, .contact-shell"
+    ".events .section-heading, .experience .section-heading, .stage, .for-you .narrow, .feedback .section-heading, .coach-grid, .contact-shell"
   )]);
   document.querySelectorAll("[data-pill-rotator]").forEach(setupPillRotator);
   loadPublicEvents();
