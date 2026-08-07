@@ -11,3 +11,5 @@ for (const file of ["index.html", "styles.css", "script.js", "calendar.js", "rec
 for (const directory of ["assets", "admin"]) {
   await cp(new URL(`../${directory}/`, import.meta.url), new URL(`${directory}/`, output), { recursive: true });
 }
+
+await cp(new URL("../node_modules/leaflet/dist/", import.meta.url), new URL("vendor/", output), { recursive: true });

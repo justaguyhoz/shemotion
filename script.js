@@ -315,13 +315,104 @@ function setupEventCarousel(list, cards) {
   updateControls();
 }
 
+function mapQueriesFor(event) {
+  const queries = [];
+  if (event.address) queries.push(`${event.address}, Australia`);
+  if (event.venueName && event.suburb) queries.push(`${event.venueName}, ${event.suburb}, Queensland, Australia`);
+  if (event.suburb) queries.push(`${event.suburb}, Queensland, Australia`);
+  return [...new Set(queries)];
+}
+
+async function coordinatesFor(event) {
+  for (const query of mapQueriesFor(event)) {
+    const cacheKey = `shemotion-map:${query.toLowerCase()}`;
+    try {
+      const cached = window.localStorage.getItem(cacheKey);
+      if (cached) return JSON.parse(cached);
+    } catch {
+      // Mapping still works when storage is unavailable.
+    }
+
+    const endpoint = new URL("https://nominatim.openstreetmap.org/search");
+    endpoint.searchParams.set("format", "jsonv2");
+    endpoint.searchParams.set("limit", "1");
+    endpoint.searchParams.set("countrycodes", "au");
+    endpoint.searchParams.set("q", query);
+    const response = await fetch(endpoint, { headers: { accept: "application/json" } });
+    if (!response.ok) continue;
+    const results = await response.json();
+    if (!results.length) continue;
+    const coordinates = [Number(results[0].lat), Number(results[0].lon)];
+    try {
+      window.localStorage.setItem(cacheKey, JSON.stringify(coordinates));
+    } catch {
+      // Ignore storage limits and use the coordinates for this visit.
+    }
+    return coordinates;
+  }
+  return null;
+}
+
+function setupEventsMap(events) {
+  const mapElement = document.querySelector("[data-events-map]");
+  const status = document.querySelector("[data-events-map-status]");
+  let map;
+  let loading;
+
+  return async () => {
+    if (map) {
+      window.setTimeout(() => map.invalidateSize(), 0);
+      return;
+    }
+    if (loading) return loading;
+    loading = (async () => {
+      if (!window.L) {
+        status.textContent = "The map could not be loaded. Please try again shortly.";
+        return;
+      }
+      status.textContent = "Locating upcoming experiences...";
+      map = window.L.map(mapElement, { scrollWheelZoom: false }).setView([-27.96, 153.38], 10);
+      window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap contributors",
+      }).addTo(map);
+
+      const bounds = [];
+      let located = 0;
+      for (const event of events.filter((item) => item.address)) {
+        try {
+          const coordinates = await coordinatesFor(event);
+          if (!coordinates) continue;
+          located += 1;
+          bounds.push(coordinates);
+          const popupCard = createEventCard(event);
+          popupCard.classList.add("map-popup-card");
+          setupEventDetails([popupCard]);
+          window.L.marker(coordinates, { title: `${event.title} at ${event.venueName}` })
+            .addTo(map)
+            .bindPopup(popupCard, { maxWidth: 350, minWidth: 270, autoClose: true, closeOnClick: true });
+        } catch {
+          // One unrecognised address should not prevent the remaining pins loading.
+        }
+      }
+      if (bounds.length === 1) map.setView(bounds[0], 14);
+      if (bounds.length > 1) map.fitBounds(bounds, { padding: [42, 42], maxZoom: 14 });
+      status.textContent = located ? "Select a pin to view the event." : "No mapped event locations are available yet.";
+      window.setTimeout(() => map.invalidateSize(), 0);
+    })();
+    return loading;
+  };
+}
+
 function setupPublicCalendar(events) {
   const listView = document.querySelector("[data-events-list-view]");
   const calendarView = document.querySelector("[data-events-calendar-view]");
+  const mapView = document.querySelector("[data-events-map-view]");
   const calendarGrid = document.querySelector("[data-calendar-grid]");
   const calendarLabel = document.querySelector("[data-calendar-label]");
   const viewButtons = [...document.querySelectorAll("[data-events-view]")];
-  if (!listView || !calendarView || !calendarGrid || !calendarLabel) return;
+  if (!listView || !calendarView || !mapView || !calendarGrid || !calendarLabel) return;
+  const showMap = setupEventsMap(events);
 
   let currentMonth = initialCalendarMonth(events);
   const eventsByDate = new Map();
@@ -334,13 +425,16 @@ function setupPublicCalendar(events) {
 
   const showView = (view) => {
     const showCalendar = view === "calendar";
-    listView.hidden = showCalendar;
+    const showMapView = view === "map";
+    listView.hidden = showCalendar || showMapView;
     calendarView.hidden = !showCalendar;
+    mapView.hidden = !showMapView;
     viewButtons.forEach((button) => {
       const active = button.dataset.eventsView === view;
       button.classList.toggle("is-active", active);
       button.setAttribute("aria-pressed", String(active));
     });
+    if (showMapView) showMap();
   };
   const openCalendarPopup = (dayEvents) => {
     const dialog = document.querySelector("[data-calendar-dialog]");

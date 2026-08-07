@@ -503,6 +503,61 @@ p:last-child {
   display: none;
 }
 
+.events-map-view {
+  position: relative;
+  max-width: 980px;
+  margin: 26px auto 0;
+}
+
+.events-map-view[hidden] {
+  display: none;
+}
+
+.events-map {
+  width: 100%;
+  height: min(62vh, 560px);
+  min-height: 420px;
+  overflow: hidden;
+  border: 1px solid var(--sand);
+  border-radius: 8px;
+  box-shadow: 0 18px 44px rgba(47, 74, 61, 0.1);
+}
+
+.events-map-status {
+  min-height: 1.5em;
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 0.76rem;
+  text-align: center;
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: var(--white-soft);
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 18px 48px rgba(47, 74, 61, 0.2);
+}
+
+.leaflet-popup-content {
+  width: min(310px, calc(100vw - 88px)) !important;
+  margin: 12px;
+}
+
+.map-popup-card {
+  min-height: 0;
+  padding: 18px 18px 16px 22px;
+  border: 0;
+  box-shadow: none;
+}
+
+.map-popup-card:hover {
+  transform: none;
+  box-shadow: none;
+}
+
 .calendar-heading {
   display: grid;
   grid-template-columns: 40px minmax(0, 1fr) 40px;
@@ -667,12 +722,15 @@ p:last-child {
 }
 
 .event-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: flex;
+  align-items: flex-start;
   gap: 14px;
   width: 100%;
   margin: 0;
   padding: 6px 2px 18px;
+  overflow: hidden;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
 }
 
 .event-grid::-webkit-scrollbar {
@@ -695,6 +753,7 @@ p:last-child {
   transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
   scroll-snap-align: start;
   scroll-snap-stop: always;
+  flex: 0 0 calc(100% - 4px);
 }
 
 .event-pill::before {
@@ -843,7 +902,7 @@ p:last-child {
 }
 
 .event-carousel-controls {
-  display: none;
+  display: grid;
   grid-template-columns: 42px auto 42px;
   align-items: center;
   justify-content: center;
@@ -1523,6 +1582,16 @@ blockquote:hover {
 
   .events-calendar {
     margin-inline: -12px;
+  }
+
+  .events-map-view {
+    margin-inline: -12px;
+  }
+
+  .events-map {
+    height: 66vh;
+    min-height: 430px;
+    border-radius: 8px;
   }
 
   .calendar-weekdays span {
