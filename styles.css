@@ -465,7 +465,7 @@ p:last-child {
 }
 
 .event-carousel {
-  max-width: 980px;
+  max-width: 760px;
   margin: clamp(26px, 4vw, 42px) auto 0;
 }
 
@@ -556,6 +556,37 @@ p:last-child {
 .map-popup-card:hover {
   transform: none;
   box-shadow: none;
+}
+
+.venue-popup-controls {
+  display: grid;
+  grid-template-columns: 34px auto 34px;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 4px 8px 10px;
+}
+
+.venue-popup-controls button {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  color: var(--green);
+  background: transparent;
+  border: 1px solid rgba(47, 74, 61, 0.28);
+  border-radius: 50%;
+}
+
+.venue-popup-controls button:disabled {
+  opacity: 0.3;
+}
+
+.venue-popup-controls output {
+  min-width: 52px;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-align: center;
 }
 
 .calendar-heading {
@@ -743,8 +774,8 @@ p:last-child {
   grid-template-columns: minmax(0, 1fr);
   align-content: start;
   gap: 16px;
-  min-height: 188px;
-  padding: 22px 24px 20px 28px;
+  min-height: 164px;
+  padding: 20px 22px 18px 26px;
   overflow: hidden;
   background: rgba(255, 250, 244, 0.9);
   border: 1px solid rgba(201, 184, 166, 0.58);
@@ -781,6 +812,11 @@ p:last-child {
   justify-items: start;
   gap: 8px;
   min-width: 0;
+}
+
+.event-carousel .event-pill-content,
+.event-carousel .event-pill-details {
+  max-width: 620px;
 }
 
 .event-pill-venue {
@@ -946,6 +982,67 @@ p:last-child {
   font-weight: 600;
   letter-spacing: 0.12em;
   text-align: center;
+}
+
+.faq {
+  background: var(--ivory);
+}
+
+.faq-list {
+  max-width: 840px;
+  margin: 36px auto 0;
+  border-top: 1px solid var(--sand);
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--sand);
+}
+
+.faq-item h3 {
+  margin: 0;
+}
+
+.faq-item button {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 28px;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  padding: 20px 4px;
+  color: var(--charcoal);
+  font-family: var(--serif);
+  font-size: 1.06rem;
+  line-height: 1.35;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+
+.faq-item button span {
+  color: var(--green);
+  font: 1.25rem/1 var(--sans);
+  text-align: center;
+}
+
+.faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 240ms ease, opacity 200ms ease;
+}
+
+.faq-answer > p {
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+  color: var(--muted);
+}
+
+.faq-answer.is-open {
+  grid-template-rows: 1fr;
+  padding-bottom: 20px;
+  opacity: 1;
 }
 
 .events-loading,
@@ -1536,6 +1633,16 @@ blockquote:hover {
     min-height: 0;
     padding: 22px 20px 22px 26px;
     border-radius: 8px;
+  }
+
+  .faq-list {
+    margin-top: 24px;
+  }
+
+  .faq-item button {
+    gap: 12px;
+    padding-block: 17px;
+    font-size: 1rem;
   }
 
   .event-pill-action {

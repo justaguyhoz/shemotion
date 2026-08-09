@@ -29,6 +29,7 @@ export const EVENT_FIELDS = [
   "displayOrder",
   "recurrenceFrequency",
   "recurrenceUntil",
+  "locationId",
 ];
 
 const LIMITS = {
@@ -104,6 +105,9 @@ export function validateEventInput(input) {
   event.displayOrder = Number.isInteger(Number(event.displayOrder)) ? Number(event.displayOrder) : 0;
   event.recurrenceFrequency = cleanText(event.recurrenceFrequency) || "none";
   event.recurrenceUntil = cleanText(event.recurrenceUntil) || null;
+  event.locationId = Number.isSafeInteger(Number(event.locationId)) && Number(event.locationId) > 0
+    ? Number(event.locationId)
+    : null;
 
   if (!EVENT_TYPES.includes(event.eventType)) errors.push("eventType is invalid.");
   if (!DATE_STATUS_OPTIONS.includes(event.dateStatus)) errors.push("dateStatus is invalid.");
@@ -157,6 +161,9 @@ export function rowToPublicEvent(row) {
     recurrenceFrequency: row.recurrence_frequency || "none",
     recurrenceUntil: row.recurrence_until,
     displayOrder: row.display_order || 0,
+    locationId: row.location_id || null,
+    latitude: row.latitude != null && Number.isFinite(Number(row.latitude)) ? Number(row.latitude) : null,
+    longitude: row.longitude != null && Number.isFinite(Number(row.longitude)) ? Number(row.longitude) : null,
   };
 }
 
@@ -189,6 +196,7 @@ export function eventValues(event) {
     event.displayOrder,
     event.recurrenceFrequency,
     event.recurrenceUntil,
+    event.locationId,
   ];
 }
 

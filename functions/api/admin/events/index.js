@@ -8,7 +8,9 @@ import {
 export async function onRequestGet({ env }) {
   try {
     const result = await env.DB.prepare(`
-      SELECT * FROM events
+      SELECT events.*, locations.latitude, locations.longitude
+      FROM events
+      LEFT JOIN locations ON locations.id = events.location_id
       ORDER BY CASE WHEN date_status = 'tbc' THEN 1 ELSE 0 END, start_at ASC, display_order ASC
     `).all();
     return jsonResponse({ events: result.results.map(rowToAdminEvent) });
@@ -33,8 +35,8 @@ export async function onRequestPost({ request, env }) {
       INSERT INTO events (
         title, event_type, venue_name, suburb, address, date_status, start_at, end_at, timezone,
         audience, short_description, booking_label, booking_url, availability_status,
-        is_published, display_order, recurrence_frequency, recurrence_until
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        is_published, display_order, recurrence_frequency, recurrence_until, location_id
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       RETURNING *
     `).bind(...eventValues(validation.event)).first();
     return jsonResponse({ event: rowToAdminEvent(result) }, 201);

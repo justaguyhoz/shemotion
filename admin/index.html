@@ -9,21 +9,24 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="admin.css?v=20260804-4">
+    <link rel="stylesheet" href="admin.css?v=20260809-1">
   </head>
   <body>
     <header class="admin-header">
       <a href="../" aria-label="View Shemotion website">
         <img src="../assets/shemotion-logo.png" alt="Shemotion">
       </a>
-      <button class="primary-button" type="button" data-new-event>Add Event</button>
+      <a class="header-link" href="../">View website</a>
     </header>
 
     <main>
-      <div class="page-heading">
-        <p class="eyebrow">Events manager</p>
-        <h1>Upcoming Experiences</h1>
-        <p>Create, edit and publish the classes shown on the Shemotion website.</p>
+      <div class="dashboard-heading">
+        <div class="page-heading">
+          <p class="eyebrow">Events manager</p>
+          <h1>Upcoming Experiences</h1>
+          <p>Create, edit and publish the classes shown on the Shemotion website.</p>
+        </div>
+        <button class="primary-button" type="button" data-new-event>+ Add Event</button>
       </div>
 
       <p class="notice" data-notice role="status" aria-live="polite"></p>
@@ -71,15 +74,21 @@
 
         <input type="hidden" name="id">
         <div class="form-grid">
+          <label class="field-wide template-field">Create from existing event <span class="optional-label">Optional</span>
+            <select name="templateSource" data-template-select><option value="">Start with a blank event</option></select>
+          </label>
           <label class="field-wide">Event title<input name="title" maxlength="120" required></label>
           <label>Event type
             <select name="eventType" required>
               <option>Class</option><option>Workshop</option><option>Retreat</option><option>Private event</option>
             </select>
           </label>
-          <label>Venue name<input name="venueName" maxlength="120" required></label>
-          <label>Suburb<input name="suburb" maxlength="80"></label>
-          <label>Address<input name="address" maxlength="200"></label>
+          <label class="field-wide">Saved location
+            <select name="locationId" data-location-select><option value="new">Create a new location</option></select>
+          </label>
+          <label>Venue name<input name="venueName" maxlength="120" required data-location-field></label>
+          <label>Suburb<input name="suburb" maxlength="80" data-location-field></label>
+          <label class="field-wide">Address<input name="address" maxlength="200" data-location-field></label>
           <label>Date status
             <select name="dateStatus" required>
               <option value="scheduled">Scheduled</option>
@@ -116,6 +125,7 @@
         <p class="form-error" data-form-error role="alert"></p>
         <div class="form-actions">
           <button class="text-button danger-button" type="button" data-delete hidden>Delete Event</button>
+          <button class="text-button" type="button" data-duplicate hidden>Duplicate</button>
           <span class="action-spacer"></span>
           <button class="text-button" type="button" data-close>Cancel</button>
           <button class="primary-button" type="submit">Save Event</button>
@@ -123,6 +133,6 @@
       </form>
     </dialog>
 
-    <script type="module" src="admin.js?v=20260804-4"></script>
+    <script type="module" src="admin.js?v=20260809-1"></script>
   </body>
 </html>

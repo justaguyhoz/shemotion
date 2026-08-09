@@ -63,7 +63,7 @@ function element(tag, options = {}) {
   return node;
 }
 
-export function createEventCard(event) {
+export function createEventCard(event, idPrefix = "event") {
   const destination = eventDestination(event);
   const card = element("article", { className: "event-pill" });
   card.dataset.eventId = String(event.id);
@@ -104,7 +104,8 @@ export function createEventCard(event) {
   const actions = element("div", { className: "event-pill-actions" });
   let details;
   if (hasDetails) {
-    const detailsId = `event-details-${event.id}`;
+    const occurrenceKey = event.occurrenceIndex ?? event.startAt ?? "tbc";
+    const detailsId = `${idPrefix}-details-${event.id}-${String(occurrenceKey).replace(/[^a-z0-9]/gi, "")}`;
     const toggle = element("button", { className: "event-details-toggle", text: "Full details" });
     toggle.type = "button";
     toggle.setAttribute("aria-expanded", "false");
@@ -257,6 +258,52 @@ function setupQuoteRotator(container) {
   }, 4400);
 }
 
+function setupFaq() {
+  const list = document.querySelector("[data-faq-list]");
+  if (!list) return;
+  const items = [...list.querySelectorAll(".faq-item")];
+  let activeItem = null;
+  let closeTimer;
+
+  const close = (item) => {
+    if (!item) return;
+    const button = item.querySelector("button");
+    const answer = item.querySelector(".faq-answer");
+    button.setAttribute("aria-expanded", "false");
+    button.querySelector("span").textContent = "+";
+    answer.classList.remove("is-open");
+    window.clearTimeout(closeTimer);
+    closeTimer = window.setTimeout(() => {
+      if (!answer.classList.contains("is-open")) answer.hidden = true;
+    }, 240);
+    if (activeItem === item) activeItem = null;
+  };
+  const open = (item) => {
+    if (activeItem && activeItem !== item) close(activeItem);
+    const button = item.querySelector("button");
+    const answer = item.querySelector(".faq-answer");
+    window.clearTimeout(closeTimer);
+    answer.hidden = false;
+    button.setAttribute("aria-expanded", "true");
+    button.querySelector("span").textContent = "−";
+    window.requestAnimationFrame(() => answer.classList.add("is-open"));
+    activeItem = item;
+  };
+
+  items.forEach((item) => {
+    item.querySelector("button").addEventListener("click", () => {
+      if (activeItem === item) close(item);
+      else open(item);
+    });
+  });
+  document.addEventListener("click", (event) => {
+    if (activeItem && !list.contains(event.target)) close(activeItem);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && activeItem) close(activeItem);
+  });
+}
+
 function renderAnnouncement(events) {
   const bar = document.querySelector(".announcement-bar");
   const content = announcementFor(events);
@@ -377,20 +424,54 @@ function setupEventsMap(events) {
         attribution: "&copy; OpenStreetMap contributors",
       }).addTo(map);
 
+      const venueGroups = new Map();
+      events.filter((item) => item.address).forEach((event) => {
+        const key = event.locationId
+          ? `location-${event.locationId}`
+          : `${event.venueName}|${event.address}`.toLowerCase().replace(/\s+/g, " ");
+        if (!venueGroups.has(key)) venueGroups.set(key, []);
+        venueGroups.get(key).push(event);
+      });
       const bounds = [];
       let located = 0;
-      for (const event of events.filter((item) => item.address)) {
+      for (const [venueKey, venueEvents] of venueGroups) {
         try {
-          const coordinates = await coordinatesFor(event);
+          const event = venueEvents[0];
+          const savedCoordinates = Number.isFinite(event.latitude) && Number.isFinite(event.longitude)
+            ? [event.latitude, event.longitude]
+            : null;
+          const coordinates = savedCoordinates || await coordinatesFor(event);
           if (!coordinates) continue;
           located += 1;
           bounds.push(coordinates);
-          const popupCard = createEventCard(event);
-          popupCard.classList.add("map-popup-card");
-          setupEventDetails([popupCard]);
+          const popup = element("div", { className: "venue-popup" });
+          const cardHost = element("div", { className: "venue-popup-card-host" });
+          const controls = element("div", { className: "venue-popup-controls" });
+          const previous = element("button", { text: "←" });
+          const counter = element("output");
+          const next = element("button", { text: "→" });
+          previous.type = next.type = "button";
+          previous.setAttribute("aria-label", "Previous event at this venue");
+          next.setAttribute("aria-label", "Next event at this venue");
+          controls.append(previous, counter, next);
+          let index = 0;
+          const renderVenueEvent = () => {
+            const popupCard = createEventCard(venueEvents[index], `map-${venueKey}-${index}`);
+            popupCard.classList.add("map-popup-card");
+            cardHost.replaceChildren(popupCard);
+            setupEventDetails([popupCard]);
+            counter.textContent = `${index + 1} of ${venueEvents.length}`;
+            previous.disabled = index === 0;
+            next.disabled = index === venueEvents.length - 1;
+          };
+          previous.addEventListener("click", () => { index -= 1; renderVenueEvent(); });
+          next.addEventListener("click", () => { index += 1; renderVenueEvent(); });
+          popup.append(cardHost);
+          if (venueEvents.length > 1) popup.append(controls);
+          renderVenueEvent();
           window.L.marker(coordinates, { title: `${event.title} at ${event.venueName}` })
             .addTo(map)
-            .bindPopup(popupCard, { maxWidth: 350, minWidth: 270, autoClose: true, closeOnClick: true });
+            .bindPopup(popup, { maxWidth: 350, minWidth: 270, autoClose: true, closeOnClick: true });
         } catch {
           // One unrecognised address should not prevent the remaining pins loading.
         }
@@ -566,6 +647,7 @@ function initialisePage() {
   )]);
   document.querySelectorAll("[data-pill-rotator]").forEach(setupPillRotator);
   document.querySelectorAll("[data-quote-rotator]").forEach(setupQuoteRotator);
+  setupFaq();
   loadPublicEvents();
 }
 

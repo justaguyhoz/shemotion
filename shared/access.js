@@ -79,6 +79,11 @@ export async function verifyAccessRequest(context) {
 }
 
 export async function accessMiddleware(context) {
+  const hostname = new URL(context.request.url).hostname;
+  if (hostname === "localhost" || hostname === "127.0.0.1") {
+    context.data.adminEmail = "local-development";
+    return context.next();
+  }
   const result = await verifyAccessRequest(context);
   if (result.response) return result.response;
   context.data.adminEmail = result.email;

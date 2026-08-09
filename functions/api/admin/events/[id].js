@@ -30,7 +30,7 @@ export async function onRequestPut({ request, env, params }) {
         title = ?, event_type = ?, venue_name = ?, suburb = ?, address = ?, date_status = ?,
         start_at = ?, end_at = ?, timezone = ?, audience = ?, short_description = ?,
         booking_label = ?, booking_url = ?, availability_status = ?, is_published = ?,
-        display_order = ?, recurrence_frequency = ?, recurrence_until = ?
+        display_order = ?, recurrence_frequency = ?, recurrence_until = ?, location_id = ?
       WHERE id = ?
       RETURNING *
     `).bind(...eventValues(validation.event), id).first();

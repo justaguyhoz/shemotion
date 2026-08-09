@@ -7,17 +7,24 @@ const dialog = document.querySelector("[data-event-dialog]");
 const form = document.querySelector("[data-event-form]");
 const formError = document.querySelector("[data-form-error]");
 const deleteButton = document.querySelector("[data-delete]");
+const duplicateButton = document.querySelector("[data-duplicate]");
+const locationSelect = document.querySelector("[data-location-select]");
+const templateSelect = document.querySelector("[data-template-select]");
 let events = [];
+let locations = [];
 let adminCalendarMonth;
+let initialFormState = "";
+let allowDialogClose = false;
 
 const dateFormatter = new Intl.DateTimeFormat("en-AU", {
-  weekday: "short",
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-  hour: "numeric",
-  minute: "2-digit",
-  timeZone: "Australia/Brisbane",
+  weekday: "short", day: "numeric", month: "short", year: "numeric",
+  hour: "numeric", minute: "2-digit", timeZone: "Australia/Brisbane",
+});
+const compactDateFormatter = new Intl.DateTimeFormat("en-AU", {
+  day: "numeric", month: "short", year: "numeric", timeZone: "Australia/Brisbane",
+});
+const compactTimeFormatter = new Intl.DateTimeFormat("en-AU", {
+  hour: "numeric", minute: "2-digit", timeZone: "Australia/Brisbane",
 });
 
 function setNotice(message, isError = false) {
@@ -33,49 +40,49 @@ function element(tag, options = {}) {
 }
 
 function eventStatuses(event) {
-  const statuses = [];
-  const isPast = event.startAt && Date.parse(event.endAt || event.startAt) < Date.now();
-  statuses.push(event.isPublished ? "Published" : "Draft");
-  if (isPast) statuses.push("Past");
-  if (event.availabilityStatus === "Sold out") statuses.push("Sold out");
-  if (event.availabilityStatus === "Cancelled") statuses.push("Cancelled");
+  const statuses = [event.isPublished ? "Published" : "Draft"];
+  if (event.startAt && Date.parse(event.endAt || event.startAt) < Date.now()) statuses.push("Past");
+  if (["Sold out", "Cancelled"].includes(event.availabilityStatus)) statuses.push(event.availabilityStatus);
   return statuses;
+}
+
+function eventDateParts(event) {
+  if (event.dateStatus === "tbc") return { date: "Date to be confirmed", time: "" };
+  const date = new Date(event.startAt);
+  return { date: compactDateFormatter.format(date), time: compactTimeFormatter.format(date) };
 }
 
 function renderEvents() {
   list.replaceChildren();
   if (!events.length) {
-    list.append(element("p", { text: "No events yet. Add the first Shemotion experience." }));
+    list.append(element("p", { className: "empty-state", text: "No events yet. Add the first Shemotion experience." }));
+    renderAdminCalendar();
     return;
   }
 
   for (const event of events) {
     const article = element("article", { className: "admin-event" });
-    const content = element("div");
+    const open = element("button", { className: "admin-event-button" });
+    open.type = "button";
+    open.setAttribute("aria-label", `Edit ${event.title} at ${event.venueName}`);
     const meta = element("div", { className: "event-meta" });
     for (const status of eventStatuses(event)) {
-      const className = status.toLowerCase().replaceAll(" ", "-");
-      meta.append(element("span", { className: `status ${className}`, text: status }));
+      meta.append(element("span", {
+        className: `status ${status.toLowerCase().replaceAll(" ", "-")}`,
+        text: status,
+      }));
     }
-    content.append(meta, element("h3", { text: event.title }));
-    const eventDate = event.dateStatus === "tbc"
-      ? "Date to be confirmed"
-      : dateFormatter.format(new Date(event.startAt));
-    content.append(element("p", {
-      text: `${event.venueName}${event.suburb ? `, ${event.suburb}` : ""} | ${eventDate}`,
-    }));
-    if (event.recurrenceFrequency && event.recurrenceFrequency !== "none") {
-      const frequency = event.recurrenceFrequency === "fortnightly" ? "Every fortnight" : `Every ${event.recurrenceFrequency.replace("ly", "")}`;
-      content.append(element("p", { text: `${frequency}${event.recurrenceUntil ? ` until ${event.recurrenceUntil}` : ""}` }));
-    }
-    content.append(element("p", {
-      text: event.bookingUrl ? `Booking link: ${event.bookingUrl}` : "Booking link: not added",
-    }));
-
-    const edit = element("button", { className: "edit-button", text: "Edit" });
-    edit.type = "button";
-    edit.addEventListener("click", () => openForm(event));
-    article.append(content, edit);
+    const date = eventDateParts(event);
+    open.append(
+      meta,
+      element("p", { className: "admin-event-date", text: date.date }),
+      element("p", { className: "admin-event-time", text: date.time || event.eventType }),
+      element("h3", { text: event.title }),
+      element("p", { className: "admin-event-venue", text: event.venueName }),
+      element("span", { className: "admin-event-edit", text: "Edit event" })
+    );
+    open.addEventListener("click", () => openForm(event));
+    article.append(open);
     list.append(article);
   }
   renderAdminCalendar();
@@ -84,7 +91,7 @@ function renderEvents() {
 function renderAdminCalendar() {
   const grid = document.querySelector("[data-admin-calendar-grid]");
   const label = document.querySelector("[data-admin-calendar-label]");
-  if (!grid || !label || !events.length) return;
+  if (!grid || !label) return;
   adminCalendarMonth ||= initialCalendarMonth(events);
   label.textContent = monthLabel(adminCalendarMonth);
   grid.replaceChildren();
@@ -120,13 +127,11 @@ function renderAdminCalendar() {
 }
 
 function openAdminCalendarPopup(dayEvents) {
-  const dialog = document.querySelector("[data-admin-calendar-dialog]");
+  const calendarDialog = document.querySelector("[data-admin-calendar-dialog]");
   const track = document.querySelector("[data-admin-calendar-dialog-track]");
   const previous = document.querySelector("[data-admin-calendar-dialog-previous]");
   const next = document.querySelector("[data-admin-calendar-dialog-next]");
   const counter = document.querySelector("[data-admin-calendar-dialog-counter]");
-  if (!dialog || !track || !previous || !next || !counter) return;
-
   const cards = dayEvents.map((occurrence) => {
     const master = events.find((event) => String(event.id) === String(occurrence.seriesId || occurrence.id));
     const card = element("article", { className: "admin-calendar-card" });
@@ -136,14 +141,11 @@ function openAdminCalendarPopup(dayEvents) {
       element("p", { text: dateFormatter.format(new Date(occurrence.startAt)) }),
       element("p", { text: [occurrence.suburb, occurrence.address].filter(Boolean).join(" | ") })
     );
-    if (occurrence.shortDescription && occurrence.shortDescription !== "-") {
-      card.append(element("p", { text: occurrence.shortDescription }));
-    }
     if (master) {
       const edit = element("button", { className: "primary-button", text: occurrence.isRecurringOccurrence ? "Edit series" : "Edit event" });
       edit.type = "button";
       edit.addEventListener("click", () => {
-        dialog.close();
+        calendarDialog.close();
         openForm(master);
       });
       card.append(edit);
@@ -157,8 +159,8 @@ function openAdminCalendarPopup(dayEvents) {
     previous.disabled = index === 0;
     next.disabled = index === cards.length - 1;
   };
-  const goTo = (nextIndex) => {
-    index = Math.max(0, Math.min(cards.length - 1, nextIndex));
+  const goTo = (value) => {
+    index = Math.max(0, Math.min(cards.length - 1, value));
     track.scrollTo({ left: cards[index].offsetLeft - track.offsetLeft, behavior: "smooth" });
     update();
   };
@@ -173,7 +175,7 @@ function openAdminCalendarPopup(dayEvents) {
     update();
   };
   update();
-  dialog.showModal();
+  calendarDialog.showModal();
 }
 
 async function apiRequest(path, options = {}) {
@@ -190,10 +192,22 @@ async function apiRequest(path, options = {}) {
   return data;
 }
 
-async function loadEvents() {
+function populateSelectors() {
+  locationSelect.replaceChildren(new Option("Create a new location", "new"));
+  locations.forEach((location) => locationSelect.append(new Option(`${location.name} - ${location.suburb || location.address}`, String(location.id))));
+  templateSelect.replaceChildren(new Option("Start with a blank event", ""));
+  events.forEach((event) => templateSelect.append(new Option(`${event.title} - ${event.venueName}`, String(event.id))));
+}
+
+async function loadData() {
   try {
-    const data = await apiRequest("../api/admin/events");
-    events = data.events;
+    const [eventData, locationData] = await Promise.all([
+      apiRequest("../api/admin/events"),
+      apiRequest("../api/admin/locations"),
+    ]);
+    events = eventData.events;
+    locations = locationData.locations;
+    populateSelectors();
     renderEvents();
   } catch (error) {
     list.replaceChildren(element("p", { text: "Events could not be loaded." }));
@@ -211,44 +225,91 @@ function brisbaneParts(iso) {
   return { date: `${get("year")}-${get("month")}-${get("day")}`, time: `${get("hour")}:${get("minute")}` };
 }
 
-function openForm(event = null, prefillDate = "") {
-  form.reset();
-  formError.textContent = "";
-  form.elements.id.value = event?.id || "";
-  document.querySelector("[data-form-title]").textContent = event ? "Edit Event" : "Add Event";
-  deleteButton.hidden = !event;
+function setLocationMode(value) {
+  const location = locations.find((item) => String(item.id) === String(value));
+  document.querySelectorAll("[data-location-field]").forEach((field) => {
+    field.readOnly = Boolean(location);
+  });
+  if (location) {
+    form.elements.venueName.value = location.name;
+    form.elements.suburb.value = location.suburb || "";
+    form.elements.address.value = location.address;
+  }
+}
 
-  if (event) {
+function applyEventToForm(event, { includeSchedule = true } = {}) {
+  for (const name of ["title", "eventType", "audience", "shortDescription", "bookingLabel", "bookingUrl", "availabilityStatus", "displayOrder", "recurrenceFrequency", "recurrenceUntil"]) {
+    form.elements[name].value = event[name] ?? "";
+  }
+  locationSelect.value = event.locationId ? String(event.locationId) : "new";
+  if (![...locationSelect.options].some((option) => option.value === locationSelect.value)) locationSelect.value = "new";
+  if (locationSelect.value === "new") {
+    form.elements.venueName.value = event.venueName || "";
+    form.elements.suburb.value = event.suburb || "";
+    form.elements.address.value = event.address || "";
+  }
+  setLocationMode(locationSelect.value);
+  form.elements.dateStatus.value = event.dateStatus || "scheduled";
+  form.elements.isPublished.checked = Boolean(event.isPublished);
+  if (includeSchedule) {
     const start = brisbaneParts(event.startAt);
     const end = brisbaneParts(event.endAt);
-    for (const name of ["title", "eventType", "venueName", "suburb", "address", "audience", "shortDescription", "bookingLabel", "bookingUrl", "availabilityStatus", "displayOrder", "recurrenceFrequency", "recurrenceUntil"]) {
-      form.elements[name].value = event[name] ?? "";
-    }
     form.elements.startDate.value = start.date;
     form.elements.startTime.value = start.time;
     form.elements.endDate.value = end.date;
     form.elements.endTime.value = end.time;
-    form.elements.dateStatus.value = event.dateStatus || "scheduled";
-    form.elements.isPublished.checked = event.isPublished;
+  }
+}
+
+function defaultForm(prefillDate = "") {
+  form.elements.eventType.value = "Class";
+  form.elements.audience.value = "Women only";
+  form.elements.bookingLabel.value = "Book now";
+  form.elements.availabilityStatus.value = "Available";
+  form.elements.displayOrder.value = "0";
+  form.elements.dateStatus.value = "scheduled";
+  form.elements.recurrenceFrequency.value = "none";
+  form.elements.startDate.value = prefillDate;
+  locationSelect.value = "new";
+  setLocationMode("new");
+}
+
+function currentFormState() {
+  return JSON.stringify([...new FormData(form).entries()]);
+}
+
+function openForm(event = null, prefillDate = "", options = {}) {
+  form.reset();
+  formError.textContent = "";
+  const duplicate = Boolean(options.duplicate);
+  form.elements.id.value = event && !duplicate ? event.id : "";
+  document.querySelector("[data-form-title]").textContent = duplicate ? "Duplicate Event" : event ? "Edit Event" : "Add Event";
+  deleteButton.hidden = !event || duplicate;
+  duplicateButton.hidden = !event || duplicate;
+  templateSelect.closest("label").hidden = Boolean(event);
+  if (event) {
+    applyEventToForm(event);
+    if (duplicate) form.elements.isPublished.checked = false;
   } else {
-    form.elements.eventType.value = "Class";
-    form.elements.audience.value = "Women only";
-    form.elements.bookingLabel.value = "Book now";
-    form.elements.availabilityStatus.value = "Available";
-    form.elements.displayOrder.value = "0";
-    form.elements.dateStatus.value = "scheduled";
-    form.elements.recurrenceFrequency.value = "none";
-    form.elements.startDate.value = prefillDate;
+    defaultForm(prefillDate);
   }
   updateDateFields();
+  allowDialogClose = false;
   dialog.showModal();
+  initialFormState = currentFormState();
+}
+
+function requestClose() {
+  if (currentFormState() !== initialFormState && !window.confirm("Discard your unsaved changes?")) return;
+  allowDialogClose = true;
+  dialog.close();
 }
 
 function toIso(date, time) {
   return date && time ? new Date(`${date}T${time}:00+10:00`).toISOString() : null;
 }
 
-function formPayload() {
+function formPayload(locationId = null) {
   const data = new FormData(form);
   const dateStatus = data.get("dateStatus");
   const endDate = data.get("endDate");
@@ -257,24 +318,16 @@ function formPayload() {
     throw new Error("Add both an end date and end time, or leave both empty.");
   }
   return {
-    title: data.get("title"),
-    eventType: data.get("eventType"),
-    venueName: data.get("venueName"),
-    suburb: data.get("suburb"),
-    address: data.get("address"),
-    dateStatus,
+    title: data.get("title"), eventType: data.get("eventType"),
+    venueName: form.elements.venueName.value, suburb: form.elements.suburb.value,
+    address: form.elements.address.value, locationId, dateStatus,
     startAt: dateStatus === "tbc" ? null : toIso(data.get("startDate"), data.get("startTime")),
     endAt: dateStatus === "tbc" ? null : toIso(endDate, endTime),
-    timezone: "Australia/Brisbane",
-    audience: data.get("audience"),
-    shortDescription: data.get("shortDescription"),
-    bookingLabel: data.get("bookingLabel"),
-    bookingUrl: data.get("bookingUrl"),
-    availabilityStatus: data.get("availabilityStatus"),
-    isPublished: data.get("isPublished") === "on",
-    displayOrder: Number(data.get("displayOrder") || 0),
-    recurrenceFrequency: data.get("recurrenceFrequency"),
-    recurrenceUntil: data.get("recurrenceUntil"),
+    timezone: "Australia/Brisbane", audience: data.get("audience"),
+    shortDescription: data.get("shortDescription"), bookingLabel: data.get("bookingLabel"),
+    bookingUrl: data.get("bookingUrl"), availabilityStatus: data.get("availabilityStatus"),
+    isPublished: data.get("isPublished") === "on", displayOrder: Number(data.get("displayOrder") || 0),
+    recurrenceFrequency: data.get("recurrenceFrequency"), recurrenceUntil: data.get("recurrenceUntil"),
   };
 }
 
@@ -294,6 +347,12 @@ function updateDateFields() {
   }
 }
 
+locationSelect.addEventListener("change", () => setLocationMode(locationSelect.value));
+templateSelect.addEventListener("change", () => {
+  const template = events.find((event) => String(event.id) === templateSelect.value);
+  if (template) applyEventToForm(template, { includeSchedule: false });
+  updateDateFields();
+});
 form.elements.dateStatus.addEventListener("change", updateDateFields);
 
 form.addEventListener("submit", async (event) => {
@@ -302,14 +361,26 @@ form.addEventListener("submit", async (event) => {
   if (!form.reportValidity()) return;
   const id = form.elements.id.value;
   try {
-    const payload = formPayload();
+    let locationId = locationSelect.value === "new" ? null : Number(locationSelect.value);
+    if (!locationId && form.elements.address.value.trim()) {
+      const result = await apiRequest("../api/admin/locations", {
+        method: "POST",
+        body: JSON.stringify({
+          name: form.elements.venueName.value,
+          suburb: form.elements.suburb.value,
+          address: form.elements.address.value,
+        }),
+      });
+      locationId = result.location.id;
+    }
     await apiRequest(id ? `../api/admin/events/${id}` : "../api/admin/events", {
       method: id ? "PUT" : "POST",
-      body: JSON.stringify(payload),
+      body: JSON.stringify(formPayload(locationId)),
     });
+    allowDialogClose = true;
     dialog.close();
     setNotice(id ? "Event updated." : "Event created.");
-    await loadEvents();
+    await loadData();
   } catch (error) {
     formError.textContent = error.message;
   }
@@ -318,19 +389,36 @@ form.addEventListener("submit", async (event) => {
 deleteButton.addEventListener("click", async () => {
   const id = form.elements.id.value;
   const title = form.elements.title.value;
-  if (!id || !window.confirm(`Delete “${title}”? This cannot be undone.`)) return;
+  if (!id || !window.confirm(`Delete "${title}"? This cannot be undone.`)) return;
   try {
     await apiRequest(`../api/admin/events/${id}`, { method: "DELETE" });
+    allowDialogClose = true;
     dialog.close();
     setNotice("Event deleted.");
-    await loadEvents();
+    await loadData();
   } catch (error) {
     formError.textContent = error.message;
   }
 });
 
+duplicateButton.addEventListener("click", () => {
+  const source = events.find((event) => String(event.id) === form.elements.id.value);
+  if (!source) return;
+  allowDialogClose = true;
+  dialog.close();
+  window.requestAnimationFrame(() => openForm(source, "", { duplicate: true }));
+});
 document.querySelector("[data-new-event]").addEventListener("click", () => openForm());
-document.querySelectorAll("[data-close]").forEach((button) => button.addEventListener("click", () => dialog.close()));
+document.querySelectorAll("[data-close]").forEach((button) => button.addEventListener("click", requestClose));
+dialog.addEventListener("cancel", (event) => {
+  if (allowDialogClose) return;
+  event.preventDefault();
+  requestClose();
+});
+dialog.addEventListener("click", (event) => {
+  if (event.target === dialog) requestClose();
+});
+
 document.querySelectorAll("[data-admin-view]").forEach((button) => button.addEventListener("click", () => {
   const calendar = button.dataset.adminView === "calendar";
   document.querySelector("[data-admin-list-view]").hidden = calendar;
@@ -355,4 +443,5 @@ document.querySelector("[data-admin-calendar-dialog-close]").addEventListener("c
 adminCalendarDialog.addEventListener("click", (event) => {
   if (event.target === adminCalendarDialog) adminCalendarDialog.close();
 });
-loadEvents();
+
+loadData();

@@ -6,6 +6,7 @@ import { verifyAccessRequest } from "../shared/access.js";
 import { onRequestGet as getPublicEvents } from "../functions/api/events.js";
 import { eventDateKey, monthGrid, moveMonth } from "../calendar.js";
 import { expandRecurringEvents } from "../recurrence.js";
+import { rowToLocation, validateLocationInput } from "../shared/locations.js";
 
 const baseEvent = {
   id: 1,
@@ -148,4 +149,29 @@ test("recurrence validation rejects an end before the first event", () => {
     recurrenceUntil: "2026-08-01",
   });
   assert.ok(result.errors.some((error) => error.includes("on or after")));
+});
+
+test("saved locations require reusable venue details", () => {
+  const invalid = validateLocationInput({ name: "Stellar Studio Collective", address: "" });
+  assert.ok(invalid.errors.some((error) => error.includes("address")));
+  const valid = validateLocationInput({
+    name: " Stellar Studio Collective ",
+    suburb: " Helensvale ",
+    address: " Unit 11/5 Philip Gray Rd, Helensvale QLD 4212 ",
+  });
+  assert.deepEqual(valid.location, {
+    name: "Stellar Studio Collective",
+    suburb: "Helensvale",
+    address: "Unit 11/5 Philip Gray Rd, Helensvale QLD 4212",
+  });
+});
+
+test("saved location rows retain optional map coordinates", () => {
+  assert.deepEqual(rowToLocation({
+    id: 3, name: "Stellar", suburb: "Helensvale", address: "1 Example Road",
+    latitude: -27.9, longitude: 153.3,
+  }), {
+    id: 3, name: "Stellar", suburb: "Helensvale", address: "1 Example Road",
+    latitude: -27.9, longitude: 153.3,
+  });
 });

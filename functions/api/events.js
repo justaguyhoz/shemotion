@@ -6,10 +6,16 @@ export async function onRequestGet({ env }) {
     const now = new Date().toISOString();
     const rangeEnd = new Date(Date.parse(now) + 366 * 86400000).toISOString();
     const result = await env.DB.prepare(`
-      SELECT id, title, event_type, venue_name, suburb, address, date_status, start_at, end_at, timezone,
-             audience, short_description, booking_label, booking_url, availability_status,
-             recurrence_frequency, recurrence_until, display_order
+      SELECT events.id, events.title, events.event_type,
+             COALESCE(locations.name, events.venue_name) AS venue_name,
+             COALESCE(locations.suburb, events.suburb) AS suburb,
+             COALESCE(locations.address, events.address) AS address,
+             events.date_status, events.start_at, events.end_at, events.timezone,
+             events.audience, events.short_description, events.booking_label, events.booking_url,
+             events.availability_status, events.recurrence_frequency, events.recurrence_until,
+             events.display_order, events.location_id, locations.latitude, locations.longitude
       FROM events
+      LEFT JOIN locations ON locations.id = events.location_id
       WHERE is_published = 1
         AND (
           date_status = 'tbc'
