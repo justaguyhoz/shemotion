@@ -148,9 +148,11 @@ function closeEventDetails(card) {
   const toggle = card.querySelector(".event-details-toggle");
   const details = card.querySelector(".event-pill-details");
   if (!toggle || !details) return;
+  const wasOpen = toggle.getAttribute("aria-expanded") === "true";
   toggle.setAttribute("aria-expanded", "false");
   toggle.textContent = "Full details";
   details.hidden = true;
+  if (wasOpen) card.dispatchEvent(new CustomEvent("eventdetailschange", { bubbles: true }));
 }
 
 function setupEventDetails(cards) {
@@ -165,6 +167,7 @@ function setupEventDetails(cards) {
       toggle.setAttribute("aria-expanded", "true");
       toggle.textContent = "Close details";
       details.hidden = false;
+      card.dispatchEvent(new CustomEvent("eventdetailschange", { bubbles: true }));
     });
   });
 
@@ -469,9 +472,14 @@ function setupEventsMap(events) {
           popup.append(cardHost);
           if (venueEvents.length > 1) popup.append(controls);
           renderVenueEvent();
-          window.L.marker(coordinates, { title: `${event.title} at ${event.venueName}` })
-            .addTo(map)
-            .bindPopup(popup, { maxWidth: 350, minWidth: 270, autoClose: true, closeOnClick: true });
+          const marker = window.L.marker(coordinates, { title: `${event.title} at ${event.venueName}` })
+            .addTo(map);
+          const leafletPopup = marker.bindPopup(popup, {
+            maxWidth: 350, minWidth: 270, autoClose: true, closeOnClick: true,
+          }).getPopup();
+          popup.addEventListener("eventdetailschange", () => {
+            window.requestAnimationFrame(() => leafletPopup.update());
+          });
         } catch {
           // One unrecognised address should not prevent the remaining pins loading.
         }

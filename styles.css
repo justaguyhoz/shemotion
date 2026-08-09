@@ -465,7 +465,7 @@ p:last-child {
 }
 
 .event-carousel {
-  max-width: 760px;
+  max-width: 640px;
   margin: clamp(26px, 4vw, 42px) auto 0;
 }
 
@@ -544,6 +544,14 @@ p:last-child {
 .leaflet-popup-content {
   width: min(310px, calc(100vw - 88px)) !important;
   margin: 12px;
+}
+
+.venue-popup-card-host {
+  max-height: min(42vh, 320px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--clay) transparent;
 }
 
 .map-popup-card {
@@ -758,7 +766,7 @@ p:last-child {
   gap: 14px;
   width: 100%;
   margin: 0;
-  padding: 6px 2px 18px;
+  padding: 6px 2px 12px;
   overflow: hidden;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
@@ -773,9 +781,9 @@ p:last-child {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-content: start;
-  gap: 16px;
-  min-height: 164px;
-  padding: 20px 22px 18px 26px;
+  gap: 12px;
+  min-height: 0;
+  padding: 18px 20px 16px 24px;
   overflow: hidden;
   background: rgba(255, 250, 244, 0.9);
   border: 1px solid rgba(201, 184, 166, 0.58);
@@ -816,7 +824,7 @@ p:last-child {
 
 .event-carousel .event-pill-content,
 .event-carousel .event-pill-details {
-  max-width: 620px;
+  max-width: 560px;
 }
 
 .event-pill-venue {
@@ -900,10 +908,10 @@ p:last-child {
 .event-pill-actions {
   display: flex;
   align-items: center;
-  align-self: end;
+  align-self: start;
   flex-wrap: wrap;
   gap: 10px 16px;
-  margin-top: auto;
+  margin-top: 2px;
 }
 
 .event-details-toggle {
@@ -943,7 +951,7 @@ p:last-child {
   align-items: center;
   justify-content: center;
   gap: 18px;
-  margin-top: 10px;
+  margin-top: 6px;
 }
 
 .event-carousel-controls[hidden] {
