@@ -10,11 +10,16 @@ const deleteButton = document.querySelector("[data-delete]");
 const duplicateButton = document.querySelector("[data-duplicate]");
 const locationSelect = document.querySelector("[data-location-select]");
 const templateSelect = document.querySelector("[data-template-select]");
+const formGrid = form.querySelector(".form-grid");
 let events = [];
 let locations = [];
 let adminCalendarMonth;
 let initialFormState = "";
 let allowDialogClose = false;
+
+formGrid.addEventListener("scroll", () => {
+  if (formGrid.scrollLeft) formGrid.scrollLeft = 0;
+}, { passive: true });
 
 const dateFormatter = new Intl.DateTimeFormat("en-AU", {
   weekday: "short", day: "numeric", month: "short", year: "numeric",
