@@ -32,7 +32,7 @@ export async function onRequestGet({ env }) {
     return jsonResponse(
       { events: expanded },
       200,
-      { "cache-control": "public, max-age=60, stale-while-revalidate=120" }
+      { "cache-control": "no-store" }
     );
   } catch {
     return jsonResponse({ error: "Upcoming events are temporarily unavailable." }, 500, {

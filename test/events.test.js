@@ -120,6 +120,7 @@ test("public API uses future published filtering and ordered results", async () 
   assert.equal(response.status, 200);
   assert.equal(body.events.length, 1);
   assert.equal(body.events[0].address, row.address);
+  assert.equal(response.headers.get("cache-control"), "no-store");
   assert.match(sql, /address/);
   assert.match(sql, /is_published = 1/);
   assert.match(sql, /date_status = 'tbc'/);

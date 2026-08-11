@@ -608,7 +608,10 @@ async function loadPublicEvents() {
   if (!list) return;
 
   try {
-    const response = await fetch("api/events", { headers: { accept: "application/json" } });
+    const response = await fetch(`api/events?fresh=${Date.now()}`, {
+      cache: "no-store",
+      headers: { accept: "application/json" },
+    });
     if (!response.ok) throw new Error("Events request failed");
     const data = await response.json();
     const events = Array.isArray(data.events) ? data.events : [];
@@ -665,3 +668,9 @@ function initialisePage() {
 }
 
 if (typeof document !== "undefined") initialisePage();
+
+if (typeof window !== "undefined") {
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted) window.location.reload();
+  });
+}
