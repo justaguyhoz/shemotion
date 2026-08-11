@@ -56,6 +56,11 @@ export function eventDestination(event) {
   return event.bookingUrl || "mailto:shemotion.au@gmail.com";
 }
 
+export function eventActionLabel(event) {
+  if (!event.bookingUrl) return "Email Shemotion";
+  return event.bookingLabel?.trim() || "Venue details";
+}
+
 function element(tag, options = {}) {
   const node = document.createElement(tag);
   if (options.className) node.className = options.className;
@@ -129,7 +134,7 @@ export function createEventCard(event, idPrefix = "event") {
   if (destination) {
     const action = element("a", {
       className: "event-pill-action",
-      text: event.bookingUrl ? "Venue details" : "Email Shemotion",
+      text: eventActionLabel(event),
     });
     action.href = destination;
     if (event.bookingUrl) {

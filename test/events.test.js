@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { announcementFor, eventDestination } from "../script.js";
+import { announcementFor, eventActionLabel, eventDestination } from "../script.js";
 import { validateEventInput } from "../shared/events.js";
 import { verifyAccessRequest } from "../shared/access.js";
 import { onRequestGet as getPublicEvents } from "../functions/api/events.js";
@@ -47,8 +47,12 @@ test("multiple and no events update announcement state", () => {
 
 test("event pills use the venue link or Shemotion email without dead booking controls", () => {
   assert.equal(eventDestination(baseEvent), "mailto:shemotion.au@gmail.com");
+  assert.equal(eventActionLabel(baseEvent), "Email Shemotion");
   assert.equal(eventDestination({ ...baseEvent, availabilityStatus: "Cancelled" }), null);
-  assert.equal(eventDestination({ ...baseEvent, bookingUrl: "https://example.com/class" }), "https://example.com/class");
+  const bookable = { ...baseEvent, bookingUrl: "https://example.com/class" };
+  assert.equal(eventDestination(bookable), "https://example.com/class");
+  assert.equal(eventActionLabel(bookable), "Book with Reinvigr8");
+  assert.equal(eventActionLabel({ ...bookable, bookingLabel: "" }), "Venue details");
 });
 
 test("admin validation rejects invalid URLs and dates", () => {
