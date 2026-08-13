@@ -25,6 +25,7 @@ export function validateLocationInput(input) {
   const errors = [];
   if (!location.name) errors.push("Location name is required.");
   if (!location.address) errors.push("Location address is required.");
+  if (/^https?:\/\//i.test(location.address)) errors.push("Address must be a street address, not a web link.");
   for (const [field, limit] of Object.entries(LIMITS)) {
     if (location[field]?.length > limit) errors.push(`${field} is too long.`);
   }

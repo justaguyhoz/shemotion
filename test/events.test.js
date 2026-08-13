@@ -215,6 +215,11 @@ test("saved location validation accepts coordinate pairs and rejects unsafe map 
   });
   assert.ok(invalid.errors.some((error) => error.includes("together")));
   assert.ok(invalid.errors.some((error) => error.includes("Google Maps")));
+  const swapped = validateLocationInput({
+    name: "Gold Coast Salsa",
+    address: "https://maps.app.goo.gl/JZVGXLXR2BVrph598",
+  });
+  assert.ok(swapped.errors.some((error) => error.includes("street address")));
 });
 
 test("admin can create and update complete saved location geography", async () => {

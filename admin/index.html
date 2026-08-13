@@ -84,12 +84,12 @@
             </div>
             <label>Venue name<input name="name" maxlength="120" required></label>
             <label>Suburb<input name="suburb" maxlength="80"></label>
-            <label>Address<input name="address" maxlength="200" required></label>
+            <label>Street address<input name="address" maxlength="200" placeholder="Unit 3/76 Ferry Rd, Southport QLD 4215" required></label>
             <div class="coordinate-fields">
               <label>Latitude<input name="latitude" type="number" min="-90" max="90" step="any" inputmode="decimal"></label>
               <label>Longitude<input name="longitude" type="number" min="-180" max="180" step="any" inputmode="decimal"></label>
             </div>
-            <label>Google Maps URL<input name="googleMapsUrl" type="url" maxlength="1000" placeholder="https://maps.google.com/..."></label>
+            <label>Google Maps URL <span class="optional-label">Paste the Maps link here, not above</span><input name="googleMapsUrl" type="url" maxlength="1000" placeholder="https://maps.app.goo.gl/..."></label>
             <div class="location-verification" data-location-verification hidden>
               <a data-location-google-link target="_blank" rel="noopener noreferrer">Open in Google Maps</a>
               <a data-location-coordinate-link target="_blank" rel="noopener noreferrer">View stored coordinates</a>
@@ -172,6 +172,6 @@
       </form>
     </dialog>
 
-    <script type="module" src="admin.js?v=20260813-1"></script>
+    <script type="module" src="admin.js?v=20260813-2"></script>
   </body>
 </html>
