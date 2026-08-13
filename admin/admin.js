@@ -11,6 +11,10 @@ const duplicateButton = document.querySelector("[data-duplicate]");
 const locationSelect = document.querySelector("[data-location-select]");
 const templateSelect = document.querySelector("[data-template-select]");
 const formGrid = form.querySelector(".form-grid");
+const locationsDialog = document.querySelector("[data-locations-dialog]");
+const locationsList = document.querySelector("[data-locations-list]");
+const locationForm = document.querySelector("[data-location-form]");
+const locationError = document.querySelector("[data-location-error]");
 let events = [];
 let locations = [];
 let adminCalendarMonth;
@@ -204,6 +208,60 @@ function populateSelectors() {
   events.forEach((event) => templateSelect.append(new Option(`${event.title} - ${event.venueName}`, String(event.id))));
 }
 
+function locationGoogleMapsUrl(location) {
+  if (location.googleMapsUrl) return location.googleMapsUrl;
+  const query = [location.name, location.address, location.suburb].filter(Boolean).join(", ");
+  return query ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}` : "";
+}
+
+function updateLocationVerification(location = {}) {
+  const verification = document.querySelector("[data-location-verification]");
+  const googleLink = document.querySelector("[data-location-google-link]");
+  const coordinateLink = document.querySelector("[data-location-coordinate-link]");
+  const googleUrl = locationGoogleMapsUrl(location);
+  const hasCoordinates = Number.isFinite(location.latitude) && Number.isFinite(location.longitude);
+  googleLink.hidden = !googleUrl;
+  if (googleUrl) googleLink.href = googleUrl;
+  coordinateLink.hidden = !hasCoordinates;
+  if (hasCoordinates) coordinateLink.href = `https://www.google.com/maps?q=${location.latitude},${location.longitude}`;
+  verification.hidden = !googleUrl && !hasCoordinates;
+}
+
+function openLocationForm(location = null) {
+  locationForm.reset();
+  locationError.textContent = "";
+  locationForm.elements.id.value = location?.id || "";
+  for (const name of ["name", "suburb", "address", "latitude", "longitude", "googleMapsUrl"]) {
+    locationForm.elements[name].value = location?.[name] ?? "";
+  }
+  document.querySelector("[data-location-form-title]").textContent = location ? "Edit Location" : "New Location";
+  locationsList.querySelectorAll(".location-list-button").forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.locationId === String(location?.id));
+  });
+  updateLocationVerification(location || {});
+}
+
+function renderLocations() {
+  locationsList.replaceChildren();
+  if (!locations.length) {
+    locationsList.append(element("p", { className: "empty-state", text: "No saved locations yet." }));
+    return;
+  }
+  locations.forEach((location) => {
+    const button = element("button", { className: "location-list-button" });
+    button.type = "button";
+    button.dataset.locationId = String(location.id);
+    const verified = Number.isFinite(location.latitude) && Number.isFinite(location.longitude) && location.googleMapsUrl;
+    button.append(
+      element("strong", { text: location.name }),
+      element("span", { text: [location.suburb, location.address].filter(Boolean).join(" - ") }),
+      element("span", { className: "location-status", text: verified ? "Map details complete" : "Needs map verification" })
+    );
+    button.addEventListener("click", () => openLocationForm(location));
+    locationsList.append(button);
+  });
+}
+
 async function loadData() {
   try {
     const [eventData, locationData] = await Promise.all([
@@ -213,6 +271,7 @@ async function loadData() {
     events = eventData.events;
     locations = locationData.locations;
     populateSelectors();
+    renderLocations();
     renderEvents();
   } catch (error) {
     list.replaceChildren(element("p", { text: "Events could not be loaded." }));
@@ -414,6 +473,57 @@ duplicateButton.addEventListener("click", () => {
   window.requestAnimationFrame(() => openForm(source, "", { duplicate: true }));
 });
 document.querySelector("[data-new-event]").addEventListener("click", () => openForm());
+document.querySelector("[data-manage-locations]").addEventListener("click", () => {
+  renderLocations();
+  openLocationForm(locations[0] || null);
+  locationsDialog.showModal();
+});
+document.querySelector("[data-locations-close]").addEventListener("click", () => locationsDialog.close());
+document.querySelector("[data-new-location]").addEventListener("click", () => openLocationForm());
+locationsDialog.addEventListener("click", (event) => {
+  if (event.target === locationsDialog) locationsDialog.close();
+});
+locationForm.addEventListener("input", () => {
+  updateLocationVerification({
+    name: locationForm.elements.name.value,
+    suburb: locationForm.elements.suburb.value,
+    address: locationForm.elements.address.value,
+    latitude: locationForm.elements.latitude.value === "" ? null : Number(locationForm.elements.latitude.value),
+    longitude: locationForm.elements.longitude.value === "" ? null : Number(locationForm.elements.longitude.value),
+    googleMapsUrl: locationForm.elements.googleMapsUrl.value,
+  });
+});
+locationForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  locationError.textContent = "";
+  if (!locationForm.reportValidity()) return;
+  const id = locationForm.elements.id.value;
+  const payload = {
+    name: locationForm.elements.name.value,
+    suburb: locationForm.elements.suburb.value,
+    address: locationForm.elements.address.value,
+    latitude: locationForm.elements.latitude.value,
+    longitude: locationForm.elements.longitude.value,
+    googleMapsUrl: locationForm.elements.googleMapsUrl.value,
+  };
+  try {
+    const result = await apiRequest(id ? `../api/admin/locations/${id}` : "../api/admin/locations", {
+      method: id ? "PUT" : "POST",
+      body: JSON.stringify(payload),
+    });
+    const saved = result.location;
+    const existingIndex = locations.findIndex((location) => String(location.id) === String(saved.id));
+    if (existingIndex >= 0) locations.splice(existingIndex, 1, saved);
+    else locations.push(saved);
+    locations.sort((a, b) => a.name.localeCompare(b.name));
+    populateSelectors();
+    renderLocations();
+    openLocationForm(saved);
+    setNotice(id ? "Location updated." : "Location created.");
+  } catch (error) {
+    locationError.textContent = error.message;
+  }
+});
 document.querySelectorAll("[data-close]").forEach((button) => button.addEventListener("click", requestClose));
 dialog.addEventListener("cancel", (event) => {
   if (allowDialogClose) return;

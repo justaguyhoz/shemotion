@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="admin.css?v=20260811-3">
+    <link rel="stylesheet" href="admin.css?v=20260813-1">
   </head>
   <body>
     <header class="admin-header">
@@ -26,7 +26,10 @@
           <h1>Upcoming Experiences</h1>
           <p>Create, edit and publish the classes shown on the Shemotion website.</p>
         </div>
-        <button class="primary-button" type="button" data-new-event>+ Add Event</button>
+        <div class="dashboard-actions">
+          <button class="text-button" type="button" data-manage-locations>Manage Locations</button>
+          <button class="primary-button" type="button" data-new-event>+ Add Event</button>
+        </div>
       </div>
 
       <p class="notice" data-notice role="status" aria-live="polite"></p>
@@ -58,6 +61,42 @@
           <button type="button" data-admin-calendar-dialog-previous aria-label="Previous event">&#8592;</button>
           <output data-admin-calendar-dialog-counter></output>
           <button type="button" data-admin-calendar-dialog-next aria-label="Next event">&#8594;</button>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="locations-dialog" data-locations-dialog>
+      <div class="locations-dialog-shell">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">Saved venues</p>
+            <h2>Manage Locations</h2>
+          </div>
+          <button class="icon-button" type="button" data-locations-close aria-label="Close">&#215;</button>
+        </div>
+        <div class="locations-manager">
+          <div class="locations-list" data-locations-list></div>
+          <form class="location-form" data-location-form novalidate>
+            <input type="hidden" name="id">
+            <div class="location-form-heading">
+              <h3 data-location-form-title>New Location</h3>
+              <button class="text-button" type="button" data-new-location>New</button>
+            </div>
+            <label>Venue name<input name="name" maxlength="120" required></label>
+            <label>Suburb<input name="suburb" maxlength="80"></label>
+            <label>Address<input name="address" maxlength="200" required></label>
+            <div class="coordinate-fields">
+              <label>Latitude<input name="latitude" type="number" min="-90" max="90" step="any" inputmode="decimal"></label>
+              <label>Longitude<input name="longitude" type="number" min="-180" max="180" step="any" inputmode="decimal"></label>
+            </div>
+            <label>Google Maps URL<input name="googleMapsUrl" type="url" maxlength="1000" placeholder="https://maps.google.com/..."></label>
+            <div class="location-verification" data-location-verification hidden>
+              <a data-location-google-link target="_blank" rel="noopener noreferrer">Open in Google Maps</a>
+              <a data-location-coordinate-link target="_blank" rel="noopener noreferrer">View stored coordinates</a>
+            </div>
+            <p class="form-error" data-location-error role="alert"></p>
+            <button class="primary-button" type="submit">Save Location</button>
+          </form>
         </div>
       </div>
     </dialog>
@@ -133,6 +172,6 @@
       </form>
     </dialog>
 
-    <script type="module" src="admin.js?v=20260811-2"></script>
+    <script type="module" src="admin.js?v=20260813-1"></script>
   </body>
 </html>

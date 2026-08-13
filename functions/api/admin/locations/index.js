@@ -21,14 +21,14 @@ export async function onRequestPost({ request, env }) {
   if (validation.errors) return jsonResponse({ error: "Validation failed.", details: validation.errors }, 400);
 
   try {
-    const { name, suburb, address } = validation.location;
+    const { name, suburb, address, latitude, longitude, googleMapsUrl } = validation.location;
     const existing = await env.DB.prepare(
       "SELECT * FROM locations WHERE name = ?1 COLLATE NOCASE AND address = ?2 COLLATE NOCASE"
     ).bind(name, address).first();
     if (existing) return jsonResponse({ location: rowToLocation(existing) });
     const result = await env.DB.prepare(
-      "INSERT INTO locations (name, suburb, address) VALUES (?1, ?2, ?3) RETURNING *"
-    ).bind(name, suburb, address).first();
+      "INSERT INTO locations (name, suburb, address, latitude, longitude, google_maps_url) VALUES (?1, ?2, ?3, ?4, ?5, ?6) RETURNING *"
+    ).bind(name, suburb, address, latitude, longitude, googleMapsUrl).first();
     return jsonResponse({ location: rowToLocation(result) }, 201);
   } catch {
     return jsonResponse({ error: "The location could not be saved." }, 500);

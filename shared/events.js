@@ -164,6 +164,7 @@ export function rowToPublicEvent(row) {
     locationId: row.location_id || null,
     latitude: row.latitude != null && Number.isFinite(Number(row.latitude)) ? Number(row.latitude) : null,
     longitude: row.longitude != null && Number.isFinite(Number(row.longitude)) ? Number(row.longitude) : null,
+    googleMapsUrl: row.google_maps_url || null,
   };
 }
 

@@ -8,7 +8,16 @@ import {
 export async function onRequestGet({ env }) {
   try {
     const result = await env.DB.prepare(`
-      SELECT events.*, locations.latitude, locations.longitude
+      SELECT events.id, events.title, events.event_type,
+             COALESCE(locations.name, events.venue_name) AS venue_name,
+             COALESCE(locations.suburb, events.suburb) AS suburb,
+             COALESCE(locations.address, events.address) AS address,
+             events.date_status, events.start_at, events.end_at, events.timezone,
+             events.audience, events.short_description, events.booking_label, events.booking_url,
+             events.availability_status, events.is_published, events.display_order,
+             events.recurrence_frequency, events.recurrence_until, events.location_id,
+             events.created_at, events.updated_at,
+             locations.latitude, locations.longitude, locations.google_maps_url
       FROM events
       LEFT JOIN locations ON locations.id = events.location_id
       ORDER BY CASE WHEN date_status = 'tbc' THEN 1 ELSE 0 END, start_at ASC, display_order ASC

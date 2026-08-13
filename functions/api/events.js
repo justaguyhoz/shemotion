@@ -13,7 +13,8 @@ export async function onRequestGet({ env }) {
              events.date_status, events.start_at, events.end_at, events.timezone,
              events.audience, events.short_description, events.booking_label, events.booking_url,
              events.availability_status, events.recurrence_frequency, events.recurrence_until,
-             events.display_order, events.location_id, locations.latitude, locations.longitude
+             events.display_order, events.location_id, locations.latitude, locations.longitude,
+             locations.google_maps_url
       FROM events
       LEFT JOIN locations ON locations.id = events.location_id
       WHERE is_published = 1

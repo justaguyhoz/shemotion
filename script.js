@@ -61,6 +61,14 @@ export function eventActionLabel(event) {
   return event.bookingLabel?.trim() || "Venue details";
 }
 
+export function eventGoogleMapsUrl(event) {
+  if (event.googleMapsUrl) return event.googleMapsUrl;
+  const query = [event.venueName, event.address, event.suburb].filter(Boolean).join(", ");
+  return query
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`
+    : null;
+}
+
 function element(tag, options = {}) {
   const node = document.createElement(tag);
   if (options.className) node.className = options.className;
@@ -122,11 +130,14 @@ export function createEventCard(event, idPrefix = "event") {
     details.hidden = true;
     if (event.address) {
       details.append(element("p", { className: "event-pill-address", text: event.address }));
-      const mapLink = element("a", { className: "event-map-link", text: "Open in Google Maps" });
-      mapLink.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.address)}`;
-      mapLink.target = "_blank";
-      mapLink.rel = "noopener noreferrer";
-      details.append(mapLink);
+      const googleMapsUrl = eventGoogleMapsUrl(event);
+      if (googleMapsUrl) {
+        const mapLink = element("a", { className: "event-map-link", text: "Open in Google Maps" });
+        mapLink.href = googleMapsUrl;
+        mapLink.target = "_blank";
+        mapLink.rel = "noopener noreferrer";
+        details.append(mapLink);
+      }
     }
     if (description) details.append(element("p", { className: "event-pill-description", text: description }));
   }
@@ -372,8 +383,9 @@ function setupEventCarousel(list, cards) {
 
 function mapQueriesFor(event) {
   const queries = [];
-  if (event.address) queries.push(`${event.address}, Australia`);
+  if (event.venueName && event.address) queries.push(`${event.venueName}, ${event.address}, Australia`);
   if (event.venueName && event.suburb) queries.push(`${event.venueName}, ${event.suburb}, Queensland, Australia`);
+  if (event.address) queries.push(`${event.address}, Australia`);
   if (event.suburb) queries.push(`${event.suburb}, Queensland, Australia`);
   return [...new Set(queries)];
 }

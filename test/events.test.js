@@ -1,12 +1,14 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { announcementFor, eventActionLabel, eventDestination } from "../script.js";
+import { announcementFor, eventActionLabel, eventDestination, eventGoogleMapsUrl } from "../script.js";
 import { validateEventInput } from "../shared/events.js";
 import { verifyAccessRequest } from "../shared/access.js";
 import { onRequestGet as getPublicEvents } from "../functions/api/events.js";
 import { eventDateKey, monthGrid, moveMonth } from "../calendar.js";
 import { expandRecurringEvents } from "../recurrence.js";
 import { rowToLocation, validateLocationInput } from "../shared/locations.js";
+import { onRequestPost as createLocation } from "../functions/api/admin/locations/index.js";
+import { onRequestPut as updateLocation } from "../functions/api/admin/locations/[id].js";
 
 const baseEvent = {
   id: 1,
@@ -55,6 +57,19 @@ test("event pills use the venue link or Shemotion email without dead booking con
   assert.equal(eventActionLabel({ ...bookable, bookingLabel: "" }), "Venue details");
 });
 
+test("event map links prefer saved URLs and otherwise include venue and address", () => {
+  const exact = "https://maps.google.com/?cid=123";
+  assert.equal(eventGoogleMapsUrl({ ...baseEvent, googleMapsUrl: exact }), exact);
+  const fallback = eventGoogleMapsUrl({
+    ...baseEvent,
+    address: "Unit 3/76 Ferry Rd, Southport QLD 4215",
+    suburb: "Southport",
+    venueName: "Gold Coast Salsa",
+  });
+  assert.match(decodeURIComponent(fallback), /Gold Coast Salsa/);
+  assert.match(decodeURIComponent(fallback), /Unit 3\/76 Ferry Rd/);
+});
+
 test("admin validation rejects invalid URLs and dates", () => {
   const invalid = validateEventInput({ ...baseEvent, bookingUrl: "http://example.com", startAt: "tomorrow" });
   assert.ok(invalid.errors.some((error) => error.includes("https")));
@@ -101,6 +116,7 @@ test("public API uses future published filtering and ordered results", async () 
     start_at: baseEvent.startAt, end_at: null, timezone: baseEvent.timezone,
     audience: baseEvent.audience, short_description: baseEvent.shortDescription,
     booking_label: baseEvent.bookingLabel, booking_url: null, availability_status: baseEvent.availabilityStatus,
+    google_maps_url: "https://maps.google.com/?cid=123", latitude: -27.9, longitude: 153.3,
   };
   const env = {
     DB: {
@@ -120,6 +136,7 @@ test("public API uses future published filtering and ordered results", async () 
   assert.equal(response.status, 200);
   assert.equal(body.events.length, 1);
   assert.equal(body.events[0].address, row.address);
+  assert.equal(body.events[0].googleMapsUrl, row.google_maps_url);
   assert.equal(response.headers.get("cache-control"), "no-store");
   assert.match(sql, /address/);
   assert.match(sql, /is_published = 1/);
@@ -168,15 +185,79 @@ test("saved locations require reusable venue details", () => {
     name: "Stellar Studio Collective",
     suburb: "Helensvale",
     address: "Unit 11/5 Philip Gray Rd, Helensvale QLD 4212",
+    latitude: null,
+    longitude: null,
+    googleMapsUrl: null,
   });
 });
 
 test("saved location rows retain optional map coordinates", () => {
   assert.deepEqual(rowToLocation({
     id: 3, name: "Stellar", suburb: "Helensvale", address: "1 Example Road",
-    latitude: -27.9, longitude: 153.3,
+    latitude: -27.9, longitude: 153.3, google_maps_url: "https://maps.google.com/?cid=123",
   }), {
     id: 3, name: "Stellar", suburb: "Helensvale", address: "1 Example Road",
-    latitude: -27.9, longitude: 153.3,
+    latitude: -27.9, longitude: 153.3, googleMapsUrl: "https://maps.google.com/?cid=123",
   });
+});
+
+test("saved location validation accepts coordinate pairs and rejects unsafe map URLs", () => {
+  const valid = validateLocationInput({
+    name: "Gold Coast Salsa", suburb: "Southport",
+    address: "Unit 3/76 Ferry Rd, Southport QLD 4215",
+    latitude: -27.98, longitude: 153.41,
+    googleMapsUrl: "https://maps.google.com/?cid=123",
+  });
+  assert.equal(valid.errors, undefined);
+  const invalid = validateLocationInput({
+    name: "Gold Coast Salsa", address: "Unit 3/76 Ferry Rd",
+    latitude: -27.98, googleMapsUrl: "https://example.com/not-maps",
+  });
+  assert.ok(invalid.errors.some((error) => error.includes("together")));
+  assert.ok(invalid.errors.some((error) => error.includes("Google Maps")));
+});
+
+test("admin can create and update complete saved location geography", async () => {
+  const savedRow = {
+    id: 4, name: "Gold Coast Salsa", suburb: "Southport",
+    address: "Unit 3/76 Ferry Rd, Southport QLD 4215",
+    latitude: -27.97, longitude: 153.41,
+    google_maps_url: "https://maps.google.com/?cid=123",
+  };
+  const statements = [];
+  const env = {
+    DB: {
+      prepare(sql) {
+        const statement = { sql, values: [] };
+        statements.push(statement);
+        return {
+          bind(...values) {
+            statement.values = values;
+            return {
+              first: async () => sql.includes("SELECT") ? null : savedRow,
+            };
+          },
+        };
+      },
+    },
+  };
+  const payload = {
+    name: savedRow.name, suburb: savedRow.suburb, address: savedRow.address,
+    latitude: savedRow.latitude, longitude: savedRow.longitude,
+    googleMapsUrl: savedRow.google_maps_url,
+  };
+  const created = await createLocation({
+    env,
+    request: new Request("https://example.com", { method: "POST", body: JSON.stringify(payload) }),
+  });
+  assert.equal(created.status, 201);
+  assert.equal((await created.json()).location.googleMapsUrl, savedRow.google_maps_url);
+  assert.match(statements.at(-1).sql, /google_maps_url/);
+
+  const updated = await updateLocation({
+    env, params: { id: "4" },
+    request: new Request("https://example.com/4", { method: "PUT", body: JSON.stringify(payload) }),
+  });
+  assert.equal(updated.status, 200);
+  assert.deepEqual(statements.at(-1).values.slice(3, 6), [savedRow.latitude, savedRow.longitude, savedRow.google_maps_url]);
 });
