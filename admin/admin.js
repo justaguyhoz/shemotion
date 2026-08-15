@@ -15,11 +15,15 @@ const locationsDialog = document.querySelector("[data-locations-dialog]");
 const locationsList = document.querySelector("[data-locations-list]");
 const locationForm = document.querySelector("[data-location-form]");
 const locationError = document.querySelector("[data-location-error]");
+const placeSearch = document.querySelector("[data-place-search]");
+const placeResults = document.querySelector("[data-place-results]");
 let events = [];
 let locations = [];
 let adminCalendarMonth;
 let initialFormState = "";
 let allowDialogClose = false;
+let placeSearchTimer;
+let placeSessionToken = "";
 
 formGrid.addEventListener("scroll", () => {
   if (formGrid.scrollLeft) formGrid.scrollLeft = 0;
@@ -46,6 +50,60 @@ function element(tag, options = {}) {
   if (options.className) node.className = options.className;
   if (options.text) node.textContent = options.text;
   return node;
+}
+
+function newPlaceSession() {
+  placeSessionToken = crypto.randomUUID();
+}
+
+function clearPlaceResults() {
+  placeResults.replaceChildren();
+  placeResults.hidden = true;
+}
+
+function applyGoogleLocation(location) {
+  for (const name of ["name", "suburb", "address", "latitude", "longitude", "googleMapsUrl"]) {
+    locationForm.elements[name].value = location[name] ?? "";
+  }
+  updateLocationVerification(location);
+  clearPlaceResults();
+  placeSearch.value = location.name || "";
+  newPlaceSession();
+}
+
+async function chooseGooglePlace(place) {
+  placeResults.setAttribute("aria-busy", "true");
+  try {
+    const data = await apiRequest(`../api/admin/places/${encodeURIComponent(place.id)}`, {
+      method: "POST", body: JSON.stringify({ sessionToken: placeSessionToken }),
+    });
+    applyGoogleLocation(data.location);
+  } catch (error) {
+    locationError.textContent = error.message;
+  } finally {
+    placeResults.removeAttribute("aria-busy");
+  }
+}
+
+async function searchGooglePlaces(query) {
+  try {
+    const data = await apiRequest("../api/admin/places", {
+      method: "POST", body: JSON.stringify({ query, sessionToken: placeSessionToken }),
+    });
+    placeResults.replaceChildren();
+    if (!data.places.length) placeResults.append(element("p", { className: "place-finder-help", text: "No matching Google businesses. Try the address or enter it manually." }));
+    data.places.forEach((place) => {
+      const button = element("button", { className: "place-result" });
+      button.type = "button";
+      button.append(element("strong", { text: place.name }), element("span", { text: place.address }));
+      button.addEventListener("click", () => chooseGooglePlace(place));
+      placeResults.append(button);
+    });
+    placeResults.hidden = false;
+  } catch (error) {
+    placeResults.replaceChildren(element("p", { className: "place-finder-help", text: error.message }));
+    placeResults.hidden = false;
+  }
 }
 
 function eventStatuses(event) {
@@ -230,6 +288,10 @@ function updateLocationVerification(location = {}) {
 function openLocationForm(location = null) {
   locationForm.reset();
   locationError.textContent = "";
+  clearTimeout(placeSearchTimer);
+  clearPlaceResults();
+  placeSearch.value = "";
+  newPlaceSession();
   locationForm.elements.id.value = location?.id || "";
   for (const name of ["name", "suburb", "address", "latitude", "longitude", "googleMapsUrl"]) {
     locationForm.elements[name].value = location?.[name] ?? "";
@@ -480,6 +542,18 @@ document.querySelector("[data-manage-locations]").addEventListener("click", () =
 });
 document.querySelector("[data-locations-close]").addEventListener("click", () => locationsDialog.close());
 document.querySelector("[data-new-location]").addEventListener("click", () => openLocationForm());
+document.querySelector("[data-manual-location]").addEventListener("click", () => {
+  clearTimeout(placeSearchTimer);
+  clearPlaceResults();
+  placeSearch.value = "";
+  locationForm.elements.name.focus();
+});
+placeSearch.addEventListener("input", () => {
+  clearTimeout(placeSearchTimer);
+  const query = placeSearch.value.trim();
+  if (query.length < 3) return clearPlaceResults();
+  placeSearchTimer = setTimeout(() => searchGooglePlaces(query), 350);
+});
 locationsDialog.addEventListener("click", (event) => {
   if (event.target === locationsDialog) locationsDialog.close();
 });

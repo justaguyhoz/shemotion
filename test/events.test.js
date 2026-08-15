@@ -9,6 +9,7 @@ import { expandRecurringEvents } from "../recurrence.js";
 import { rowToLocation, validateLocationInput } from "../shared/locations.js";
 import { onRequestPost as createLocation } from "../functions/api/admin/locations/index.js";
 import { onRequestPut as updateLocation } from "../functions/api/admin/locations/[id].js";
+import { placeDetailsToLocation, placePredictionSummary } from "../shared/google-places.js";
 
 const baseEvent = {
   id: 1,
@@ -265,4 +266,22 @@ test("admin can create and update complete saved location geography", async () =
   });
   assert.equal(updated.status, 200);
   assert.deepEqual(statements.at(-1).values.slice(3, 6), [savedRow.latitude, savedRow.longitude, savedRow.google_maps_url]);
+});
+
+test("Google place data populates a saved location only after selection", () => {
+  assert.deepEqual(placePredictionSummary({ placePrediction: {
+    placeId: "abc", text: { text: "Stellar Studio Collective" },
+    structuredFormat: { mainText: { text: "Stellar Studio Collective" }, secondaryText: { text: "Helensvale QLD" } },
+  } }), { id: "abc", name: "Stellar Studio Collective", address: "Helensvale QLD" });
+  assert.deepEqual(placeDetailsToLocation({
+    displayName: { text: "Stellar Studio Collective" },
+    formattedAddress: "Unit 11/5 Philip Gray Rd, Helensvale QLD 4212, Australia",
+    addressComponents: [{ longText: "Helensvale", types: ["locality"] }],
+    location: { latitude: -27.9, longitude: 153.3 },
+    googleMapsUri: "https://maps.google.com/?cid=123",
+  }), {
+    name: "Stellar Studio Collective", suburb: "Helensvale",
+    address: "Unit 11/5 Philip Gray Rd, Helensvale QLD 4212, Australia",
+    latitude: -27.9, longitude: 153.3, googleMapsUrl: "https://maps.google.com/?cid=123",
+  });
 });

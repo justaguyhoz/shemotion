@@ -82,6 +82,17 @@
               <h3 data-location-form-title>New Location</h3>
               <button class="text-button" type="button" data-new-location>New</button>
             </div>
+            <section class="place-finder" data-place-finder>
+              <label>Find Google business
+                <input type="search" data-place-search autocomplete="off" placeholder="Venue name or address">
+              </label>
+              <p class="place-finder-help">Choose the listing that best matches the venue, or enter the details manually.</p>
+              <div class="place-results" data-place-results hidden></div>
+              <div class="place-finder-footer">
+                <span>Powered by Google</span>
+                <button class="text-button" type="button" data-manual-location>Enter manually</button>
+              </div>
+            </section>
             <label>Venue name<input name="name" maxlength="120" required></label>
             <label>Suburb<input name="suburb" maxlength="80"></label>
             <label>Street address<input name="address" maxlength="200" placeholder="Unit 3/76 Ferry Rd, Southport QLD 4215" required></label>

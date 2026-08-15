@@ -74,6 +74,16 @@ h3 { font-size: 1.4rem; }
 .location-list-button .location-status { color: var(--green); font-size: .68rem; font-weight: 600; text-transform: uppercase; }
 .location-form { display: grid; align-content: start; gap: 13px; min-width: 0; padding: 20px; background: var(--ivory); border: 1px solid var(--sand); border-radius: 8px; }
 .location-form-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.place-finder { display: grid; gap: 8px; padding: 14px; background: var(--white); border: 1px solid var(--sand); border-radius: 8px; }
+.place-finder-help { margin: 0; color: var(--muted); font-size: .75rem; }
+.place-results { display: grid; gap: 6px; }
+.place-result { width: 100%; padding: 10px 12px; text-align: left; background: var(--ivory); border: 1px solid var(--sand); border-radius: 6px; color: var(--charcoal); }
+.place-result:hover { border-color: var(--green); box-shadow: 0 6px 16px rgba(47, 74, 61, .1); }
+.place-result strong, .place-result span { display: block; }
+.place-result span { margin-top: 2px; color: var(--muted); font-size: .72rem; }
+.place-finder-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.place-finder-footer span { color: var(--muted); font-size: .68rem; }
+.place-finder-footer .text-button { padding: 6px 10px; font-size: .72rem; }
 .coordinate-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .location-verification { display: flex; flex-wrap: wrap; gap: 10px 18px; }
 .location-verification a { color: var(--green); font-size: .72rem; font-weight: 600; text-transform: uppercase; }

@@ -21,3 +21,13 @@ The public homepage reads published future events from `GET /api/events`. The pr
 - Deploy: `npm run deploy`
 
 Cloudflare Access must protect `/admin*` and `/api/admin/*`. Set `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` in the Pages project environment. The application also validates the Access JWT and restricts admin access to the comma-separated `ADMIN_EMAILS` value.
+
+## Google business search
+
+The Saved Locations manager can search Google Places and copy the selected business name, formatted address, suburb, coordinates and exact Google Maps URL into a location. Manual entry remains available.
+
+1. Enable **Places API (New)** in a billed Google Cloud project.
+2. Create a dedicated API key and restrict it to **Places API (New)**.
+3. Store it as a Cloudflare Pages secret: `npx wrangler pages secret put GOOGLE_MAPS_API_KEY --project-name shemotion`.
+
+The key is used only by authenticated `/api/admin/places/*` Functions and is never sent to the browser.
