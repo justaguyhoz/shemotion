@@ -1,6 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import { announcementFor, eventActionLabel, eventDestination, eventGoogleMapsUrl } from "../script.js";
+import { addCustomEventClickTracking, eventBookingMetadata, trackCustomEvent } from "../tracking.js";
 import { validateEventInput } from "../shared/events.js";
 import { verifyAccessRequest } from "../shared/access.js";
 import { onRequestGet as getPublicEvents } from "../functions/api/events.js";
@@ -31,6 +33,66 @@ const baseEvent = {
   recurrenceFrequency: "none",
   recurrenceUntil: null,
 };
+
+test("public homepage installs one Meta Pixel PageView and marks only the primary Book Now CTA", async () => {
+  const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
+  const adminHtml = await readFile(new URL("../admin/index.html", import.meta.url), "utf8");
+  assert.match(html, /4344672809106563/);
+  assert.equal((html.match(/fbq\('track', 'PageView'\)/g) || []).length, 1);
+  assert.match(html, /<a class="button" href="#upcoming-events" data-primary-book-now>Book Now<\/a>/);
+  assert.equal((html.match(/data-primary-book-now/g) || []).length, 1);
+  assert.ok((html.match(/href="#upcoming-events"/g) || []).length > 1);
+  assert.doesNotMatch(adminHtml, /4344672809106563|connect\.facebook\.net|facebook\.com\/tr/);
+});
+
+test("custom click tracking fires once without interfering with the click", () => {
+  const calls = [];
+  const target = { fbq: (...args) => calls.push(args) };
+  const link = new EventTarget();
+  addCustomEventClickTracking(link, "BookNowClick", {}, target);
+  const click = new Event("click", { cancelable: true });
+  assert.equal(link.dispatchEvent(click), true);
+  assert.equal(click.defaultPrevented, false);
+  assert.deepEqual(calls, [["trackCustom", "BookNowClick", {}]]);
+});
+
+test("tracking is safe when fbq is missing or throws", () => {
+  assert.equal(trackCustomEvent("BookNowClick", {}, {}), false);
+  assert.doesNotThrow(() => trackCustomEvent("BookNowClick", {}, { fbq: () => { throw new Error("blocked"); } }));
+
+  const link = new EventTarget();
+  addCustomEventClickTracking(link, "BookNowClick", {}, {});
+  assert.equal(link.dispatchEvent(new Event("click", { cancelable: true })), true);
+});
+
+test("event booking tracking sends non-sensitive metadata once", () => {
+  assert.deepEqual(eventBookingMetadata(baseEvent), {
+    event_id: "1",
+    event_name: "Special Introductory Class",
+    event_type: "Class",
+    venue_name: "Reinvigr8 Gym",
+    suburb: "Helensvale",
+  });
+
+  const calls = [];
+  const link = new EventTarget();
+  addCustomEventClickTracking(
+    link,
+    "EventBookingClick",
+    () => eventBookingMetadata(baseEvent),
+    { fbq: (...args) => calls.push(args) }
+  );
+  link.dispatchEvent(new Event("click"));
+  assert.equal(calls.length, 1);
+  assert.deepEqual(calls[0], ["trackCustom", "EventBookingClick", eventBookingMetadata(baseEvent)]);
+});
+
+test("central event-card implementation tracks only genuine booking URLs", async () => {
+  const source = await readFile(new URL("../script.js", import.meta.url), "utf8");
+  assert.equal((source.match(/"EventBookingClick"/g) || []).length, 1);
+  assert.match(source, /if \(event\.bookingUrl\) \{[\s\S]*addCustomEventClickTracking\(action, "EventBookingClick"/);
+  assert.doesNotMatch(source, /mailto:shemotion\.au@gmail\.com[\s\S]{0,250}EventBookingClick/);
+});
 
 test("one event creates a detailed announcement", () => {
   const announcement = announcementFor([baseEvent]);
@@ -111,10 +173,11 @@ test("unauthenticated admin requests are rejected", async () => {
 test("public API uses future published filtering and ordered results", async () => {
   let sql = "";
   let boundNow = "";
+  const futureStartAt = new Date(Date.now() + 7 * 86400000).toISOString();
   const row = {
     id: 1, title: baseEvent.title, event_type: baseEvent.eventType, venue_name: baseEvent.venueName,
     suburb: baseEvent.suburb, address: "1 Example Street, Helensvale QLD 4212", date_status: baseEvent.dateStatus,
-    start_at: baseEvent.startAt, end_at: null, timezone: baseEvent.timezone,
+    start_at: futureStartAt, end_at: null, timezone: baseEvent.timezone,
     audience: baseEvent.audience, short_description: baseEvent.shortDescription,
     booking_label: baseEvent.bookingLabel, booking_url: null, availability_status: baseEvent.availabilityStatus,
     google_maps_url: "https://maps.google.com/?cid=123", latitude: -27.9, longitude: 153.3,
