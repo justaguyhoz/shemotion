@@ -12,8 +12,25 @@
     <link rel="stylesheet" href="vendor/leaflet.css?v=1.9.4">
     <link rel="stylesheet" href="styles.css?v=20260809-2">
     <script src="vendor/leaflet.js?v=1.9.4" defer></script>
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '4344672809106563');
+    fbq('track', 'PageView');
+    </script>
+    <!-- End Meta Pixel Code -->
   </head>
   <body>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=4344672809106563&ev=PageView&noscript=1"
+    /></noscript>
     <a class="announcement-bar" href="#upcoming-events" aria-label="View upcoming Shemotion experiences" hidden>
       <span data-announcement-text></span>
       <strong data-announcement-action>View Class</strong>
@@ -80,7 +97,7 @@
           <p class="hero-subtitle">Move, release tension and reconnect with yourself through guided feminine movement, intuitive free movement and grounding meditation.</p>
           <p class="hero-support">No dance experience required. All fitness levels welcome.</p>
           <div class="hero-actions" aria-label="Primary actions">
-            <a class="button" href="#upcoming-events">View Upcoming Classes</a>
+            <a class="button" href="#upcoming-events" data-primary-book-now>Book Now</a>
             <a class="button button-ghost" href="mailto:shemotion.au@gmail.com">Email Shemotion</a>
           </div>
         </div>
@@ -343,6 +360,6 @@
       </div>
     </footer>
 
-    <script type="module" src="script.js?v=20260813-1"></script>
+    <script type="module" src="script.js?v=20260825-1"></script>
   </body>
 </html>

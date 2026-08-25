@@ -1,4 +1,5 @@
 import { eventDateKey, initialCalendarMonth, monthGrid, monthLabel, moveMonth } from "./calendar.js";
+import { addCustomEventClickTracking, eventBookingMetadata } from "./tracking.js";
 
 const BRISBANE_TIMEZONE = "Australia/Brisbane";
 
@@ -151,6 +152,7 @@ export function createEventCard(event, idPrefix = "event") {
     if (event.bookingUrl) {
       action.target = "_blank";
       action.rel = "noopener noreferrer";
+      addCustomEventClickTracking(action, "EventBookingClick", () => eventBookingMetadata(event));
     }
     actions.append(action);
   }
@@ -656,6 +658,9 @@ async function loadPublicEvents() {
 }
 
 function initialisePage() {
+  const primaryBookNow = document.querySelector("[data-primary-book-now]");
+  addCustomEventClickTracking(primaryBookNow, "BookNowClick");
+
   const header = document.querySelector("[data-header]");
   const navToggle = document.querySelector(".nav-toggle");
   const navLinks = document.querySelectorAll(".site-nav a");
