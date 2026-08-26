@@ -42,13 +42,17 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.equal((html.match(/fbq\('track', 'PageView'\)/g) || []).length, 1);
   assert.match(html, /<a class="button booking-button" href="#upcoming-events" data-primary-book-now>Book Now<\/a>/);
   assert.equal((html.match(/data-primary-book-now/g) || []).length, 1);
-  assert.equal((html.match(/href="#upcoming-events"/g) || []).length, 1);
+  assert.equal((html.match(/href="#upcoming-events"/g) || []).length, 2);
   assert.ok(
     html.indexOf('id="upcoming-events"') < html.indexOf('class="hero section-pad"'),
     "upcoming events should appear before the hero section"
   );
   assert.doesNotMatch(html, /announcement-bar|data-announcement-/);
-  assert.doesNotMatch(html, /<a href="#upcoming-events">Upcoming<\/a>/);
+  assert.match(
+    html,
+    /<nav class="site-nav"[^>]*>\s*<a href="#upcoming-events">Upcoming<\/a>\s*<a href="#experience">Experience<\/a>/
+  );
+  assert.doesNotMatch(html, /<a href="#upcoming-events"[^>]*data-primary-book-now[^>]*>Upcoming<\/a>/);
   assert.match(html, /<a href="#experience">Experience<\/a>/);
   assert.match(html, /<a href="#coach">Meet Katty<\/a>/);
   assert.match(html, /<a href="mailto:shemotion\.au@gmail\.com">Contact<\/a>/);
