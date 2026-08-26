@@ -42,6 +42,10 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.match(html, /<a class="button" href="#upcoming-events" data-primary-book-now>Book Now<\/a>/);
   assert.equal((html.match(/data-primary-book-now/g) || []).length, 1);
   assert.ok((html.match(/href="#upcoming-events"/g) || []).length > 1);
+  assert.ok(
+    html.indexOf('id="upcoming-events"') < html.indexOf('class="hero section-pad"'),
+    "upcoming events should appear before the hero section"
+  );
   assert.doesNotMatch(adminHtml, /4344672809106563|connect\.facebook\.net|facebook\.com\/tr/);
 });
 
