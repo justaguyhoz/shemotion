@@ -54,6 +54,7 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.match(html, /<a href="mailto:shemotion\.au@gmail\.com">Contact<\/a>/);
   assert.match(html, /<h2 id="experience-title">The Shemotion Experience<\/h2>\s*<p>Move, release tension and reconnect\.<\/p>/);
   assert.match(css, /\.booking-button::after[\s\S]*animation: booking-button-glow 4\.4s/);
+  assert.match(css, /\.event-pill-action\.button\.booking-button\s*\{[\s\S]*min-height: 30px;[\s\S]*font-size: 0\.68rem;/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.booking-button::after[\s\S]*animation: none/);
   assert.doesNotMatch(adminHtml, /4344672809106563|connect\.facebook\.net|facebook\.com\/tr/);
 });
