@@ -64,32 +64,6 @@ textarea {
   border: 0;
 }
 
-.announcement-bar {
-  position: relative;
-  z-index: 60;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  padding: 10px 18px;
-  background: var(--green);
-  color: var(--ivory);
-  font-size: 0.86rem;
-  line-height: 1.4;
-  text-align: center;
-}
-
-.announcement-bar strong {
-  flex: 0 0 auto;
-  padding: 6px 12px;
-  border: 1px solid rgba(247, 242, 236, 0.42);
-  border-radius: 999px;
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.announcement-bar:focus-visible,
 a:focus-visible,
 button:focus-visible {
   outline: 3px solid rgba(47, 74, 61, 0.36);
@@ -1571,13 +1545,6 @@ blockquote:hover {
 @media (max-width: 560px) {
   html {
     scroll-padding-top: 112px;
-  }
-
-  .announcement-bar {
-    display: grid;
-    gap: 8px;
-    padding: 9px 14px;
-    font-size: 0.78rem;
   }
 
   .site-header {

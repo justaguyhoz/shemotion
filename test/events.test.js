@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { announcementFor, eventActionLabel, eventDestination, eventGoogleMapsUrl } from "../script.js";
+import { eventActionLabel, eventDestination, eventGoogleMapsUrl } from "../script.js";
 import { addCustomEventClickTracking, eventBookingMetadata, trackCustomEvent } from "../tracking.js";
 import { validateEventInput } from "../shared/events.js";
 import { verifyAccessRequest } from "../shared/access.js";
@@ -41,11 +41,17 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.equal((html.match(/fbq\('track', 'PageView'\)/g) || []).length, 1);
   assert.match(html, /<a class="button" href="#upcoming-events" data-primary-book-now>Book Now<\/a>/);
   assert.equal((html.match(/data-primary-book-now/g) || []).length, 1);
-  assert.ok((html.match(/href="#upcoming-events"/g) || []).length > 1);
+  assert.equal((html.match(/href="#upcoming-events"/g) || []).length, 1);
   assert.ok(
     html.indexOf('id="upcoming-events"') < html.indexOf('class="hero section-pad"'),
     "upcoming events should appear before the hero section"
   );
+  assert.doesNotMatch(html, /announcement-bar|data-announcement-/);
+  assert.doesNotMatch(html, /<a href="#upcoming-events">Upcoming<\/a>/);
+  assert.match(html, /<a href="#experience">Experience<\/a>/);
+  assert.match(html, /<a href="#coach">Meet Katty<\/a>/);
+  assert.match(html, /<a href="mailto:shemotion\.au@gmail\.com">Contact<\/a>/);
+  assert.match(html, /<h2 id="experience-title">The Shemotion Experience<\/h2>\s*<p>Move, release tension and reconnect\.<\/p>/);
   assert.doesNotMatch(adminHtml, /4344672809106563|connect\.facebook\.net|facebook\.com\/tr/);
 });
 
@@ -98,22 +104,6 @@ test("central event-card implementation tracks only genuine booking URLs", async
   assert.doesNotMatch(source, /mailto:shemotion\.au@gmail\.com[\s\S]{0,250}EventBookingClick/);
 });
 
-test("one event creates a detailed announcement", () => {
-  const announcement = announcementFor([baseEvent]);
-  assert.equal(
-    announcement.text,
-    "Upcoming Shemotion Class - Reinvigr8 Gym, Helensvale - Wednesday 19 August at 9.15am"
-  );
-});
-
-test("multiple and no events update announcement state", () => {
-  assert.equal(announcementFor([]), null);
-  assert.deepEqual(announcementFor([baseEvent, { ...baseEvent, id: 2 }]), {
-    text: "Upcoming Shemotion Experiences - View Dates and Locations",
-    action: "View Dates",
-  });
-});
-
 test("event pills use the venue link or Shemotion email without dead booking controls", () => {
   assert.equal(eventDestination(baseEvent), "mailto:shemotion.au@gmail.com");
   assert.equal(eventActionLabel(baseEvent), "Email Shemotion");
@@ -147,7 +137,6 @@ test("events can be published with a date to be confirmed", () => {
   const result = validateEventInput({ ...baseEvent, dateStatus: "tbc", startAt: null });
   assert.equal(result.event.dateStatus, "tbc");
   assert.equal(result.event.startAt, null);
-  assert.match(announcementFor([result.event]).text, /Date to be confirmed/);
 });
 
 test("event descriptions are optional", () => {

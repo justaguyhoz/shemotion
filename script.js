@@ -11,13 +11,6 @@ const fullDateFormatter = new Intl.DateTimeFormat("en-AU", {
   timeZone: BRISBANE_TIMEZONE,
 });
 
-const announcementDateFormatter = new Intl.DateTimeFormat("en-AU", {
-  weekday: "long",
-  day: "numeric",
-  month: "long",
-  timeZone: BRISBANE_TIMEZONE,
-});
-
 const timeFormatter = new Intl.DateTimeFormat("en-AU", {
   hour: "numeric",
   minute: "2-digit",
@@ -27,29 +20,6 @@ const timeFormatter = new Intl.DateTimeFormat("en-AU", {
 
 function compactTime(date) {
   return timeFormatter.format(date).replace(":", ".").replace(/\s/g, "").toLowerCase();
-}
-
-export function announcementFor(events) {
-  if (!events.length) return null;
-  if (events.length > 1) {
-    return {
-      text: "Upcoming Shemotion Experiences - View Dates and Locations",
-      action: "View Dates",
-    };
-  }
-  const event = events[0];
-  const location = [event.venueName, event.suburb].filter(Boolean).join(", ");
-  if (event.dateStatus === "tbc") {
-    return {
-      text: `Upcoming Shemotion ${event.eventType} - ${location} - Date to be confirmed`,
-      action: "View Class",
-    };
-  }
-  const date = new Date(event.startAt);
-  return {
-    text: `Upcoming Shemotion ${event.eventType} - ${location} - ${announcementDateFormatter.format(date)} at ${compactTime(date)}`,
-    action: "View Class",
-  };
 }
 
 export function eventDestination(event) {
@@ -323,18 +293,6 @@ function setupFaq() {
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && activeItem) close(activeItem);
   });
-}
-
-function renderAnnouncement(events) {
-  const bar = document.querySelector(".announcement-bar");
-  const content = announcementFor(events);
-  if (!bar || !content) {
-    bar?.setAttribute("hidden", "");
-    return;
-  }
-  bar.querySelector("[data-announcement-text]").textContent = content.text;
-  bar.querySelector("[data-announcement-action]").textContent = content.action;
-  bar.removeAttribute("hidden");
 }
 
 function setupEventCarousel(list, cards) {
@@ -631,8 +589,6 @@ async function loadPublicEvents() {
     const events = Array.isArray(data.events) ? data.events : [];
     list.replaceChildren();
     list.setAttribute("aria-busy", "false");
-    renderAnnouncement(events);
-
     if (!events.length) {
       list.append(element("p", {
         className: "events-empty",
@@ -652,7 +608,6 @@ async function loadPublicEvents() {
       text: "Upcoming dates could not be loaded right now. Please check back soon.",
     }));
     list.setAttribute("aria-busy", "false");
-    renderAnnouncement([]);
     console.error("Shemotion events could not be loaded.");
   }
 }
