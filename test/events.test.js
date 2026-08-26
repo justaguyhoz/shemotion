@@ -37,9 +37,10 @@ const baseEvent = {
 test("public homepage installs one Meta Pixel PageView and marks only the primary Book Now CTA", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const adminHtml = await readFile(new URL("../admin/index.html", import.meta.url), "utf8");
+  const css = await readFile(new URL("../styles.css", import.meta.url), "utf8");
   assert.match(html, /4344672809106563/);
   assert.equal((html.match(/fbq\('track', 'PageView'\)/g) || []).length, 1);
-  assert.match(html, /<a class="button" href="#upcoming-events" data-primary-book-now>Book Now<\/a>/);
+  assert.match(html, /<a class="button booking-button" href="#upcoming-events" data-primary-book-now>Book Now<\/a>/);
   assert.equal((html.match(/data-primary-book-now/g) || []).length, 1);
   assert.equal((html.match(/href="#upcoming-events"/g) || []).length, 1);
   assert.ok(
@@ -52,6 +53,8 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.match(html, /<a href="#coach">Meet Katty<\/a>/);
   assert.match(html, /<a href="mailto:shemotion\.au@gmail\.com">Contact<\/a>/);
   assert.match(html, /<h2 id="experience-title">The Shemotion Experience<\/h2>\s*<p>Move, release tension and reconnect\.<\/p>/);
+  assert.match(css, /\.booking-button::after[\s\S]*animation: booking-button-glow 4\.4s/);
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.booking-button::after[\s\S]*animation: none/);
   assert.doesNotMatch(adminHtml, /4344672809106563|connect\.facebook\.net|facebook\.com\/tr/);
 });
 
@@ -110,8 +113,8 @@ test("event pills use the venue link or Shemotion email without dead booking con
   assert.equal(eventDestination({ ...baseEvent, availabilityStatus: "Cancelled" }), null);
   const bookable = { ...baseEvent, bookingUrl: "https://example.com/class" };
   assert.equal(eventDestination(bookable), "https://example.com/class");
-  assert.equal(eventActionLabel(bookable), "Book with Reinvigr8");
-  assert.equal(eventActionLabel({ ...bookable, bookingLabel: "" }), "Venue details");
+  assert.equal(eventActionLabel(bookable), "BOOK NOW");
+  assert.equal(eventActionLabel({ ...bookable, bookingLabel: "" }), "BOOK NOW");
 });
 
 test("event map links prefer saved URLs and otherwise include venue and address", () => {

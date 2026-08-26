@@ -377,6 +377,46 @@ p:last-child {
   border-color: #243a30;
 }
 
+.booking-button {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  box-shadow: 0 5px 16px rgba(47, 74, 61, 0.14), 0 0 0 1px rgba(123, 160, 122, 0.1);
+}
+
+.booking-button::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    110deg,
+    transparent 18%,
+    rgba(216, 232, 206, 0.04) 34%,
+    rgba(216, 232, 206, 0.2) 48%,
+    rgba(216, 232, 206, 0.05) 62%,
+    transparent 78%
+  );
+  content: "";
+  pointer-events: none;
+  transform: translateX(-130%);
+  animation: booking-button-glow 4.4s ease-in-out infinite;
+}
+
+.booking-button:hover::after,
+.booking-button:focus-visible::after {
+  opacity: 0.9;
+}
+
+@keyframes booking-button-glow {
+  0%, 12% {
+    transform: translateX(-130%);
+  }
+
+  55%, 100% {
+    transform: translateX(130%);
+  }
+}
+
 .button-ghost {
   background: transparent;
   color: var(--green);
@@ -871,7 +911,7 @@ p:last-child {
   background: #f0dcd8;
 }
 
-.event-pill-action {
+.event-pill-action:not(.button) {
   color: var(--green);
   font-size: 0.72rem;
   font-weight: 600;
@@ -1701,6 +1741,12 @@ blockquote:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .booking-button::after {
+    animation: none;
+    opacity: 0.2;
+    transform: none;
+  }
+
   .reveal {
     opacity: 1;
     transform: none;

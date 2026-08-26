@@ -29,7 +29,7 @@ export function eventDestination(event) {
 
 export function eventActionLabel(event) {
   if (!event.bookingUrl) return "Email Shemotion";
-  return event.bookingLabel?.trim() || "Venue details";
+  return "BOOK NOW";
 }
 
 export function eventGoogleMapsUrl(event) {
@@ -115,7 +115,7 @@ export function createEventCard(event, idPrefix = "event") {
 
   if (destination) {
     const action = element("a", {
-      className: "event-pill-action",
+      className: `event-pill-action${event.bookingUrl ? " button booking-button" : ""}`,
       text: eventActionLabel(event),
     });
     action.href = destination;
