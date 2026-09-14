@@ -25,6 +25,25 @@ document.querySelectorAll("[data-event-booking]").forEach((link) => {
 
 document.querySelectorAll("[data-private-enquiry]").forEach((link) => addCustomEventClickTracking(link, "PrivateGroupEnquiryClick"));
 
+const serviceCards = [...document.querySelectorAll("[data-service-card]")];
+if (serviceCards.length) {
+  serviceCards.forEach((card, index) => {
+    card.style.setProperty("--reveal-delay", `${index * 65}ms`);
+  });
+
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reducedMotion && "IntersectionObserver" in window) {
+    const cardObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-revealed");
+        cardObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+    serviceCards.forEach((card) => cardObserver.observe(card));
+  }
+}
+
 const detail = document.querySelector("[data-event-detail]");
 if (detail) trackCustomEvent("EventDetailView", {
   event_id: detail.dataset.eventId,

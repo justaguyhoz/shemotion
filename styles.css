@@ -996,10 +996,32 @@ p:last-child {
 }
 
 .service-card-grid article {
+  display: grid;
+  align-content: start;
+  gap: 14px;
   padding: 28px;
   background: var(--ivory);
   border: 1px solid var(--sand);
   border-radius: 8px;
+  box-shadow: 0 8px 22px rgba(47, 74, 61, 0.07);
+  transition: transform 280ms ease, box-shadow 280ms ease;
+}
+
+.service-card-grid article.is-revealed {
+  animation: service-card-reveal 280ms ease backwards;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+
+@keyframes service-card-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .service-card-grid h3 {
@@ -1010,9 +1032,16 @@ p:last-child {
 }
 
 .service-card-grid p {
-  margin: 12px 0 0;
+  margin: 0;
   color: var(--muted);
   line-height: 1.65;
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .service-card-grid article:hover {
+    transform: translateY(-4px) scale(1.006);
+    box-shadow: 0 15px 32px rgba(47, 74, 61, 0.12);
+  }
 }
 
 .site-footer a {
@@ -1946,6 +1975,11 @@ blockquote:hover {
   .reveal {
     opacity: 1;
     transform: none;
+    transition: none;
+  }
+
+  .service-card-grid article {
+    animation: none;
     transition: none;
   }
 
