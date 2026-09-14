@@ -3,7 +3,8 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { eventActionLabel, eventDestination, eventGoogleMapsUrl } from "../script.js";
 import { addCustomEventClickTracking, eventBookingMetadata, trackCustomEvent } from "../tracking.js";
-import { validateEventInput } from "../shared/events.js";
+import { generateEventSlug, validateEventInput } from "../shared/events.js";
+import { eventJsonLd } from "../shared/public-pages.js";
 import { verifyAccessRequest } from "../shared/access.js";
 import { onRequestGet as getPublicEvents } from "../functions/api/events.js";
 import { eventDateKey, monthGrid, moveMonth } from "../calendar.js";
@@ -12,6 +13,8 @@ import { rowToLocation, validateLocationInput } from "../shared/locations.js";
 import { onRequestPost as createLocation } from "../functions/api/admin/locations/index.js";
 import { onRequestPut as updateLocation } from "../functions/api/admin/locations/[id].js";
 import { placeDetailsToLocation, placePredictionSummary } from "../shared/google-places.js";
+import { onRequestGet as getEventPage } from "../functions/events/[slug].js";
+import { onRequestGet as getSitemap } from "../functions/sitemap.xml.js";
 
 const baseEvent = {
   id: 1,
@@ -32,6 +35,7 @@ const baseEvent = {
   displayOrder: 0,
   recurrenceFrequency: "none",
   recurrenceUntil: null,
+  slug: "special-introductory-class-helensvale",
 };
 
 test("public homepage installs one Meta Pixel PageView and marks only the primary Book Now CTA", async () => {
@@ -42,7 +46,7 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.equal((html.match(/fbq\('track', 'PageView'\)/g) || []).length, 1);
   assert.match(html, /<a class="button booking-button" href="#upcoming-events" data-primary-book-now>Book Now<\/a>/);
   assert.equal((html.match(/data-primary-book-now/g) || []).length, 1);
-  assert.equal((html.match(/href="#upcoming-events"/g) || []).length, 2);
+  assert.equal((html.match(/href="#upcoming-events"/g) || []).length, 1);
   assert.ok(
     html.indexOf('id="upcoming-events"') < html.indexOf('class="hero section-pad"'),
     "upcoming events should appear before the hero section"
@@ -50,7 +54,7 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.doesNotMatch(html, /announcement-bar|data-announcement-/);
   assert.match(
     html,
-    /<nav class="site-nav"[^>]*>\s*<a href="#upcoming-events">Upcoming<\/a>\s*<a href="#experience">Experience<\/a>/
+    /<nav class="site-nav"[^>]*>\s*<a href="\/events\/">Events<\/a>\s*<a href="\/private-groups-retreats\/">Private Groups<\/a>/
   );
   assert.doesNotMatch(html, /<a href="#upcoming-events"[^>]*data-primary-book-now[^>]*>Upcoming<\/a>/);
   assert.match(html, /<a href="#experience">Experience<\/a>/);
@@ -61,6 +65,14 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.match(css, /\.event-pill-action\.button\.booking-button\s*\{[\s\S]*min-height: 30px;[\s\S]*font-size: 0\.68rem;/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.booking-button::after[\s\S]*animation: none/);
   assert.doesNotMatch(adminHtml, /4344672809106563|connect\.facebook\.net|facebook\.com\/tr/);
+});
+
+test("event slugs are SEO-friendly and remain explicit when supplied", () => {
+  assert.equal(generateEventSlug("Release & Reconnect", "Tallai"), "release-and-reconnect-tallai");
+  const generated = validateEventInput({ ...baseEvent, slug: "" });
+  assert.equal(generated.event.slug, "special-introductory-class-helensvale");
+  const invalid = validateEventInput({ ...baseEvent, slug: "Changing URL" });
+  assert.ok(invalid.errors.some((error) => error.includes("slug")));
 });
 
 test("custom click tracking fires once without interfering with the click", () => {
@@ -208,6 +220,59 @@ test("public API uses future published filtering and ordered results", async () 
   assert.match(sql, /date_status = 'tbc'/);
   assert.match(sql, /start_at ASC/);
   assert.ok(Number.isFinite(Date.parse(boundNow)));
+});
+
+test("published event slugs render crawlable metadata and database-backed Event JSON-LD", async () => {
+  const row = {
+    id: 8, slug: "release-and-reconnect-tallai", title: "Release & Reconnect",
+    event_type: "Workshop", venue_name: "Example Venue", suburb: "Tallai",
+    address: "1 Example Road, Tallai QLD 4213", date_status: "scheduled",
+    start_at: "2026-10-20T08:00:00.000Z", end_at: "2026-10-20T10:00:00.000Z",
+    timezone: "Australia/Brisbane", audience: "Women only",
+    short_description: "A guided feminine movement meditation experience.", booking_label: "Book now",
+    booking_url: "https://events.example.com/release", availability_status: "Available",
+    recurrence_frequency: "none", recurrence_until: null, display_order: 0, location_id: 2,
+    latitude: -28.0, longitude: 153.3, google_maps_url: "https://maps.google.com/?cid=123",
+    updated_at: "2026-09-14 02:00:00",
+  };
+  const env = { DB: { prepare: () => ({ bind: () => ({ first: async () => row }) }) } };
+  const response = await getEventPage({ env, params: { slug: row.slug } });
+  const html = await response.text();
+  assert.equal(response.status, 200);
+  assert.match(html, /<title>Shemotion: Release &amp; Reconnect - Tallai \| Gold Coast Women&#39;s Event<\/title>/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/shemotion\.com\.au\/events\/release-and-reconnect-tallai\/">/);
+  assert.match(html, /A guided feminine movement meditation experience\./);
+  const json = JSON.parse(html.match(/<script type="application\/ld\+json">([^<]+)<\/script>/)[1]);
+  assert.equal(json.name, row.title);
+  assert.equal(json.startDate, row.start_at);
+  assert.equal(json.location.name, row.venue_name);
+  assert.equal(json.offers.url, row.booking_url);
+  assert.equal(Object.hasOwn(json.offers, "price"), false);
+});
+
+test("unpublished or invalid event slugs return a noindex 404", async () => {
+  const env = { DB: { prepare: () => ({ bind: () => ({ first: async () => null }) }) } };
+  const response = await getEventPage({ env, params: { slug: "private-draft" } });
+  const html = await response.text();
+  assert.equal(response.status, 404);
+  assert.match(html, /<meta name="robots" content="noindex">/);
+});
+
+test("sitemap contains public routes and only published event slugs returned by the filtered query", async () => {
+  let sql = "";
+  const env = { DB: { prepare: (query) => { sql = query; return { all: async () => ({ results: [{ slug: "public-event", updated_at: "2026-09-14 02:00:00" }] }) }; } } };
+  const response = await getSitemap({ env });
+  const xml = await response.text();
+  assert.match(sql, /is_published = 1/);
+  assert.match(xml, /https:\/\/shemotion\.com\.au\/events\/public-event\//);
+  assert.match(xml, /private-groups-retreats/);
+  assert.doesNotMatch(xml, /admin|api\/events/);
+});
+
+test("Event JSON-LD is omitted for TBC events and never invents price data", () => {
+  assert.equal(eventJsonLd({ ...baseEvent, dateStatus: "tbc", startAt: null }, "https://shemotion.com.au/events/example/"), null);
+  const schema = eventJsonLd({ ...baseEvent, address: "1 Example Road", bookingUrl: null }, "https://shemotion.com.au/events/example/");
+  assert.equal(Object.hasOwn(schema, "offers"), false);
 });
 
 test("calendar utilities use Brisbane dates and Monday-first months", () => {

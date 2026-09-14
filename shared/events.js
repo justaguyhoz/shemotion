@@ -12,6 +12,7 @@ export const DATE_STATUS_OPTIONS = ["scheduled", "tbc"];
 
 export const EVENT_FIELDS = [
   "title",
+  "slug",
   "eventType",
   "venueName",
   "suburb",
@@ -34,6 +35,7 @@ export const EVENT_FIELDS = [
 
 const LIMITS = {
   title: 120,
+  slug: 180,
   eventType: 40,
   venueName: 120,
   suburb: 80,
@@ -109,6 +111,11 @@ export function validateEventInput(input) {
     ? Number(event.locationId)
     : null;
 
+  event.slug = cleanText(event.slug) || generateEventSlug(event.title, event.suburb);
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(event.slug)) {
+    errors.push("slug must contain only lowercase letters, numbers and single hyphens.");
+  }
+
   if (!EVENT_TYPES.includes(event.eventType)) errors.push("eventType is invalid.");
   if (!DATE_STATUS_OPTIONS.includes(event.dateStatus)) errors.push("dateStatus is invalid.");
   if (!AVAILABILITY_OPTIONS.includes(event.availabilityStatus)) errors.push("availabilityStatus is invalid.");
@@ -145,6 +152,7 @@ export function rowToPublicEvent(row) {
   return {
     id: row.id,
     title: row.title,
+    slug: row.slug,
     eventType: row.event_type,
     venueName: row.venue_name,
     suburb: row.suburb,
@@ -180,6 +188,7 @@ export function rowToAdminEvent(row) {
 export function eventValues(event) {
   return [
     event.title,
+    event.slug,
     event.eventType,
     event.venueName,
     event.suburb,
@@ -199,6 +208,33 @@ export function eventValues(event) {
     event.recurrenceUntil,
     event.locationId,
   ];
+}
+
+export function generateEventSlug(title, suburb = "") {
+  return `${cleanText(title)} ${cleanText(suburb)}`
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, LIMITS.slug)
+    .replace(/-+$/g, "") || "shemotion-event";
+}
+
+export async function uniqueEventSlug(db, requestedSlug, excludeId = null) {
+  const base = generateEventSlug(requestedSlug);
+  for (let suffix = 1; suffix <= 1000; suffix += 1) {
+    const candidate = suffix === 1 ? base : `${base}-${suffix}`;
+    const query = excludeId
+      ? "SELECT id FROM events WHERE slug = ? AND id != ?"
+      : "SELECT id FROM events WHERE slug = ?";
+    const statement = excludeId
+      ? db.prepare(query).bind(candidate, excludeId)
+      : db.prepare(query).bind(candidate);
+    if (!await statement.first()) return candidate;
+  }
+  throw new Error("A unique event slug could not be generated.");
 }
 
 export function jsonResponse(data, status = 200, extraHeaders = {}) {

@@ -11,6 +11,15 @@ Static Shemotion website with Cloudflare Pages Functions and a D1-backed events 
 
 The public homepage reads published future events from `GET /api/events`. The protected admin is at `/admin/`.
 
+Public SEO routes are rendered by Pages Functions from the same D1 event records:
+
+- `/events/` lists upcoming published events.
+- `/events/:slug/` renders one published event with canonical metadata and eligible Event JSON-LD.
+- `/sitemap.xml` contains the public static routes and published event slugs.
+- `/private-groups-retreats/` is a static service-area page.
+
+Event slugs are generated when blank, can be managed in the admin form, and should remain unchanged after an event is published so its URL stays stable.
+
 ## Database and deployment
 
 - D1 database: `shemotion-events`

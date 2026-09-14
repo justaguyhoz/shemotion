@@ -2,13 +2,14 @@ import {
   eventValues,
   jsonResponse,
   rowToAdminEvent,
+  uniqueEventSlug,
   validateEventInput,
 } from "../../../../shared/events.js";
 
 export async function onRequestGet({ env }) {
   try {
     const result = await env.DB.prepare(`
-      SELECT events.id, events.title, events.event_type,
+      SELECT events.id, events.title, events.slug, events.event_type,
              COALESCE(locations.name, events.venue_name) AS venue_name,
              COALESCE(locations.suburb, events.suburb) AS suburb,
              COALESCE(locations.address, events.address) AS address,
@@ -40,12 +41,13 @@ export async function onRequestPost({ request, env }) {
   if (validation.errors) return jsonResponse({ error: "Validation failed.", details: validation.errors }, 400);
 
   try {
+    validation.event.slug = await uniqueEventSlug(env.DB, validation.event.slug);
     const result = await env.DB.prepare(`
       INSERT INTO events (
-        title, event_type, venue_name, suburb, address, date_status, start_at, end_at, timezone,
+        title, slug, event_type, venue_name, suburb, address, date_status, start_at, end_at, timezone,
         audience, short_description, booking_label, booking_url, availability_status,
         is_published, display_order, recurrence_frequency, recurrence_until, location_id
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       RETURNING *
     `).bind(...eventValues(validation.event)).first();
     return jsonResponse({ event: rowToAdminEvent(result) }, 201);

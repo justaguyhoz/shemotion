@@ -364,7 +364,7 @@ function setLocationMode(value) {
 }
 
 function applyEventToForm(event, { includeSchedule = true } = {}) {
-  for (const name of ["title", "eventType", "audience", "shortDescription", "bookingLabel", "bookingUrl", "availabilityStatus", "displayOrder", "recurrenceFrequency", "recurrenceUntil"]) {
+  for (const name of ["title", "slug", "eventType", "audience", "shortDescription", "bookingLabel", "bookingUrl", "availabilityStatus", "displayOrder", "recurrenceFrequency", "recurrenceUntil"]) {
     form.elements[name].value = event[name] ?? "";
   }
   locationSelect.value = event.locationId ? String(event.locationId) : "new";
@@ -415,7 +415,10 @@ function openForm(event = null, prefillDate = "", options = {}) {
   templateSelect.closest("label").hidden = Boolean(event);
   if (event) {
     applyEventToForm(event);
-    if (duplicate) form.elements.isPublished.checked = false;
+    if (duplicate) {
+      form.elements.isPublished.checked = false;
+      form.elements.slug.value = "";
+    }
   } else {
     defaultForm(prefillDate);
   }
@@ -444,7 +447,7 @@ function formPayload(locationId = null) {
     throw new Error("Add both an end date and end time, or leave both empty.");
   }
   return {
-    title: data.get("title"), eventType: data.get("eventType"),
+    title: data.get("title"), slug: data.get("slug"), eventType: data.get("eventType"),
     venueName: form.elements.venueName.value, suburb: form.elements.suburb.value,
     address: form.elements.address.value, locationId, dateStatus,
     startAt: dateStatus === "tbc" ? null : toIso(data.get("startDate"), data.get("startTime")),

@@ -2,6 +2,7 @@ import {
   eventValues,
   jsonResponse,
   rowToAdminEvent,
+  uniqueEventSlug,
   validateEventInput,
 } from "../../../../shared/events.js";
 
@@ -25,9 +26,10 @@ export async function onRequestPut({ request, env, params }) {
   if (validation.errors) return jsonResponse({ error: "Validation failed.", details: validation.errors }, 400);
 
   try {
+    validation.event.slug = await uniqueEventSlug(env.DB, validation.event.slug, id);
     const result = await env.DB.prepare(`
       UPDATE events SET
-        title = ?, event_type = ?, venue_name = ?, suburb = ?, address = ?, date_status = ?,
+        title = ?, slug = ?, event_type = ?, venue_name = ?, suburb = ?, address = ?, date_status = ?,
         start_at = ?, end_at = ?, timezone = ?, audience = ?, short_description = ?,
         booking_label = ?, booking_url = ?, availability_status = ?, is_published = ?,
         display_order = ?, recurrence_frequency = ?, recurrence_until = ?, location_id = ?

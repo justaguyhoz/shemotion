@@ -857,6 +857,168 @@ p:last-child {
   line-height: 1.2;
 }
 
+.event-pill-title a:hover,
+.section-link,
+.page-back-link a {
+  color: var(--green);
+}
+
+.section-link,
+.page-back-link a {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(47, 74, 61, 0.3);
+}
+
+.page-hero .section-heading h1,
+.service-page-copy h1,
+.event-detail-page h1 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 6vw, 5.4rem);
+  font-weight: 400;
+  line-height: 0.98;
+}
+
+.events-page-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  max-width: 1040px;
+  margin: 42px auto 0;
+}
+
+.events-page-grid .event-pill {
+  height: 100%;
+}
+
+.events-page-grid .events-empty,
+.page-back-link {
+  grid-column: 1 / -1;
+  text-align: center;
+}
+
+.page-back-link {
+  margin: 38px 0 0;
+}
+
+.event-detail-page {
+  width: min(880px, 100%);
+  min-height: 62vh;
+  margin: 0 auto;
+}
+
+.event-detail-page h1 {
+  max-width: 760px;
+  margin-top: 12px;
+}
+
+.event-detail-intro {
+  max-width: 720px;
+  margin: 28px 0 0;
+  color: var(--muted);
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  line-height: 1.75;
+}
+
+.event-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  margin: 42px 0 0;
+  border-top: 1px solid var(--sand);
+}
+
+.event-facts div {
+  padding: 20px 20px 20px 0;
+  border-bottom: 1px solid var(--sand);
+}
+
+.event-facts dt {
+  color: var(--green);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.event-facts dd {
+  margin: 7px 0 0;
+  color: var(--charcoal);
+}
+
+.event-detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 34px;
+}
+
+.service-page-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.75fr);
+  align-items: center;
+  gap: clamp(36px, 7vw, 96px);
+}
+
+.service-page-copy {
+  max-width: 700px;
+}
+
+.service-page-copy > p:not(.eyebrow) {
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.service-page-copy .button {
+  margin-top: 16px;
+}
+
+.service-page-image img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 46% 46% 8px 8px;
+}
+
+.service-options {
+  background: var(--white-soft);
+}
+
+.service-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  max-width: 980px;
+  margin: 38px auto 0;
+}
+
+.service-card-grid article {
+  padding: 28px;
+  background: var(--ivory);
+  border: 1px solid var(--sand);
+  border-radius: 8px;
+}
+
+.service-card-grid h3 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 1.45rem;
+  font-weight: 400;
+}
+
+.service-card-grid p {
+  margin: 12px 0 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.site-footer a {
+  color: inherit;
+}
+
 .event-pill-meta {
   display: flex;
   flex-wrap: wrap;
@@ -1417,15 +1579,17 @@ blockquote:hover {
   .site-nav {
     position: absolute;
     top: 100%;
-    left: 0;
-    right: 0;
+    left: 50%;
+    right: auto;
+    width: 100vw;
     display: grid;
     justify-items: center;
     gap: 0;
     padding: 10px 20px 22px;
-    background: rgba(247, 242, 236, 0.98);
+    background: var(--ivory);
     border-bottom: 1px solid var(--sand);
-    transform: translateY(-12px);
+    box-shadow: 0 16px 28px rgba(47, 42, 38, 0.08);
+    transform: translate(-50%, -12px);
     opacity: 0;
     pointer-events: none;
   }
@@ -1460,7 +1624,7 @@ blockquote:hover {
   }
 
   .site-header.is-open .site-nav {
-    transform: translateY(0);
+    transform: translate(-50%, 0);
     opacity: 1;
     pointer-events: auto;
   }
@@ -1498,6 +1662,21 @@ blockquote:hover {
   .coach-grid,
   .contact-shell {
     grid-template-columns: 1fr;
+  }
+
+  .events-page-grid,
+  .service-page-hero,
+  .service-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .service-page-copy {
+    text-align: center;
+  }
+
+  .service-page-image {
+    width: min(78%, 420px);
+    margin: 0 auto;
   }
 
   .split,
@@ -1642,6 +1821,14 @@ blockquote:hover {
 
   .button {
     width: 100%;
+  }
+
+  .event-facts {
+    grid-template-columns: 1fr;
+  }
+
+  .event-detail-actions {
+    display: grid;
   }
 
   blockquote {

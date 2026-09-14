@@ -87,10 +87,15 @@ export function createEventCard(event, idPrefix = "event") {
   const hasDetails = Boolean(event.address || description);
   const actions = element("div", { className: "event-pill-actions" });
   let details;
+  if (event.slug) {
+    const pageLink = element("a", { className: "event-details-toggle", text: "Event page" });
+    pageLink.href = `/events/${encodeURIComponent(event.slug)}/`;
+    actions.append(pageLink);
+  }
   if (hasDetails) {
     const occurrenceKey = event.occurrenceIndex ?? event.startAt ?? "tbc";
     const detailsId = `${idPrefix}-details-${event.id}-${String(occurrenceKey).replace(/[^a-z0-9]/gi, "")}`;
-    const toggle = element("button", { className: "event-details-toggle", text: "Full details" });
+    const toggle = element("button", { className: "event-details-toggle", text: "Quick details" });
     toggle.type = "button";
     toggle.setAttribute("aria-expanded", "false");
     toggle.setAttribute("aria-controls", detailsId);
