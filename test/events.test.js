@@ -185,7 +185,6 @@ test("unauthenticated admin requests are rejected", async () => {
 
 test("public API uses future published filtering and ordered results", async () => {
   let sql = "";
-  let boundNow = "";
   const futureStartAt = new Date(Date.now() + 7 * 86400000).toISOString();
   const row = {
     id: 1, title: baseEvent.title, event_type: baseEvent.eventType, venue_name: baseEvent.venueName,
@@ -200,10 +199,7 @@ test("public API uses future published filtering and ordered results", async () 
       prepare(query) {
         sql = query;
         return {
-          bind(value) {
-            boundNow = value;
-            return { all: async () => ({ results: [row] }) };
-          },
+          all: async () => ({ results: [row] }),
         };
       },
     },
@@ -217,9 +213,8 @@ test("public API uses future published filtering and ordered results", async () 
   assert.equal(response.headers.get("cache-control"), "no-store");
   assert.match(sql, /address/);
   assert.match(sql, /is_published = 1/);
-  assert.match(sql, /date_status = 'tbc'/);
   assert.match(sql, /start_at ASC/);
-  assert.ok(Number.isFinite(Date.parse(boundNow)));
+  assert.doesNotMatch(sql, /start_at >=|end_at >=/);
 });
 
 test("published event slugs render crawlable metadata and database-backed Event JSON-LD", async () => {
@@ -258,7 +253,7 @@ test("unpublished or invalid event slugs return a noindex 404", async () => {
   assert.match(html, /<meta name="robots" content="noindex">/);
 });
 
-test("sitemap contains public routes and only published event slugs returned by the filtered query", async () => {
+test("sitemap retains published historical URLs and excludes non-public routes", async () => {
   let sql = "";
   const env = { DB: { prepare: (query) => { sql = query; return { all: async () => ({ results: [{ slug: "public-event", updated_at: "2026-09-14 02:00:00" }] }) }; } } };
   const response = await getSitemap({ env });

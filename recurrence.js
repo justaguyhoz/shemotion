@@ -1,3 +1,5 @@
+import { isEventPast } from "./event-lifecycle.js";
+
 export const RECURRENCE_OPTIONS = ["none", "weekly", "fortnightly", "monthly"];
 
 const BRISBANE_OFFSET_MS = 10 * 60 * 60 * 1000;
@@ -27,7 +29,6 @@ function nextOccurrence(iso, frequency) {
 }
 
 export function expandRecurringEvents(events, rangeStart, rangeEnd) {
-  const startMs = Date.parse(rangeStart);
   const endMs = Date.parse(rangeEnd);
   const expanded = [];
 
@@ -38,8 +39,7 @@ export function expandRecurringEvents(events, rangeStart, rangeEnd) {
     }
     const frequency = event.recurrenceFrequency || "none";
     if (frequency === "none") {
-      const eventEnd = Date.parse(event.endAt || event.startAt);
-      if (eventEnd >= startMs && Date.parse(event.startAt) <= endMs) expanded.push(event);
+      if (!isEventPast(event, rangeStart) && Date.parse(event.startAt) <= endMs) expanded.push(event);
       return;
     }
 
@@ -50,16 +50,15 @@ export function expandRecurringEvents(events, rangeStart, rangeEnd) {
       const occurrenceMs = Date.parse(occurrenceStart);
       if (occurrenceMs > endMs || occurrenceMs > recurrenceEnd) break;
       const occurrenceEnd = duration === null ? null : new Date(occurrenceMs + duration).toISOString();
-      if (Date.parse(occurrenceEnd || occurrenceStart) >= startMs) {
-        expanded.push({
-          ...event,
-          id: `${event.id}-${occurrenceMs}`,
-          seriesId: event.id,
-          startAt: occurrenceStart,
-          endAt: occurrenceEnd,
-          isRecurringOccurrence: true,
-        });
-      }
+      const occurrence = {
+        ...event,
+        id: `${event.id}-${occurrenceMs}`,
+        seriesId: event.id,
+        startAt: occurrenceStart,
+        endAt: occurrenceEnd,
+        isRecurringOccurrence: true,
+      };
+      if (!isEventPast(occurrence, rangeStart)) expanded.push(occurrence);
       occurrenceStart = nextOccurrence(occurrenceStart, frequency);
     }
   });

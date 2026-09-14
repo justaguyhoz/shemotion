@@ -1007,6 +1007,23 @@ p:last-child {
   transition: transform 280ms ease, box-shadow 280ms ease;
 }
 
+.event-lifecycle-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: 30px;
+  padding: 16px 18px;
+  background: var(--green-soft);
+  border-left: 3px solid var(--green);
+}
+
+.event-lifecycle-notice p {
+  margin: 0;
+  color: var(--charcoal);
+  font-weight: 500;
+}
+
 .service-card-grid article.is-revealed {
   animation: service-card-reveal 280ms ease backwards;
   animation-delay: var(--reveal-delay, 0ms);
@@ -1858,6 +1875,11 @@ blockquote:hover {
 
   .event-detail-actions {
     display: grid;
+  }
+
+  .event-lifecycle-notice {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   blockquote {

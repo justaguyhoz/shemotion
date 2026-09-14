@@ -23,7 +23,7 @@ export async function onRequestGet({ env }) {
     const events = expanded.filter((event) => event.slug && !seen.has(event.slug) && seen.add(event.slug));
     const content = events.length ? events.map(eventCard).join("") : '<p class="events-empty">New Shemotion dates are coming soon.</p>';
     const body = `<main id="top"><section class="events page-hero section-pad"><div class="section-heading"><p class="eyebrow">Feminine movement meditation on the Gold Coast</p><h1>Upcoming Shemotion Events</h1><p>Explore upcoming guided movement experiences, workshops and gatherings for women.</p></div><div class="events-page-grid">${content}</div><p class="page-back-link"><a href="/">Back to Shemotion home</a></p></section></main>`;
-    return htmlResponse(pageDocument({ title: "Shemotion Events | Gold Coast Women's Movement Experiences", description: "Discover upcoming Shemotion feminine movement meditation events, workshops and women's experiences across the Gold Coast.", canonical: `${SITE_URL}/events/`, body }));
+    return htmlResponse(pageDocument({ title: "Shemotion Events | Gold Coast Women's Movement Experiences", description: "Discover upcoming Shemotion feminine movement meditation events, workshops and women's experiences across the Gold Coast.", canonical: `${SITE_URL}/events/`, body }), 200, "no-store");
   } catch {
     return htmlResponse(pageDocument({ title: "Shemotion Events", description: "Upcoming Shemotion events on the Gold Coast.", canonical: `${SITE_URL}/events/`, body: '<main><section class="page-hero section-pad"><div class="section-heading"><h1>Upcoming Shemotion Events</h1><p>Events are temporarily unavailable. Please check back soon.</p></div></section></main>' }), 500);
   }

@@ -19,14 +19,8 @@ export async function getUpcomingPublicEvents(db, now = new Date().toISOString()
     FROM events
     LEFT JOIN locations ON locations.id = events.location_id
     WHERE is_published = 1
-      AND (
-        date_status = 'tbc'
-        OR start_at >= ?1
-        OR (end_at IS NOT NULL AND end_at >= ?1)
-        OR (recurrence_frequency != 'none' AND (recurrence_until IS NULL OR recurrence_until >= substr(?1, 1, 10)))
-      )
     ORDER BY CASE WHEN date_status = 'tbc' THEN 1 ELSE 0 END, start_at ASC, display_order ASC
-  `).bind(now).all();
+  `).all();
 
   return expandRecurringEvents(result.results.map(rowToPublicEvent), now, rangeEnd);
 }

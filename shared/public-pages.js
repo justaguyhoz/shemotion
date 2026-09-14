@@ -1,3 +1,5 @@
+import { isEventPast } from "../event-lifecycle.js";
+
 const SITE_URL = "https://shemotion.com.au";
 const EMAIL = "shemotion.au@gmail.com";
 
@@ -57,8 +59,8 @@ export function pageDocument({ title, description, canonical, body, bodyAttribut
     ${siteHeader()}${body}${siteFooter()}<script type="module" src="/public-page.js?v=20260914-1"></script></body></html>`;
 }
 
-export function htmlResponse(document, status = 200) {
-  return new Response(document, { status, headers: { "content-type": "text/html; charset=utf-8", "cache-control": "public, max-age=300" } });
+export function htmlResponse(document, status = 200, cacheControl = "public, max-age=300") {
+  return new Response(document, { status, headers: { "content-type": "text/html; charset=utf-8", "cache-control": cacheControl } });
 }
 
 export function formatEventDate(event) {
@@ -78,7 +80,7 @@ export function eventDescription(event) {
   return `${event.title} is a Shemotion ${event.eventType.toLowerCase()}${event.suburb ? ` in ${event.suburb}` : " on the Gold Coast"}.`;
 }
 
-export function eventJsonLd(event, canonical) {
+export function eventJsonLd(event, canonical, now = new Date()) {
   if (event.dateStatus !== "scheduled" || !event.startAt || !event.venueName || (!event.address && !event.suburb)) return null;
   const data = {
     "@context": "https://schema.org", "@type": "Event", name: event.title,
@@ -89,7 +91,7 @@ export function eventJsonLd(event, canonical) {
     organizer: { "@type": "Organization", name: "Shemotion", url: SITE_URL }, url: canonical,
   };
   if (event.endAt) data.endDate = event.endAt;
-  if (event.bookingUrl && event.availabilityStatus !== "Cancelled") {
+  if (event.bookingUrl && event.availabilityStatus !== "Cancelled" && !isEventPast(event, now)) {
     data.offers = { "@type": "Offer", url: event.bookingUrl, availability: event.availabilityStatus === "Sold out" ? "https://schema.org/SoldOut" : "https://schema.org/InStock" };
   }
   return data;
