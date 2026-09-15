@@ -468,15 +468,15 @@ p:last-child {
 }
 
 .events {
-  padding-top: clamp(30px, 4vw, 48px);
-  padding-bottom: clamp(26px, 3.5vw, 44px);
+  padding-top: clamp(26px, 3.4vw, 40px);
+  padding-bottom: clamp(22px, 3vw, 36px);
 }
 
-.events .section-heading h2 {
-  margin-bottom: 12px;
+#upcoming-events .section-heading h2 {
+  margin-bottom: 10px;
 }
 
-.events .section-heading p {
+#upcoming-events .section-heading p {
   margin: 0;
 }
 
@@ -486,7 +486,7 @@ p:last-child {
 
 .event-carousel {
   max-width: 640px;
-  margin: clamp(16px, 2.2vw, 24px) auto 0;
+  margin: clamp(13px, 1.8vw, 20px) auto 0;
 }
 
 .event-view-switch {
@@ -893,7 +893,24 @@ p:last-child {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
   max-width: 1040px;
-  margin: 42px auto 0;
+  margin: clamp(24px, 3.2vw, 34px) auto 0;
+}
+
+.events.page-hero .section-heading {
+  max-width: 720px;
+}
+
+.events.page-hero .section-heading .eyebrow {
+  margin: 0 0 12px;
+}
+
+.events.page-hero .section-heading h1 {
+  font-size: clamp(2.1rem, 4vw, 3.6rem);
+}
+
+.events.page-hero .section-heading > p:last-child {
+  max-width: 560px;
+  margin: 16px auto 0;
 }
 
 .events-page-grid .event-pill {
@@ -1459,7 +1476,7 @@ p:last-child {
 @media (prefers-reduced-motion: no-preference) {
   html.reveal-ready [data-reveal],
   html.reveal-ready [data-service-card],
-  html.reveal-ready .events .section-heading,
+  html.reveal-ready [id="upcoming-events"] .section-heading,
   html.reveal-ready .experience .section-heading,
   html.reveal-ready .stage,
   html.reveal-ready .experience-followup,
@@ -1654,7 +1671,7 @@ p:last-child {
   align-items: center;
   justify-content: center;
   gap: 18px;
-  margin-top: 2px;
+  margin-top: 0;
 }
 
 .event-carousel-controls[hidden] {

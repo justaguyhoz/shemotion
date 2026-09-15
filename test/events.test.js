@@ -77,6 +77,9 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.booking-button::after[\s\S]*animation: none/);
   assert.match(html, /<script>document\.documentElement\.classList\.add\("reveal-ready"\)<\/script>\s*<link rel="stylesheet"/);
   assert.match(css, /html\.reveal-ready \[data-reveal\][\s\S]*opacity: 0;[\s\S]*translateY\(14px\)/);
+  assert.match(css, /opacity 440ms cubic-bezier/);
+  assert.match(css, /html\.reveal-ready \[id="upcoming-events"\] \.section-heading/);
+  assert.doesNotMatch(css, /html\.reveal-ready \.events \.section-heading/);
   assert.doesNotMatch(css, /guide-content-reveal|service-card-reveal/);
   assert.doesNotMatch(adminHtml, /4344672809106563|connect\.facebook\.net|facebook\.com\/tr/);
 });
@@ -103,6 +106,11 @@ test("feminine movement meditation guide has complete metadata and internal path
   assert.match(sharedPagesSource, /href="\/what-is-feminine-movement-meditation\/">The Approach<\/a>/);
   assert.match(html, /<img src="\/assets\/studio-1\.jpg" alt="Katty seated in a studio with a group of women behind her">/);
   assert.doesNotMatch(html, /FAQPage|"@type":"FAQPage"/);
+});
+
+test("public events page uses the compact requested introduction", async () => {
+  const source = await readFile(new URL("../functions/events/index.js", import.meta.url), "utf8");
+  assert.match(source, /<p class="eyebrow">Upcoming events<\/p><h1>Shemotion Classes &amp; Workshops<\/h1><p>Feminine movement meditation experiences across the Gold Coast\.<\/p>/);
 });
 
 test("public contact paths, visible punctuation and email copying follow the sitewide policy", async () => {
