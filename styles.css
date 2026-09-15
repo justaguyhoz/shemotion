@@ -2600,6 +2600,7 @@ blockquote:hover {
     width: calc(100% + (2 * var(--space-md)));
     margin-inline: calc(-1 * var(--space-md));
     font-size: clamp(1.8rem, 8.75vw, 2.75rem);
+    letter-spacing: -0.02em;
   }
 
   .guide-hero-copy .eyebrow,
