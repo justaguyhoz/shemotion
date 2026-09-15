@@ -183,3 +183,12 @@ test("private contact section participates in the existing shared reveal initial
   assert.match(html, /class="contact-shell" data-reveal/);
   assert.match(script, /querySelectorAll\("\[data-reveal\]"\)/);
 });
+
+test("public typography uses shared relationship tokens and contains the Approach heading", async () => {
+  const css = await readFile(new URL("../styles.css", import.meta.url), "utf8");
+  assert.match(css, /--space-label-heading:\s*var\(--space-sm\)/);
+  assert.match(css, /--space-heading-body:\s*var\(--space-md\)/);
+  assert.match(css, /--space-body-action:\s*var\(--space-lg\)/);
+  assert.match(css, /--space-content-group:\s*var\(--space-xl\)/);
+  assert.match(css, /@media \(min-width: 561px\)[\s\S]*?\.guide-hero h1 \.no-wrap\s*{[\s\S]*?white-space:\s*normal/);
+});

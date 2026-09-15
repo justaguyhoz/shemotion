@@ -20,6 +20,13 @@
   --space-xl: 32px;
   --space-2xl: 40px;
   --space-section: 64px;
+  --space-label-heading: var(--space-sm);
+  --space-heading-body: var(--space-md);
+  --space-subheading-body: var(--space-sm);
+  --space-body-action: var(--space-lg);
+  --space-content-group: var(--space-xl);
+  --heading-measure-compact: 13ch;
+  --heading-measure-standard: 18ch;
 }
 
 * {
@@ -822,6 +829,14 @@ p:last-child {
   font-size: clamp(2.75rem, 6.2vw, 5.65rem);
   font-weight: 400;
   line-height: 0.98;
+}
+
+/* Keep the phrase together on narrow screens without letting it paint across
+   the adjacent portrait column on desktop. */
+@media (min-width: 561px) {
+  .guide-hero h1 .no-wrap {
+    white-space: normal;
+  }
 }
 
 .guide-hero-copy > p:not(.eyebrow) {
@@ -1938,11 +1953,23 @@ blockquote:hover {
   }
 
   .section-heading .eyebrow {
-    margin-bottom: var(--space-sm);
+    margin-bottom: var(--space-label-heading);
   }
 
+  .narrow h2,
   .section-heading h2 {
-    margin-bottom: var(--space-md);
+    max-width: var(--heading-measure-standard);
+    margin-right: auto;
+    margin-bottom: var(--space-heading-body);
+    margin-left: auto;
+  }
+
+  h2 {
+    font-size: clamp(1.9rem, 8.6vw, 2.25rem);
+  }
+
+  h3 {
+    font-size: clamp(1.4rem, 6.4vw, 1.65rem);
   }
 
   .split,
@@ -1964,9 +1991,12 @@ blockquote:hover {
 
   .service-page-hero,
   .guide-hero,
-  .guide-copy-grid,
   .guide-editorial-grid {
-    gap: var(--space-xl);
+    gap: var(--space-content-group);
+  }
+
+  .guide-copy-grid {
+    gap: var(--space-heading-body);
   }
 
   .guide-hero {
@@ -1995,7 +2025,7 @@ blockquote:hover {
   }
 
   .guide-answer-panel {
-    gap: var(--space-xl);
+    gap: var(--space-body-action);
   }
 
   .guide-answer-panel .guide-prose {
@@ -2032,8 +2062,8 @@ blockquote:hover {
   }
 
   .stage-list {
-    gap: var(--space-2xl);
-    margin-top: var(--space-xl);
+    gap: var(--space-content-group);
+    margin-top: var(--space-content-group);
   }
 
   .stage {
@@ -2045,7 +2075,10 @@ blockquote:hover {
   }
 
   .stage-copy h3 {
-    margin-bottom: var(--space-md);
+    max-width: var(--heading-measure-standard);
+    margin-right: auto;
+    margin-bottom: var(--space-heading-body);
+    margin-left: auto;
   }
 
   .stage-copy p {
@@ -2053,27 +2086,27 @@ blockquote:hover {
   }
 
   .experience-followup {
-    margin-top: var(--space-xl);
+    margin-top: var(--space-content-group);
   }
 
   .experience-followup p {
-    margin-bottom: 20px;
+    margin-bottom: var(--space-heading-body);
   }
 
   .service-card-grid,
   .guide-card-grid,
   .guide-expectation-grid,
   .guide-faq-list {
-    margin-top: var(--space-xl);
+    margin-top: var(--space-content-group);
   }
 
   .guide-editorial-intro {
-    margin-top: var(--space-md);
+    margin-top: var(--space-heading-body);
   }
 
   .guide-mode-cards,
   .guide-cta-actions {
-    margin-top: var(--space-lg);
+    margin-top: var(--space-body-action);
   }
 
   .guide-session-note {
@@ -2090,6 +2123,23 @@ blockquote:hover {
 
   .coach-image img {
     max-width: min(78%, 360px);
+  }
+
+  .coach-copy h2,
+  .contact-intro h2 {
+    max-width: var(--heading-measure-standard);
+    margin-right: auto;
+    margin-bottom: var(--space-heading-body);
+    margin-left: auto;
+  }
+
+  .for-you-list,
+  .quotes {
+    margin-top: var(--space-content-group);
+  }
+
+  .contact-shell {
+    gap: var(--space-content-group);
   }
 
   .hero-image {
@@ -2206,7 +2256,7 @@ blockquote:hover {
   }
 
   .hero-content .eyebrow {
-    margin-bottom: var(--space-sm);
+    margin-bottom: var(--space-label-heading);
   }
 
   .eyebrow {
@@ -2215,18 +2265,24 @@ blockquote:hover {
   }
 
   .hero h1 {
+    max-width: var(--heading-measure-compact);
+    margin-inline: auto;
     font-size: clamp(2.75rem, 12vw, 3rem);
   }
 
   .problem-line,
   .hero-subtitle,
   .hero-support {
-    margin-top: var(--space-md);
+    margin-top: var(--space-heading-body);
+  }
+
+  .hero-support {
+    margin-bottom: 0;
   }
 
   .hero-actions {
     gap: var(--space-sm);
-    margin-top: var(--space-lg);
+    margin-top: var(--space-body-action);
   }
 
   .hero-support span {
@@ -2262,30 +2318,54 @@ blockquote:hover {
 
   .guide-hero h1 {
     width: calc(100% + (2 * var(--space-md)));
+    max-width: none;
     margin-inline: calc(-1 * var(--space-md));
-    font-size: clamp(1.8rem, 8.75vw, 2.75rem);
+    font-size: clamp(1.9rem, 9.5vw, 2.1rem);
     letter-spacing: -0.02em;
   }
 
   .guide-hero-copy .eyebrow,
   .service-page-copy .eyebrow {
-    margin-bottom: var(--space-sm);
+    margin-bottom: var(--space-label-heading);
   }
 
   .guide-hero-copy .hero-subtitle,
   .service-page-copy .hero-subtitle {
-    margin-top: var(--space-md);
-    margin-bottom: var(--space-sm);
+    margin-top: var(--space-heading-body);
+    margin-bottom: var(--space-subheading-body);
   }
 
   .guide-hero-copy > p:not(.eyebrow),
   .service-page-copy > p:not(.eyebrow) {
-    margin-bottom: var(--space-sm);
+    margin-bottom: var(--space-subheading-body);
+  }
+
+  .guide-hero-copy > p:not(.eyebrow):last-of-type,
+  .service-page-copy > p:not(.eyebrow):last-of-type {
+    margin-bottom: 0;
   }
 
   .guide-hero-copy .button,
   .service-page-copy .button {
-    margin-top: var(--space-lg);
+    margin-top: var(--space-body-action);
+  }
+
+  .service-page-copy h1 {
+    max-width: var(--heading-measure-standard);
+    margin-inline: auto;
+  }
+
+  .events.page-hero .section-heading h1 {
+    width: calc(100% + var(--space-md));
+    max-width: none;
+    margin-inline: calc(-0.5 * var(--space-md));
+    font-size: clamp(2rem, 9vw, 2.35rem);
+  }
+
+  .guide-copy-grid h2,
+  .guide-editorial-copy h2 {
+    max-width: var(--heading-measure-standard);
+    margin-inline: auto;
   }
 
   .guide-hero-image {
@@ -2329,7 +2409,7 @@ blockquote:hover {
   }
 
   .guide-cta-shell h2 {
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-heading-body);
   }
 
   .event-detail-page h1 {
@@ -2340,7 +2420,7 @@ blockquote:hover {
   }
 
   .event-detail-intro {
-    margin-top: var(--space-md);
+    margin-top: var(--space-heading-body);
   }
 
   .event-facts {
@@ -2349,7 +2429,7 @@ blockquote:hover {
 
   .event-detail-actions {
     gap: var(--space-sm);
-    margin-top: var(--space-lg);
+    margin-top: var(--space-body-action);
   }
 
   p {

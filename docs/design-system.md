@@ -14,6 +14,20 @@ The public site uses these CSS custom properties:
 | `--space-2xl` | 40px |
 | `--space-section` | 64px |
 
+Relationship aliases keep equivalent content gaps tied to that scale:
+
+| Token | Relationship | Value |
+| --- | --- | ---: |
+| `--space-label-heading` | Eyebrow or label to heading | 12px |
+| `--space-heading-body` | Major heading to introductory copy | 16px |
+| `--space-subheading-body` | Minor heading or lead to body copy | 12px |
+| `--space-body-action` | Body copy to CTA | 24px |
+| `--space-content-group` | Related content groups | 32px |
+
+Heading measures use `--heading-measure-compact` (13ch) and
+`--heading-measure-standard` (18ch). Apply them by heading type rather than to
+every heading globally.
+
 Use the scale deliberately rather than mechanically replacing every numeric value. Preserve intentional desktop and component-specific exceptions.
 
 ## Default mobile relationships
@@ -41,6 +55,7 @@ Equivalent relationships should use equivalent spacing throughout the public sit
 - Avoid isolated final words and keep meaningful phrases such as "Gold Coast" together where practical.
 - Prefer container width, max-width, font size, line-height, letter spacing and wrapping rules over device-specific fixes.
 - Deliberate responsive line breaks are acceptable only for intentional compositions. Never add arbitrary `<br>` elements to repair a single viewport.
+- The Approach hero keeps “Movement Meditation?” together on narrow screens only. On wider layouts it may wrap so the text cannot overlap the portrait column.
 
 ## Required visual QA
 
