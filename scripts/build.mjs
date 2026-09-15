@@ -8,7 +8,7 @@ for (const file of ["index.html", "styles.css", "script.js", "tracking.js", "pub
   await cp(new URL(`../${file}`, import.meta.url), new URL(file, output));
 }
 
-for (const directory of ["assets", "admin", "private-groups-retreats"]) {
+for (const directory of ["assets", "admin", "private-groups-retreats", "what-is-feminine-movement-meditation"]) {
   await cp(new URL(`../${directory}/`, import.meta.url), new URL(`${directory}/`, output), { recursive: true });
 }
 

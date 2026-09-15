@@ -61,10 +61,25 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.match(html, /<a href="#coach">Meet Katty<\/a>/);
   assert.match(html, /<a href="mailto:shemotion\.au@gmail\.com">Contact<\/a>/);
   assert.match(html, /<h2 id="experience-title">The Shemotion Experience<\/h2>\s*<p>Move, release tension and reconnect\.<\/p>/);
+  assert.match(html, /href="\/what-is-feminine-movement-meditation\/">Learn more about feminine movement meditation<\/a>/);
   assert.match(css, /\.booking-button::after[\s\S]*animation: booking-button-glow 4\.4s/);
   assert.match(css, /\.event-pill-action\.button\.booking-button\s*\{[\s\S]*min-height: 30px;[\s\S]*font-size: 0\.68rem;/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.booking-button::after[\s\S]*animation: none/);
   assert.doesNotMatch(adminHtml, /4344672809106563|connect\.facebook\.net|facebook\.com\/tr/);
+});
+
+test("feminine movement meditation guide has complete metadata and internal paths", async () => {
+  const html = await readFile(new URL("../what-is-feminine-movement-meditation/index.html", import.meta.url), "utf8");
+  assert.match(html, /<title>What Is Feminine Movement Meditation\? \| Shemotion Gold Coast<\/title>/);
+  assert.match(html, /<meta name="description" content="Learn what feminine movement meditation is, how a Shemotion session works, and how guided movement, intuitive expression and grounding meditation come together\.">/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/shemotion\.com\.au\/what-is-feminine-movement-meditation\/">/);
+  assert.match(html, /<meta property="og:title" content="What Is Feminine Movement Meditation\? \| Shemotion Gold Coast">/);
+  assert.match(html, /<meta property="og:url" content="https:\/\/shemotion\.com\.au\/what-is-feminine-movement-meditation\/">/);
+  assert.equal((html.match(/<h1[\s>]/g) || []).length, 1);
+  assert.match(html, /href="\/events\/">View Upcoming Events<\/a>/);
+  assert.match(html, /href="\/private-groups-retreats\/">Private Groups &amp; Retreats<\/a>/);
+  assert.match(html, /href="\/">Shemotion<\/a>/);
+  assert.doesNotMatch(html, /FAQPage|"@type":"FAQPage"/);
 });
 
 test("event slugs are SEO-friendly and remain explicit when supplied", () => {
@@ -261,6 +276,7 @@ test("sitemap retains published historical URLs and excludes non-public routes",
   assert.match(sql, /is_published = 1/);
   assert.match(xml, /https:\/\/shemotion\.com\.au\/events\/public-event\//);
   assert.match(xml, /private-groups-retreats/);
+  assert.match(xml, /what-is-feminine-movement-meditation/);
   assert.doesNotMatch(xml, /admin|api\/events/);
 });
 
