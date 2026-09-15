@@ -13,7 +13,7 @@ function eventCard(event) {
     <div class="event-pill-content"><p class="event-pill-venue">${escapeHtml(event.eventType)} &middot; ${escapeHtml(event.venueName)}</p><h2 class="event-pill-title">${heading}</h2>
     <div class="event-pill-meta"><span>${escapeHtml(formatEventDate(event))}</span><span>${escapeHtml(formatEventTime(event))}</span>${event.suburb ? `<span>${escapeHtml(event.suburb)}</span>` : ""}</div>${status}
     <p class="event-pill-description">${escapeHtml(eventDescription(event))}</p></div>
-    <div class="event-pill-actions">${detailUrl ? `<a class="event-details-toggle" href="${detailUrl}">Event details</a>` : ""}${booking}</div></article>`;
+    <div class="event-pill-actions">${detailUrl ? `<a class="event-page-link" href="${detailUrl}">Event details</a>` : ""}${booking}</div></article>`;
 }
 
 export async function onRequestGet({ env }) {

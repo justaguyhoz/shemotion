@@ -29,7 +29,7 @@ export function siteHeader() {
   return `<header class="site-header" data-header>
       <a class="brand" href="/" aria-label="Shemotion home"><img src="/assets/shemotion-logo.png" alt="Shemotion" width="1080" height="326"></a>
       <nav class="site-nav" id="site-nav" aria-label="Main navigation">
-        <a href="/events/">Events</a><a href="/private-groups-retreats/">Private Groups</a><a href="/#experience">Experience</a><a href="/#coach">Meet Katty</a><a href="mailto:${EMAIL}">Contact</a>${socialLinks("nav-social-links")}
+        <a href="/events/">Events</a><a href="/private-groups-retreats/">Private Groups</a><a href="/what-is-feminine-movement-meditation/">The Practice</a><a href="/#experience">Experience</a><a href="/#coach">Meet Katty</a><a href="mailto:${EMAIL}">Contact</a>${socialLinks("nav-social-links")}
       </nav>
       <div class="header-actions"><a class="header-cta" href="mailto:${EMAIL}">Contact Shemotion</a>${socialLinks("header-social-links")}<button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span><span></span><span class="sr-only">Menu</span></button></div>
     </header>`;
@@ -53,10 +53,10 @@ export function pageDocument({ title, description, canonical, body, bodyAttribut
     <title>${escapeHtml(title)}</title><meta name="description" content="${escapeHtml(description)}">${robots}
     <link rel="canonical" href="${escapeHtml(canonical)}">
     <meta property="og:type" content="website"><meta property="og:site_name" content="Shemotion"><meta property="og:title" content="${escapeHtml(title)}"><meta property="og:description" content="${escapeHtml(description)}"><meta property="og:url" content="${escapeHtml(canonical)}"><meta property="og:image" content="${image}">
-    <link rel="icon" href="/assets/favicon_shemotion.png" type="image/png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet"><link rel="stylesheet" href="/styles.css?v=20260914-1">
+    <link rel="icon" href="/assets/favicon_shemotion.png" type="image/png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet"><link rel="stylesheet" href="/styles.css?v=20260915-2">
     ${jsonLd}${metaPixel()}</head><body ${bodyAttributes}>
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=4344672809106563&amp;ev=PageView&amp;noscript=1" alt=""></noscript>
-    ${siteHeader()}${body}${siteFooter()}<script type="module" src="/public-page.js?v=20260914-1"></script></body></html>`;
+    ${siteHeader()}${body}${siteFooter()}<script type="module" src="/public-page.js?v=20260915-2"></script></body></html>`;
 }
 
 export function htmlResponse(document, status = 200, cacheControl = "public, max-age=300") {

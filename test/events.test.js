@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { eventActionLabel, eventDestination, eventGoogleMapsUrl } from "../script.js";
+import { eventActionLabel, eventDestination, eventGoogleMapsUrl, setupEventDetails } from "../script.js";
 import { addCustomEventClickTracking, eventBookingMetadata, trackCustomEvent } from "../tracking.js";
 import { generateEventSlug, validateEventInput } from "../shared/events.js";
 import { eventJsonLd } from "../shared/public-pages.js";
@@ -54,14 +54,19 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.doesNotMatch(html, /announcement-bar|data-announcement-/);
   assert.match(
     html,
-    /<nav class="site-nav"[^>]*>\s*<a href="\/events\/">Events<\/a>\s*<a href="\/private-groups-retreats\/">Private Groups<\/a>/
+    /<nav class="site-nav"[^>]*>\s*<a href="\/events\/">Events<\/a>\s*<a href="\/private-groups-retreats\/">Private Groups<\/a>\s*<a href="\/what-is-feminine-movement-meditation\/">The Practice<\/a>/
   );
   assert.doesNotMatch(html, /<a href="#upcoming-events"[^>]*data-primary-book-now[^>]*>Upcoming<\/a>/);
   assert.match(html, /<a href="#experience">Experience<\/a>/);
   assert.match(html, /<a href="#coach">Meet Katty<\/a>/);
   assert.match(html, /<a href="mailto:shemotion\.au@gmail\.com">Contact<\/a>/);
   assert.match(html, /<h2 id="experience-title">The Shemotion Experience<\/h2>\s*<p>Move, release tension and reconnect\.<\/p>/);
-  assert.match(html, /href="\/what-is-feminine-movement-meditation\/">Learn more about feminine movement meditation<\/a>/);
+  assert.match(html, /Want to understand the practice more deeply\?/);
+  assert.match(html, /href="\/what-is-feminine-movement-meditation\/">What is Feminine Movement Meditation\?<\/a>/);
+  const stageThreeIndex = html.indexOf("<h3>Grounding Meditation</h3>");
+  const guideLinkIndex = html.indexOf(">What is Feminine Movement Meditation?</a>");
+  const nextSectionIndex = html.indexOf('<section class="for-you');
+  assert.ok(stageThreeIndex < guideLinkIndex && guideLinkIndex < nextSectionIndex, "guide link should follow the complete three-stage experience");
   assert.match(css, /\.booking-button::after[\s\S]*animation: booking-button-glow 4\.4s/);
   assert.match(css, /\.event-pill-action\.button\.booking-button\s*\{[\s\S]*min-height: 30px;[\s\S]*font-size: 0\.68rem;/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.booking-button::after[\s\S]*animation: none/);
@@ -70,6 +75,8 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
 
 test("feminine movement meditation guide has complete metadata and internal paths", async () => {
   const html = await readFile(new URL("../what-is-feminine-movement-meditation/index.html", import.meta.url), "utf8");
+  const privateGroupsHtml = await readFile(new URL("../private-groups-retreats/index.html", import.meta.url), "utf8");
+  const sharedPagesSource = await readFile(new URL("../shared/public-pages.js", import.meta.url), "utf8");
   assert.match(html, /<title>What Is Feminine Movement Meditation\? \| Shemotion Gold Coast<\/title>/);
   assert.match(html, /<meta name="description" content="Learn what feminine movement meditation is, how a Shemotion session works, and how guided movement, intuitive expression and grounding meditation come together\.">/);
   assert.match(html, /<link rel="canonical" href="https:\/\/shemotion\.com\.au\/what-is-feminine-movement-meditation\/">/);
@@ -79,6 +86,13 @@ test("feminine movement meditation guide has complete metadata and internal path
   assert.match(html, /href="\/events\/">View Upcoming Events<\/a>/);
   assert.match(html, /href="\/private-groups-retreats\/">Private Groups &amp; Retreats<\/a>/);
   assert.match(html, /href="\/">Shemotion<\/a>/);
+  assert.match(html, /<h2 id="modes-title">Guided Movement and Intuitive Movement<\/h2>/);
+  assert.match(html, /A Shemotion session moves from guided movement into intuitive movement and finishes with grounding meditation\./);
+  assert.match(html, /<h2 id="dance-title">Is It a Dance Class\?<\/h2><p class="guide-answer">No &mdash; and that's an important distinction\.<\/p>/);
+  assert.doesNotMatch(html, /guide-stages|\/assets\/step-[123]\.jpg|How a Shemotion Session Works/);
+  assert.match(html, /href="\/what-is-feminine-movement-meditation\/" aria-current="page">The Practice<\/a>/);
+  assert.match(privateGroupsHtml, /href="\/what-is-feminine-movement-meditation\/">The Practice<\/a>/);
+  assert.match(sharedPagesSource, /href="\/what-is-feminine-movement-meditation\/">The Practice<\/a>/);
   assert.doesNotMatch(html, /FAQPage|"@type":"FAQPage"/);
 });
 
@@ -147,6 +161,65 @@ test("event pills use the venue link or Shemotion email without dead booking con
   assert.equal(eventDestination(bookable), "https://example.com/class");
   assert.equal(eventActionLabel(bookable), "BOOK NOW");
   assert.equal(eventActionLabel({ ...bookable, bookingLabel: "" }), "BOOK NOW");
+});
+
+function eventDetailsCardStub() {
+  const toggle = new EventTarget();
+  const attributes = new Map([["aria-expanded", "false"]]);
+  toggle.getAttribute = (name) => attributes.get(name) ?? null;
+  toggle.setAttribute = (name, value) => attributes.set(name, String(value));
+  toggle.textContent = "Quick details";
+  const details = { hidden: true };
+  const card = new EventTarget();
+  card.querySelector = (selector) => selector === "[data-event-details-toggle]" ? toggle : selector === ".event-pill-details" ? details : null;
+  card.contains = (target) => target === toggle;
+  return { card, details, toggle };
+}
+
+test("event-card controls remain mutually exclusive and cards toggle independently", async () => {
+  const first = eventDetailsCardStub();
+  const second = eventDetailsCardStub();
+  const eventRoot = new EventTarget();
+  setupEventDetails([first.card, second.card], eventRoot);
+
+  const quickDetailsClick = new Event("click", { cancelable: true });
+  first.toggle.dispatchEvent(quickDetailsClick);
+  assert.equal(quickDetailsClick.defaultPrevented, false);
+  assert.equal(first.toggle.getAttribute("aria-expanded"), "true");
+  assert.equal(first.toggle.textContent, "Close details");
+  assert.equal(first.details.hidden, false);
+  assert.equal(second.toggle.getAttribute("aria-expanded"), "false");
+  assert.equal(second.details.hidden, true);
+
+  second.toggle.dispatchEvent(new Event("click", { cancelable: true }));
+  assert.equal(first.toggle.getAttribute("aria-expanded"), "true");
+  assert.equal(first.details.hidden, false);
+  assert.equal(second.toggle.getAttribute("aria-expanded"), "true");
+  assert.equal(second.details.hidden, false);
+
+  second.toggle.dispatchEvent(new Event("click", { cancelable: true }));
+  assert.equal(second.toggle.getAttribute("aria-expanded"), "false");
+  assert.equal(second.details.hidden, true);
+
+  first.toggle.dispatchEvent(new Event("click", { cancelable: true }));
+  assert.equal(first.toggle.getAttribute("aria-expanded"), "false");
+  assert.equal(first.toggle.textContent, "Quick details");
+  assert.equal(first.details.hidden, true);
+
+  const source = await readFile(new URL("../script.js", import.meta.url), "utf8");
+  assert.match(source, /className: "event-page-link", text: "Event page"/);
+  assert.match(source, /toggle\.dataset\.eventDetailsToggle = ""/);
+  assert.doesNotMatch(source, /card\.querySelector\("\.event-details-toggle"\)/);
+
+  const eventPageClick = new Event("click", { cancelable: true });
+  new EventTarget().dispatchEvent(eventPageClick);
+  assert.equal(eventPageClick.defaultPrevented, false);
+  assert.equal(first.details.hidden, true);
+
+  const bookingClick = new Event("click", { cancelable: true });
+  new EventTarget().dispatchEvent(bookingClick);
+  assert.equal(bookingClick.defaultPrevented, false);
+  assert.equal(first.details.hidden, true);
 });
 
 test("event map links prefer saved URLs and otherwise include venue and address", () => {

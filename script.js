@@ -88,7 +88,7 @@ export function createEventCard(event, idPrefix = "event") {
   const actions = element("div", { className: "event-pill-actions" });
   let details;
   if (event.slug) {
-    const pageLink = element("a", { className: "event-details-toggle", text: "Event page" });
+    const pageLink = element("a", { className: "event-page-link", text: "Event page" });
     pageLink.href = `/events/${encodeURIComponent(event.slug)}/`;
     actions.append(pageLink);
   }
@@ -97,6 +97,7 @@ export function createEventCard(event, idPrefix = "event") {
     const detailsId = `${idPrefix}-details-${event.id}-${String(occurrenceKey).replace(/[^a-z0-9]/gi, "")}`;
     const toggle = element("button", { className: "event-details-toggle", text: "Quick details" });
     toggle.type = "button";
+    toggle.dataset.eventDetailsToggle = "";
     toggle.setAttribute("aria-expanded", "false");
     toggle.setAttribute("aria-controls", detailsId);
     actions.append(toggle);
@@ -138,20 +139,20 @@ export function createEventCard(event, idPrefix = "event") {
 }
 
 function closeEventDetails(card) {
-  const toggle = card.querySelector(".event-details-toggle");
+  const toggle = card.querySelector("[data-event-details-toggle]");
   const details = card.querySelector(".event-pill-details");
   if (!toggle || !details) return;
   const wasOpen = toggle.getAttribute("aria-expanded") === "true";
   toggle.setAttribute("aria-expanded", "false");
-  toggle.textContent = "Full details";
+  toggle.textContent = "Quick details";
   details.hidden = true;
   if (wasOpen) card.dispatchEvent(new CustomEvent("eventdetailschange", { bubbles: true }));
 }
 
-function setupEventDetails(cards) {
+export function setupEventDetails(cards, eventRoot = document) {
 
   cards.forEach((card) => {
-    const toggle = card.querySelector(".event-details-toggle");
+    const toggle = card.querySelector("[data-event-details-toggle]");
     const details = card.querySelector(".event-pill-details");
     if (!toggle || !details) return;
     toggle.addEventListener("click", () => {
@@ -164,12 +165,12 @@ function setupEventDetails(cards) {
     });
   });
 
-  document.addEventListener("click", (event) => {
+  eventRoot.addEventListener("click", (event) => {
     cards.forEach((card) => {
       if (!card.contains(event.target)) closeEventDetails(card);
     });
   });
-  document.addEventListener("keydown", (event) => {
+  eventRoot.addEventListener("keydown", (event) => {
     if (event.key === "Escape") cards.forEach(closeEventDetails);
   });
 }
@@ -636,7 +637,7 @@ function initialisePage() {
   }
 
   setupReveal([...document.querySelectorAll(
-    ".events .section-heading, .experience .section-heading, .stage, .for-you .narrow, .feedback .section-heading, .coach-grid, .contact-shell"
+    ".events .section-heading, .experience .section-heading, .stage, .experience-followup, .for-you .narrow, .feedback .section-heading, .coach-grid, .contact-shell"
   )]);
   document.querySelectorAll("[data-pill-rotator]").forEach(setupPillRotator);
   document.querySelectorAll("[data-quote-rotator]").forEach(setupQuoteRotator);
