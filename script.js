@@ -1,4 +1,4 @@
-import { eventDateKey, initialCalendarMonth, monthGrid, monthLabel, moveMonth } from "./calendar.js";
+import { setupNavigation } from "./navigation.js";
 import { addCustomEventClickTracking, eventBookingMetadata } from "./tracking.js";
 
 const BRISBANE_TIMEZONE = "Australia/Brisbane";
@@ -204,93 +204,98 @@ function setupReveal(items) {
   items.forEach((item) => observer.observe(item));
 }
 
-function setupPillRotator(container) {
+export function setupTextRotator(container, { mobileOnly = false, duration = 3600, gap = 750 } = {}, view = window) {
   const items = [...container.children];
-  if (!items.length) return;
-
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    items.forEach((item) => item.removeAttribute("aria-hidden"));
-    return;
-  }
-
+  if (items.length < 2) return;
+  const reducedMotion = view.matchMedia("(prefers-reduced-motion: reduce)");
+  const mobile = view.matchMedia("(max-width: 760px)");
+  const control = container.ownerDocument.createElement("button");
+  control.type = "button";
+  control.className = "rotation-control";
+  control.setAttribute("aria-controls", container.id);
+  container.after(control);
   let index = 0;
-  const showCurrent = () => {
-    const current = items[index];
-    current.classList.add("is-active");
-    current.setAttribute("aria-hidden", "false");
+  let showAll = false;
+  let timer;
 
-    window.setTimeout(() => {
-      current.classList.remove("is-active");
-      current.setAttribute("aria-hidden", "true");
-      window.setTimeout(() => {
+  const schedule = () => {
+    timer = view.setTimeout(() => {
+      items[index].classList.remove("is-active");
+      items[index].setAttribute("aria-hidden", "true");
+      timer = view.setTimeout(() => {
         index = (index + 1) % items.length;
-        showCurrent();
-      }, 750);
-    }, 3600);
+        render();
+      }, gap);
+    }, duration);
   };
-
-  items.forEach((item) => item.setAttribute("aria-hidden", "true"));
-  window.requestAnimationFrame(showCurrent);
-}
-
-function setupQuoteRotator(container) {
-  if (!window.matchMedia("(max-width: 760px)").matches) return;
-  const items = [...container.children];
-  if (!items.length) return;
-  container.classList.add("is-rotating");
-
-  let index = 0;
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const showCurrent = () => {
+  const render = () => {
+    view.clearTimeout(timer);
+    const canRotate = !reducedMotion.matches && (!mobileOnly || mobile.matches);
+    const rotating = canRotate && !showAll;
+    container.classList.toggle("is-rotating", rotating);
     items.forEach((item, itemIndex) => {
-      const active = itemIndex === index;
-      item.classList.toggle("is-active", active);
-      item.setAttribute("aria-hidden", String(!active));
+      item.classList.toggle("is-active", rotating && itemIndex === index);
+      if (rotating) item.setAttribute("aria-hidden", String(itemIndex !== index));
+      else item.removeAttribute("aria-hidden");
     });
+    control.hidden = !canRotate;
+    control.textContent = showAll ? "Resume rotation" : "Show all";
+    control.setAttribute("aria-label", `${showAll ? "Resume rotation of" : "Show all"} ${mobileOnly ? "feedback quotes" : "messages"}`);
+    control.setAttribute("aria-pressed", String(showAll));
+    if (rotating && !container.ownerDocument.hidden) schedule();
   };
-  showCurrent();
-  if (reducedMotion || items.length === 1) return;
-
-  window.setInterval(() => {
-    items[index].classList.remove("is-active");
-    items[index].setAttribute("aria-hidden", "true");
-    window.setTimeout(() => {
-      index = (index + 1) % items.length;
-      showCurrent();
-    }, 700);
-  }, 4400);
+  control.addEventListener("click", () => {
+    showAll = !showAll;
+    render();
+  });
+  reducedMotion.addEventListener("change", render);
+  mobile.addEventListener("change", render);
+  container.ownerDocument.addEventListener("visibilitychange", render);
+  render();
 }
 
-function setupFaq() {
-  const list = document.querySelector("[data-faq-list]");
+export function setupFaq(root = document, view = window) {
+  const list = root.querySelector("[data-faq-list]");
   if (!list) return;
   const items = [...list.querySelectorAll(".faq-item")];
+  const closeTimers = new Map();
+  const openFrames = new Map();
   let activeItem = null;
-  let closeTimer;
 
   const close = (item) => {
     if (!item) return;
     const button = item.querySelector("button");
     const answer = item.querySelector(".faq-answer");
+    view.cancelAnimationFrame(openFrames.get(item));
+    view.clearTimeout(closeTimers.get(item));
     button.setAttribute("aria-expanded", "false");
     button.querySelector("span").textContent = "+";
     answer.classList.remove("is-open");
-    window.clearTimeout(closeTimer);
-    closeTimer = window.setTimeout(() => {
-      if (!answer.classList.contains("is-open")) answer.hidden = true;
-    }, 240);
+    answer.inert = true;
+    answer.setAttribute("aria-hidden", "true");
+    if (view.matchMedia("(prefers-reduced-motion: reduce)").matches) answer.hidden = true;
+    else closeTimers.set(item, view.setTimeout(() => {
+      answer.hidden = true;
+      closeTimers.delete(item);
+    }, 240));
     if (activeItem === item) activeItem = null;
   };
   const open = (item) => {
     if (activeItem && activeItem !== item) close(activeItem);
     const button = item.querySelector("button");
     const answer = item.querySelector(".faq-answer");
-    window.clearTimeout(closeTimer);
+    view.clearTimeout(closeTimers.get(item));
+    view.cancelAnimationFrame(openFrames.get(item));
     answer.hidden = false;
+    answer.inert = false;
+    answer.removeAttribute("aria-hidden");
     button.setAttribute("aria-expanded", "true");
     button.querySelector("span").textContent = "−";
-    window.requestAnimationFrame(() => answer.classList.add("is-open"));
     activeItem = item;
+    openFrames.set(item, view.requestAnimationFrame(() => {
+      if (activeItem === item) answer.classList.add("is-open");
+      openFrames.delete(item);
+    }));
   };
 
   items.forEach((item) => {
@@ -299,10 +304,10 @@ function setupFaq() {
       else open(item);
     });
   });
-  document.addEventListener("click", (event) => {
+  root.addEventListener("click", (event) => {
     if (activeItem && !list.contains(event.target)) close(activeItem);
   });
-  document.addEventListener("keydown", (event) => {
+  root.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && activeItem) close(activeItem);
   });
 }
@@ -328,7 +333,7 @@ function setupEventCarousel(list, cards) {
   };
   const goTo = (index) => {
     activeIndex = Math.max(0, Math.min(cards.length - 1, index));
-    list.scrollTo({ left: cards[activeIndex].offsetLeft - list.offsetLeft, behavior: "smooth" });
+    list.scrollTo({ left: cards[activeIndex].offsetLeft - list.offsetLeft, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
     updateControls();
   };
 
@@ -351,240 +356,6 @@ function setupEventCarousel(list, cards) {
 
   controls.removeAttribute("hidden");
   updateControls();
-}
-
-function mapQueriesFor(event) {
-  const queries = [];
-  if (event.venueName && event.address) queries.push(`${event.venueName}, ${event.address}, Australia`);
-  if (event.venueName && event.suburb) queries.push(`${event.venueName}, ${event.suburb}, Queensland, Australia`);
-  if (event.address) queries.push(`${event.address}, Australia`);
-  if (event.suburb) queries.push(`${event.suburb}, Queensland, Australia`);
-  return [...new Set(queries)];
-}
-
-async function coordinatesFor(event) {
-  for (const query of mapQueriesFor(event)) {
-    const cacheKey = `shemotion-map:${query.toLowerCase()}`;
-    try {
-      const cached = window.localStorage.getItem(cacheKey);
-      if (cached) return JSON.parse(cached);
-    } catch {
-      // Mapping still works when storage is unavailable.
-    }
-
-    const endpoint = new URL("https://nominatim.openstreetmap.org/search");
-    endpoint.searchParams.set("format", "jsonv2");
-    endpoint.searchParams.set("limit", "1");
-    endpoint.searchParams.set("countrycodes", "au");
-    endpoint.searchParams.set("q", query);
-    const response = await fetch(endpoint, { headers: { accept: "application/json" } });
-    if (!response.ok) continue;
-    const results = await response.json();
-    if (!results.length) continue;
-    const coordinates = [Number(results[0].lat), Number(results[0].lon)];
-    try {
-      window.localStorage.setItem(cacheKey, JSON.stringify(coordinates));
-    } catch {
-      // Ignore storage limits and use the coordinates for this visit.
-    }
-    return coordinates;
-  }
-  return null;
-}
-
-function setupEventsMap(events) {
-  const mapElement = document.querySelector("[data-events-map]");
-  const status = document.querySelector("[data-events-map-status]");
-  let map;
-  let loading;
-
-  return async () => {
-    if (map) {
-      window.setTimeout(() => map.invalidateSize(), 0);
-      return;
-    }
-    if (loading) return loading;
-    loading = (async () => {
-      if (!window.L) {
-        status.textContent = "The map could not be loaded. Please try again shortly.";
-        return;
-      }
-      status.textContent = "Locating upcoming experiences...";
-      map = window.L.map(mapElement, { scrollWheelZoom: false }).setView([-27.96, 153.38], 10);
-      window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution: "&copy; OpenStreetMap contributors",
-      }).addTo(map);
-
-      const venueGroups = new Map();
-      events.filter((item) => item.address).forEach((event) => {
-        const key = event.locationId
-          ? `location-${event.locationId}`
-          : `${event.venueName}|${event.address}`.toLowerCase().replace(/\s+/g, " ");
-        if (!venueGroups.has(key)) venueGroups.set(key, []);
-        venueGroups.get(key).push(event);
-      });
-      const bounds = [];
-      let located = 0;
-      for (const [venueKey, venueEvents] of venueGroups) {
-        try {
-          const event = venueEvents[0];
-          const savedCoordinates = Number.isFinite(event.latitude) && Number.isFinite(event.longitude)
-            ? [event.latitude, event.longitude]
-            : null;
-          const coordinates = savedCoordinates || await coordinatesFor(event);
-          if (!coordinates) continue;
-          located += 1;
-          bounds.push(coordinates);
-          const popup = element("div", { className: "venue-popup" });
-          const cardHost = element("div", { className: "venue-popup-card-host" });
-          const controls = element("div", { className: "venue-popup-controls" });
-          const previous = element("button", { text: "←" });
-          const counter = element("output");
-          const next = element("button", { text: "→" });
-          previous.type = next.type = "button";
-          previous.setAttribute("aria-label", "Previous event at this venue");
-          next.setAttribute("aria-label", "Next event at this venue");
-          controls.append(previous, counter, next);
-          let index = 0;
-          const renderVenueEvent = () => {
-            const popupCard = createEventCard(venueEvents[index], `map-${venueKey}-${index}`);
-            popupCard.classList.add("map-popup-card");
-            cardHost.replaceChildren(popupCard);
-            setupEventDetails([popupCard]);
-            counter.textContent = `${index + 1} of ${venueEvents.length}`;
-            previous.disabled = index === 0;
-            next.disabled = index === venueEvents.length - 1;
-          };
-          previous.addEventListener("click", () => { index -= 1; renderVenueEvent(); });
-          next.addEventListener("click", () => { index += 1; renderVenueEvent(); });
-          popup.append(cardHost);
-          if (venueEvents.length > 1) popup.append(controls);
-          renderVenueEvent();
-          const marker = window.L.marker(coordinates, { title: `${event.title} at ${event.venueName}` })
-            .addTo(map);
-          const leafletPopup = marker.bindPopup(popup, {
-            maxWidth: 350, minWidth: 270, autoClose: true, closeOnClick: true,
-          }).getPopup();
-          popup.addEventListener("eventdetailschange", () => {
-            window.requestAnimationFrame(() => leafletPopup.update());
-          });
-        } catch {
-          // One unrecognised address should not prevent the remaining pins loading.
-        }
-      }
-      if (bounds.length === 1) map.setView(bounds[0], 14);
-      if (bounds.length > 1) map.fitBounds(bounds, { padding: [42, 42], maxZoom: 14 });
-      status.textContent = located ? "Select a pin to view the event." : "No mapped event locations are available yet.";
-      window.setTimeout(() => map.invalidateSize(), 0);
-    })();
-    return loading;
-  };
-}
-
-function setupPublicCalendar(events) {
-  const listView = document.querySelector("[data-events-list-view]");
-  const calendarView = document.querySelector("[data-events-calendar-view]");
-  const mapView = document.querySelector("[data-events-map-view]");
-  const calendarGrid = document.querySelector("[data-calendar-grid]");
-  const calendarLabel = document.querySelector("[data-calendar-label]");
-  const viewButtons = [...document.querySelectorAll("[data-events-view]")];
-  if (!listView || !calendarView || !mapView || !calendarGrid || !calendarLabel) return;
-  const showMap = setupEventsMap(events);
-
-  let currentMonth = initialCalendarMonth(events);
-  const eventsByDate = new Map();
-  events.forEach((event) => {
-    const key = event.dateStatus === "tbc" ? null : eventDateKey(event.startAt);
-    if (!key) return;
-    if (!eventsByDate.has(key)) eventsByDate.set(key, []);
-    eventsByDate.get(key).push(event);
-  });
-
-  const showView = (view) => {
-    const showCalendar = view === "calendar";
-    const showMapView = view === "map";
-    listView.hidden = showCalendar || showMapView;
-    calendarView.hidden = !showCalendar;
-    mapView.hidden = !showMapView;
-    viewButtons.forEach((button) => {
-      const active = button.dataset.eventsView === view;
-      button.classList.toggle("is-active", active);
-      button.setAttribute("aria-pressed", String(active));
-    });
-    if (showMapView) showMap();
-  };
-  const openCalendarPopup = (dayEvents) => {
-    const dialog = document.querySelector("[data-calendar-dialog]");
-    const track = document.querySelector("[data-calendar-dialog-track]");
-    const previous = document.querySelector("[data-calendar-dialog-previous]");
-    const next = document.querySelector("[data-calendar-dialog-next]");
-    const counter = document.querySelector("[data-calendar-dialog-counter]");
-    if (!dialog || !track || !previous || !next || !counter) return;
-    const popupCards = dayEvents.map((event) => {
-      const card = createEventCard(event);
-      card.classList.add("calendar-popup-card");
-      return card;
-    });
-    track.replaceChildren(...popupCards);
-    setupEventDetails(popupCards);
-    let index = 0;
-    const update = () => {
-      counter.textContent = `${index + 1} / ${popupCards.length}`;
-      previous.disabled = index === 0;
-      next.disabled = index === popupCards.length - 1;
-    };
-    const goTo = (nextIndex) => {
-      index = Math.max(0, Math.min(popupCards.length - 1, nextIndex));
-      track.scrollTo({ left: popupCards[index].offsetLeft - track.offsetLeft, behavior: "smooth" });
-      update();
-    };
-    previous.onclick = () => goTo(index - 1);
-    next.onclick = () => goTo(index + 1);
-    track.onscroll = () => {
-      index = popupCards.reduce((closest, card, cardIndex) => {
-        const distance = Math.abs((card.offsetLeft - track.offsetLeft) - track.scrollLeft);
-        const closestDistance = Math.abs((popupCards[closest].offsetLeft - track.offsetLeft) - track.scrollLeft);
-        return distance < closestDistance ? cardIndex : closest;
-      }, 0);
-      update();
-    };
-    update();
-    dialog.showModal();
-  };
-  const renderCalendar = () => {
-    calendarLabel.textContent = monthLabel(currentMonth);
-    calendarGrid.replaceChildren();
-    monthGrid(currentMonth.year, currentMonth.month).forEach((day) => {
-      const cell = element("div", { className: `calendar-day${day.inMonth ? "" : " is-outside"}` });
-      cell.append(element("span", { className: "calendar-date", text: String(day.day) }));
-      const dayEvents = eventsByDate.get(day.key) || [];
-      if (dayEvents.length) {
-        const eventButton = element("button", { className: "calendar-event-count", text: String(dayEvents.length) });
-        eventButton.type = "button";
-        eventButton.setAttribute("aria-label", `View ${dayEvents.length} event${dayEvents.length === 1 ? "" : "s"} on this date`);
-        eventButton.addEventListener("click", () => openCalendarPopup(dayEvents));
-        cell.append(eventButton);
-      }
-      calendarGrid.append(cell);
-    });
-  };
-
-  viewButtons.forEach((button) => button.addEventListener("click", () => showView(button.dataset.eventsView)));
-  document.querySelector("[data-calendar-previous]")?.addEventListener("click", () => {
-    currentMonth = moveMonth(currentMonth, -1);
-    renderCalendar();
-  });
-  document.querySelector("[data-calendar-next]")?.addEventListener("click", () => {
-    currentMonth = moveMonth(currentMonth, 1);
-    renderCalendar();
-  });
-  renderCalendar();
-  const dialog = document.querySelector("[data-calendar-dialog]");
-  document.querySelector("[data-calendar-dialog-close]")?.addEventListener("click", () => dialog?.close());
-  dialog?.addEventListener("click", (event) => {
-    if (event.target === dialog) dialog.close();
-  });
 }
 
 async function loadPublicEvents() {
@@ -613,7 +384,6 @@ async function loadPublicEvents() {
     list.append(...cards);
     setupEventCarousel(list, cards);
     setupEventDetails(cards);
-    setupPublicCalendar(events);
   } catch {
     list.replaceChildren(element("p", {
       className: "events-empty",
@@ -652,25 +422,13 @@ function initialisePage() {
   const primaryBookNow = document.querySelector("[data-primary-book-now]");
   addCustomEventClickTracking(primaryBookNow, "BookNowClick");
 
-  const header = document.querySelector("[data-header]");
-  const navToggle = document.querySelector(".nav-toggle");
-  const navLinks = document.querySelectorAll(".site-nav a");
-  if (header && navToggle) {
-    navToggle.addEventListener("click", () => {
-      const isOpen = header.classList.toggle("is-open");
-      navToggle.setAttribute("aria-expanded", String(isOpen));
-    });
-    navLinks.forEach((link) => link.addEventListener("click", () => {
-      header.classList.remove("is-open");
-      navToggle.setAttribute("aria-expanded", "false");
-    }));
-  }
+  setupNavigation();
 
   setupReveal([...document.querySelectorAll(
     ".events .section-heading, .experience .section-heading, .stage, .experience-followup, .for-you .narrow, .feedback .section-heading, .coach-grid, .contact-shell"
   )]);
-  document.querySelectorAll("[data-pill-rotator]").forEach(setupPillRotator);
-  document.querySelectorAll("[data-quote-rotator]").forEach(setupQuoteRotator);
+  document.querySelectorAll("[data-pill-rotator]").forEach((container) => setupTextRotator(container));
+  document.querySelectorAll("[data-quote-rotator]").forEach((container) => setupTextRotator(container, { mobileOnly: true, duration: 3700, gap: 700 }));
   setupFaq();
   setupEmailCopy();
   loadPublicEvents();

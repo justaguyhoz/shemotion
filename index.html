@@ -16,10 +16,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="vendor/leaflet.css?v=1.9.4">
     <script>document.documentElement.classList.add("reveal-ready")</script>
     <link rel="stylesheet" href="styles.css?v=20260915-7">
-    <script src="vendor/leaflet.js?v=1.9.4" defer></script>
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
@@ -111,34 +109,6 @@
           </div>
         </div>
 
-        <div class="events-calendar" data-events-calendar-view hidden>
-          <div class="calendar-heading">
-            <button type="button" data-calendar-previous aria-label="Previous month" title="Previous month">&#8592;</button>
-            <h3 data-calendar-label></h3>
-            <button type="button" data-calendar-next aria-label="Next month" title="Next month">&#8594;</button>
-          </div>
-          <div class="calendar-weekdays" aria-hidden="true">
-            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
-          </div>
-          <div class="calendar-grid" data-calendar-grid></div>
-        </div>
-
-        <div class="events-map-view" data-events-map-view hidden>
-          <div class="events-map" data-events-map aria-label="Map of upcoming Shemotion classes and workshops"></div>
-          <p class="events-map-status" data-events-map-status aria-live="polite"></p>
-        </div>
-
-        <dialog class="calendar-event-dialog" data-calendar-dialog>
-          <div class="calendar-dialog-shell">
-            <button class="calendar-dialog-close" type="button" data-calendar-dialog-close aria-label="Close">&#215;</button>
-            <div class="calendar-dialog-track" data-calendar-dialog-track></div>
-            <div class="calendar-dialog-controls">
-              <button type="button" data-calendar-dialog-previous aria-label="Previous event">&#8592;</button>
-              <output data-calendar-dialog-counter></output>
-              <button type="button" data-calendar-dialog-next aria-label="Next event">&#8594;</button>
-            </div>
-          </div>
-        </dialog>
       </section>
 
       <section class="hero section-pad" aria-labelledby="hero-title">
@@ -213,7 +183,7 @@
       <section class="for-you section-pad" aria-labelledby="for-you-title">
         <div class="narrow">
           <h2 id="for-you-title">Shemotion May Be for You If You:</h2>
-          <ul class="for-you-list pill-rotator" data-pill-rotator>
+          <ul class="for-you-list pill-rotator" data-pill-rotator id="for-you-messages">
             <li>Feel stressed, overwhelmed or emotionally heavy</li>
             <li>Spend too much time in your head</li>
             <li>Feel disconnected from your body</li>
@@ -228,7 +198,7 @@
         <div class="section-heading">
           <p class="eyebrow">How you may feel</p>
           <h2 id="feedback-title">How You May Feel After Shemotion</h2>
-          <div class="outcomes pill-rotator" data-pill-rotator aria-label="Potential Shemotion outcomes">
+          <div class="outcomes pill-rotator" data-pill-rotator id="outcome-messages" aria-label="Potential Shemotion outcomes">
             <span>Less tense and overwhelmed</span>
             <span>More connected to your body</span>
             <span>Freer in your movement and expression</span>
@@ -237,7 +207,7 @@
           </div>
         </div>
 
-        <div class="quotes" data-quote-rotator aria-label="Shemotion feedback quotes">
+        <div class="quotes" data-quote-rotator id="feedback-quotes" aria-label="Shemotion feedback quotes">
           <blockquote>"It felt like leaving your ego at the door."</blockquote>
           <blockquote>"The pelvic release movements felt new and powerful."</blockquote>
           <blockquote>"The freestyle part helped me feel free."</blockquote>

@@ -1,17 +1,8 @@
 import { addCustomEventClickTracking, trackCustomEvent } from "./tracking.js";
 
-const header = document.querySelector("[data-header]");
-const toggle = document.querySelector(".nav-toggle");
-if (header && toggle) {
-  toggle.addEventListener("click", () => {
-    const open = header.classList.toggle("is-open");
-    toggle.setAttribute("aria-expanded", String(open));
-  });
-  header.querySelectorAll(".site-nav a").forEach((link) => link.addEventListener("click", () => {
-    header.classList.remove("is-open");
-    toggle.setAttribute("aria-expanded", "false");
-  }));
-}
+import { setupNavigation } from "./navigation.js";
+
+setupNavigation();
 
 document.querySelectorAll("[data-event-booking]").forEach((link) => {
   addCustomEventClickTracking(link, "EventBookingClick", {

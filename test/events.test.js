@@ -62,8 +62,10 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.match(html, /<a class="header-cta" href="#contact">Contact Shemotion<\/a>/);
   assert.doesNotMatch(html, /event-view-switch|data-events-view=/);
   assert.match(html, /data-events-list-view/);
-  assert.match(html, /data-events-calendar-view hidden/);
-  assert.match(html, /data-events-map-view hidden/);
+  assert.doesNotMatch(html, /data-events-(?:calendar|map)|data-calendar-|leaflet|vendor\//);
+  const publicScript = await readFile(new URL("../script.js", import.meta.url), "utf8");
+  assert.doesNotMatch(publicScript, /setupPublicCalendar|setupEventsMap|nominatim|calendar\.js/);
+  assert.doesNotMatch(css, /\.event-view-switch|\.events-calendar|\.events-map|\.calendar-|\.leaflet-/);
   assert.doesNotMatch(html.match(/<nav class="site-nav"[\s\S]*?<\/nav>/)[0], />Contact<\/a>/);
   assert.match(html, /<h2 id="experience-title">The Shemotion Experience<\/h2>\s*<p>Move, release tension and reconnect\.<\/p>/);
   assert.match(html, /Want to understand the practice more deeply\?/);
