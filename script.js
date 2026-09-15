@@ -183,14 +183,20 @@ function setupReveal(items) {
     if (item.matches("blockquote")) item.style.setProperty("--reveal-delay", `${(index % 5) * 90}ms`);
   });
 
-  if (!("IntersectionObserver" in window)) {
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reveal = (item) => {
+    item.addEventListener("transitionend", () => item.style.removeProperty("--reveal-delay"), { once: true });
+    item.classList.add("is-visible");
+  };
+
+  if (reducedMotion || !("IntersectionObserver" in window)) {
     items.forEach((item) => item.classList.add("is-visible"));
     return;
   }
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        entry.target.classList.add("is-visible");
+        reveal(entry.target);
         observer.unobserve(entry.target);
       }
     });

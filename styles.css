@@ -238,11 +238,8 @@ button:focus-visible {
 }
 
 .reveal {
-  opacity: 0;
-  transform: translateY(26px);
-  transition: opacity 760ms ease, transform 760ms ease;
+  transition: opacity 440ms cubic-bezier(0.22, 1, 0.36, 1), transform 440ms cubic-bezier(0.22, 1, 0.36, 1);
   transition-delay: var(--reveal-delay, 0ms);
-  will-change: opacity, transform;
 }
 
 .reveal.is-visible {
@@ -251,7 +248,7 @@ button:focus-visible {
 }
 
 .reveal-soft {
-  transform: translateY(16px);
+  transform: translateY(10px);
 }
 
 .hero {
@@ -471,7 +468,16 @@ p:last-child {
 }
 
 .events {
+  padding-top: clamp(30px, 4vw, 48px);
   padding-bottom: clamp(26px, 3.5vw, 44px);
+}
+
+.events .section-heading h2 {
+  margin-bottom: 12px;
+}
+
+.events .section-heading p {
+  margin: 0;
 }
 
 .experience {
@@ -480,7 +486,7 @@ p:last-child {
 
 .event-carousel {
   max-width: 640px;
-  margin: clamp(26px, 4vw, 42px) auto 0;
+  margin: clamp(16px, 2.2vw, 24px) auto 0;
 }
 
 .event-view-switch {
@@ -1024,23 +1030,6 @@ p:last-child {
   font-weight: 500;
 }
 
-.service-card-grid article.is-revealed {
-  animation: service-card-reveal 280ms ease backwards;
-  animation-delay: var(--reveal-delay, 0ms);
-}
-
-@keyframes service-card-reveal {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .service-card-grid h3 {
   margin: 0;
   font-family: var(--serif);
@@ -1467,18 +1456,30 @@ p:last-child {
   border-color: rgba(247, 242, 236, 0.58);
 }
 
-.guide-page [data-reveal].is-visible {
-  animation: guide-content-reveal 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: var(--reveal-delay, 0ms);
-}
-
-@keyframes guide-content-reveal {
-  from {
+@media (prefers-reduced-motion: no-preference) {
+  html.reveal-ready [data-reveal],
+  html.reveal-ready [data-service-card],
+  html.reveal-ready .events .section-heading,
+  html.reveal-ready .experience .section-heading,
+  html.reveal-ready .stage,
+  html.reveal-ready .experience-followup,
+  html.reveal-ready .for-you .narrow,
+  html.reveal-ready .feedback .section-heading,
+  html.reveal-ready .coach-grid,
+  html.reveal-ready .contact-shell {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(14px);
   }
 
-  to {
+  html.reveal-ready [data-reveal],
+  html.reveal-ready [data-service-card] {
+    transition: opacity 440ms cubic-bezier(0.22, 1, 0.36, 1), transform 440ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 280ms ease, border-color 280ms ease;
+    transition-delay: var(--reveal-delay, 0ms), var(--reveal-delay, 0ms), 0ms, 0ms;
+  }
+
+  html.reveal-ready [data-reveal].is-visible,
+  html.reveal-ready [data-service-card].is-revealed,
+  html.reveal-ready .reveal.is-visible {
     opacity: 1;
     transform: translateY(0);
   }
@@ -1653,7 +1654,7 @@ p:last-child {
   align-items: center;
   justify-content: center;
   gap: 18px;
-  margin-top: 6px;
+  margin-top: 2px;
 }
 
 .event-carousel-controls[hidden] {
@@ -2001,11 +2002,11 @@ blockquote:hover {
 
 .contact-shell {
   display: grid;
-  grid-template-columns: minmax(260px, 0.82fr) minmax(0, 1.18fr);
-  gap: clamp(40px, 7vw, 96px);
-  max-width: 1120px;
+  grid-template-columns: minmax(260px, 1fr) minmax(340px, 0.9fr);
+  gap: clamp(28px, 4vw, 52px);
+  max-width: 940px;
   margin: 0 auto;
-  align-items: start;
+  align-items: center;
 }
 
 .contact-intro p {
@@ -2013,17 +2014,16 @@ blockquote:hover {
 }
 
 .contact-intro h2 {
-  margin-bottom: 28px;
+  margin-bottom: 18px;
 }
 
 .contact-card {
   display: flex;
-  min-height: 320px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 24px;
-  padding: clamp(24px, 4vw, 42px);
+  gap: 14px;
+  padding: clamp(24px, 3vw, 34px);
   background: var(--ivory);
   border: 1px solid rgba(47, 74, 61, 0.18);
   border-radius: 8px;
@@ -2610,10 +2610,6 @@ blockquote:hover {
   .service-card-grid article {
     animation: none;
     transition: none;
-  }
-
-  .guide-page [data-reveal].is-visible {
-    animation: none;
   }
 
   .guide-mode-cards article,

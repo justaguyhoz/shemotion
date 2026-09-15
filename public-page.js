@@ -36,11 +36,14 @@ if (serviceCards.length) {
     const cardObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
+        entry.target.addEventListener("transitionend", () => entry.target.style.removeProperty("--reveal-delay"), { once: true });
         entry.target.classList.add("is-revealed");
         cardObserver.unobserve(entry.target);
       });
     }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
     serviceCards.forEach((card) => cardObserver.observe(card));
+  } else {
+    serviceCards.forEach((card) => card.classList.add("is-revealed"));
   }
 }
 
@@ -57,6 +60,7 @@ if (revealItems.length) {
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
+        entry.target.addEventListener("transitionend", () => entry.target.style.removeProperty("--reveal-delay"), { once: true });
         entry.target.classList.add("is-visible");
         revealObserver.unobserve(entry.target);
       });

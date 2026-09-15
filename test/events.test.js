@@ -60,6 +60,10 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.match(html, /<a href="#experience">Experience<\/a>/);
   assert.match(html, /<a href="#coach">Meet Katty<\/a>/);
   assert.match(html, /<a class="header-cta" href="#contact">Contact Shemotion<\/a>/);
+  assert.doesNotMatch(html, /event-view-switch|data-events-view=/);
+  assert.match(html, /data-events-list-view/);
+  assert.match(html, /data-events-calendar-view hidden/);
+  assert.match(html, /data-events-map-view hidden/);
   assert.doesNotMatch(html.match(/<nav class="site-nav"[\s\S]*?<\/nav>/)[0], />Contact<\/a>/);
   assert.match(html, /<h2 id="experience-title">The Shemotion Experience<\/h2>\s*<p>Move, release tension and reconnect\.<\/p>/);
   assert.match(html, /Want to understand the practice more deeply\?/);
@@ -71,6 +75,9 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.match(css, /\.booking-button::after[\s\S]*animation: booking-button-glow 4\.4s/);
   assert.match(css, /\.event-pill-action\.button\.booking-button\s*\{[\s\S]*min-height: 30px;[\s\S]*font-size: 0\.68rem;/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.booking-button::after[\s\S]*animation: none/);
+  assert.match(html, /<script>document\.documentElement\.classList\.add\("reveal-ready"\)<\/script>\s*<link rel="stylesheet"/);
+  assert.match(css, /html\.reveal-ready \[data-reveal\][\s\S]*opacity: 0;[\s\S]*translateY\(14px\)/);
+  assert.doesNotMatch(css, /guide-content-reveal|service-card-reveal/);
   assert.doesNotMatch(adminHtml, /4344672809106563|connect\.facebook\.net|facebook\.com\/tr/);
 });
 
