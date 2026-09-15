@@ -1,10 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { eventActionLabel, eventDestination, eventGoogleMapsUrl, setupEventDetails } from "../script.js";
+import { copyEmail, eventActionLabel, eventDestination, eventGoogleMapsUrl, setupEventDetails } from "../script.js";
 import { addCustomEventClickTracking, eventBookingMetadata, trackCustomEvent } from "../tracking.js";
 import { generateEventSlug, validateEventInput } from "../shared/events.js";
-import { eventJsonLd } from "../shared/public-pages.js";
+import { eventJsonLd, formatEventTime } from "../shared/public-pages.js";
 import { verifyAccessRequest } from "../shared/access.js";
 import { onRequestGet as getPublicEvents } from "../functions/api/events.js";
 import { eventDateKey, monthGrid, moveMonth } from "../calendar.js";
@@ -54,12 +54,13 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.doesNotMatch(html, /announcement-bar|data-announcement-/);
   assert.match(
     html,
-    /<nav class="site-nav"[^>]*>\s*<a href="\/events\/">Events<\/a>\s*<a href="\/private-groups-retreats\/">Private Groups<\/a>\s*<a href="\/what-is-feminine-movement-meditation\/">The Practice<\/a>/
+    /<nav class="site-nav"[^>]*>\s*<a href="\/events\/">Events<\/a>\s*<a href="\/private-groups-retreats\/">Private Groups<\/a>\s*<a href="\/what-is-feminine-movement-meditation\/">The Approach<\/a>/
   );
   assert.doesNotMatch(html, /<a href="#upcoming-events"[^>]*data-primary-book-now[^>]*>Upcoming<\/a>/);
   assert.match(html, /<a href="#experience">Experience<\/a>/);
   assert.match(html, /<a href="#coach">Meet Katty<\/a>/);
-  assert.match(html, /<a href="mailto:shemotion\.au@gmail\.com">Contact<\/a>/);
+  assert.match(html, /<a class="header-cta" href="#contact">Contact Shemotion<\/a>/);
+  assert.doesNotMatch(html.match(/<nav class="site-nav"[\s\S]*?<\/nav>/)[0], />Contact<\/a>/);
   assert.match(html, /<h2 id="experience-title">The Shemotion Experience<\/h2>\s*<p>Move, release tension and reconnect\.<\/p>/);
   assert.match(html, /Want to understand the practice more deeply\?/);
   assert.match(html, /href="\/what-is-feminine-movement-meditation\/">What is Feminine Movement Meditation\?<\/a>/);
@@ -88,12 +89,57 @@ test("feminine movement meditation guide has complete metadata and internal path
   assert.match(html, /href="\/">Shemotion<\/a>/);
   assert.match(html, /<h2 id="modes-title">Guided Movement and Intuitive Movement<\/h2>/);
   assert.match(html, /A Shemotion session moves from guided movement into intuitive movement and finishes with grounding meditation\./);
-  assert.match(html, /<h2 id="dance-title">Is It a Dance Class\?<\/h2><p class="guide-answer">No &mdash; and that's an important distinction\.<\/p>/);
+  assert.match(html, /<h2 id="dance-title">Is It a Dance Class\?<\/h2><p class="guide-answer">No - and that's an important distinction\.<\/p>/);
   assert.doesNotMatch(html, /guide-stages|\/assets\/step-[123]\.jpg|How a Shemotion Session Works/);
-  assert.match(html, /href="\/what-is-feminine-movement-meditation\/" aria-current="page">The Practice<\/a>/);
-  assert.match(privateGroupsHtml, /href="\/what-is-feminine-movement-meditation\/">The Practice<\/a>/);
-  assert.match(sharedPagesSource, /href="\/what-is-feminine-movement-meditation\/">The Practice<\/a>/);
+  assert.match(html, /href="\/what-is-feminine-movement-meditation\/" aria-current="page">The Approach<\/a>/);
+  assert.match(privateGroupsHtml, /href="\/what-is-feminine-movement-meditation\/">The Approach<\/a>/);
+  assert.match(sharedPagesSource, /href="\/what-is-feminine-movement-meditation\/">The Approach<\/a>/);
+  assert.match(html, /<img src="\/assets\/studio-1\.jpg" alt="Katty seated in a studio with a group of women behind her">/);
   assert.doesNotMatch(html, /FAQPage|"@type":"FAQPage"/);
+});
+
+test("public contact paths, visible punctuation and email copying follow the sitewide policy", async () => {
+  const paths = [
+    "../index.html",
+    "../private-groups-retreats/index.html",
+    "../what-is-feminine-movement-meditation/index.html",
+    "../shared/public-pages.js",
+    "../functions/events/index.js",
+    "../functions/events/[slug].js",
+  ];
+  const sources = await Promise.all(paths.map((path) => readFile(new URL(path, import.meta.url), "utf8")));
+  sources.forEach((source) => assert.doesNotMatch(source, /mailto:/));
+
+  const [homepage, privateGroups, guide, sharedPages, eventsPage, eventPage] = sources;
+  [homepage, privateGroups, guide].forEach((html) => {
+    const header = html.match(/<header class="site-header"[\s\S]*?<\/header>/)[0];
+    assert.equal((header.match(/Contact Shemotion/g) || []).length, 1);
+    assert.doesNotMatch(header.match(/<nav class="site-nav"[\s\S]*?<\/nav>/)[0], />Contact<\/a>/);
+  });
+  assert.match(homepage, /data-copy-email="shemotion\.au@gmail\.com"/);
+  assert.match(homepage, /data-copy-email-status role="status" aria-live="polite"/);
+  assert.match(await readFile(new URL("../script.js", import.meta.url), "utf8"), /finally \{[\s\S]*window\.location\.hash === "#contact"[\s\S]*scrollIntoView/);
+  assert.doesNotMatch(homepage, /Contact Me For a Tailored Quote/);
+  assert.match(privateGroups, /href="\/#contact" data-private-enquiry>Discuss your event<\/a>/);
+  assert.match(privateGroups, /href="\/#contact" data-private-enquiry>Go to contact details<\/a>/);
+  assert.match(sharedPages, /class="header-cta" href="\/#contact">Contact Shemotion<\/a>/);
+  assert.match(eventsPage, /href="\/#contact">Contact Shemotion<\/a>/);
+  assert.match(eventPage, /href="\/#contact">Contact Shemotion<\/a>/);
+
+  const visibleText = (html) => html
+    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    .replace(/<!--([\s\S]*?)-->/g, "")
+    .replace(/<[^>]+>/g, " ");
+  [homepage, privateGroups, guide].forEach((html) => assert.doesNotMatch(visibleText(html), /--|[—–]|&(?:mdash|ndash);/));
+  assert.equal(formatEventTime({ startAt: "2026-09-20T00:00:00.000Z", endAt: "2026-09-20T01:00:00.000Z" }).includes(" - "), true);
+
+  let copied = "";
+  await copyEmail("shemotion.au@gmail.com", { writeText: async (value) => { copied = value; } });
+  assert.equal(copied, "shemotion.au@gmail.com");
+
+  const css = await readFile(new URL("../styles.css", import.meta.url), "utf8");
+  assert.match(css, /--green:\s*#[0-9a-f]+;/i);
+  assert.match(css, /var\(--green\)/);
 });
 
 test("event slugs are SEO-friendly and remain explicit when supplied", () => {
@@ -153,9 +199,9 @@ test("central event-card implementation tracks only genuine booking URLs", async
   assert.doesNotMatch(source, /mailto:shemotion\.au@gmail\.com[\s\S]{0,250}EventBookingClick/);
 });
 
-test("event pills use the venue link or Shemotion email without dead booking controls", () => {
-  assert.equal(eventDestination(baseEvent), "mailto:shemotion.au@gmail.com");
-  assert.equal(eventActionLabel(baseEvent), "Email Shemotion");
+test("event pills use the venue link or homepage contact section without dead booking controls", () => {
+  assert.equal(eventDestination(baseEvent), "#contact");
+  assert.equal(eventActionLabel(baseEvent), "Contact Shemotion");
   assert.equal(eventDestination({ ...baseEvent, availabilityStatus: "Cancelled" }), null);
   const bookable = { ...baseEvent, bookingUrl: "https://example.com/class" };
   assert.equal(eventDestination(bookable), "https://example.com/class");

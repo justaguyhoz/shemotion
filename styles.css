@@ -1118,7 +1118,7 @@ p:last-child {
   width: 100%;
   aspect-ratio: 4 / 5;
   object-fit: cover;
-  object-position: center 35%;
+  object-position: center 42%;
   border-radius: 48% 48% 10px 10px;
   filter: saturate(0.76) contrast(0.97);
   box-shadow: 0 24px 58px rgba(47, 74, 61, 0.16);
@@ -1529,9 +1529,6 @@ p:last-child {
     gap: 18px;
   }
 
-  .header-cta {
-    display: none;
-  }
 }
 
 .site-footer a {
@@ -2042,6 +2039,47 @@ blockquote:hover {
   overflow-wrap: anywhere;
 }
 
+.email-copy {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 18px;
+  color: inherit;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  transition: background-color 280ms ease, border-color 280ms ease, transform 280ms ease;
+}
+
+.email-copy-label {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.email-copy-status {
+  min-height: 1.2em;
+  margin: -16px 0 0;
+  color: var(--green);
+  font-size: 0.78rem;
+}
+
+.email-copy.is-copied {
+  background: rgba(219, 227, 220, 0.42);
+  border-color: rgba(47, 74, 61, 0.2);
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .email-copy:hover {
+    background: rgba(219, 227, 220, 0.28);
+    border-color: rgba(47, 74, 61, 0.16);
+    transform: translateY(-2px);
+  }
+}
+
 .form-button {
   width: fit-content;
 }
@@ -2081,9 +2119,15 @@ blockquote:hover {
 @media (max-width: 1100px) {
   .site-header {
     grid-template-columns: auto auto;
+    gap: 16px;
   }
 
   .header-cta {
+    display: inline-flex;
+    white-space: nowrap;
+  }
+
+  .header-social-links {
     display: none;
   }
 
@@ -2341,15 +2385,22 @@ blockquote:hover {
   }
 
   .site-header {
+    gap: 8px;
     padding-inline: 16px;
   }
 
   .brand {
-    width: 150px;
+    width: 135px;
   }
 
   .header-actions {
     gap: 7px;
+  }
+
+  .header-cta {
+    padding: 8px 11px;
+    font-size: 0.64rem;
+    letter-spacing: 0.045em;
   }
 
   .header-social-links {

@@ -24,11 +24,11 @@ function compactTime(date) {
 
 export function eventDestination(event) {
   if (event.availabilityStatus === "Cancelled") return null;
-  return event.bookingUrl || "mailto:shemotion.au@gmail.com";
+  return event.bookingUrl || "#contact";
 }
 
 export function eventActionLabel(event) {
-  if (!event.bookingUrl) return "Email Shemotion";
+  if (!event.bookingUrl) return "Contact Shemotion";
   return "BOOK NOW";
 }
 
@@ -615,7 +615,31 @@ async function loadPublicEvents() {
     }));
     list.setAttribute("aria-busy", "false");
     console.error("Shemotion events could not be loaded.");
+  } finally {
+    if (window.location.hash === "#contact") {
+      document.querySelector("#contact")?.scrollIntoView();
+    }
   }
+}
+
+export async function copyEmail(text, clipboard = globalThis.navigator?.clipboard) {
+  if (!clipboard?.writeText) throw new Error("Clipboard access is unavailable");
+  await clipboard.writeText(text);
+}
+
+function setupEmailCopy() {
+  document.querySelectorAll("[data-copy-email]").forEach((button) => {
+    const status = document.querySelector("[data-copy-email-status]");
+    button.addEventListener("click", async () => {
+      try {
+        await copyEmail(button.dataset.copyEmail);
+        if (status) status.textContent = "Email copied";
+        button.classList.add("is-copied");
+      } catch {
+        if (status) status.textContent = "Copy unavailable. Select the email address to copy it.";
+      }
+    });
+  });
 }
 
 function initialisePage() {
@@ -642,6 +666,7 @@ function initialisePage() {
   document.querySelectorAll("[data-pill-rotator]").forEach(setupPillRotator);
   document.querySelectorAll("[data-quote-rotator]").forEach(setupQuoteRotator);
   setupFaq();
+  setupEmailCopy();
   loadPublicEvents();
 }
 

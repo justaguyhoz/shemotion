@@ -1,5 +1,5 @@
 import { getUpcomingPublicEvents } from "../../shared/event-store.js";
-import { EMAIL, SITE_URL, escapeHtml, eventDescription, formatEventDate, formatEventTime, htmlResponse, pageDocument } from "../../shared/public-pages.js";
+import { SITE_URL, escapeHtml, eventDescription, formatEventDate, formatEventTime, htmlResponse, pageDocument } from "../../shared/public-pages.js";
 
 function eventCard(event) {
   const detailUrl = event.slug ? `/events/${encodeURIComponent(event.slug)}/` : null;
@@ -7,7 +7,7 @@ function eventCard(event) {
     ? `<span class="event-pill-status status-${event.availabilityStatus.toLowerCase().replaceAll(" ", "-")}">${escapeHtml(event.availabilityStatus)}</span>` : "";
   const booking = event.availabilityStatus === "Cancelled" ? "" : event.bookingUrl
     ? `<a class="event-pill-action button booking-button" href="${escapeHtml(event.bookingUrl)}" target="_blank" rel="noopener noreferrer" data-event-booking data-event-id="${escapeHtml(event.id)}" data-event-name="${escapeHtml(event.title)}" data-event-type="${escapeHtml(event.eventType)}" data-venue-name="${escapeHtml(event.venueName)}" data-suburb="${escapeHtml(event.suburb || "")}">${escapeHtml(event.bookingLabel || "Book now")}</a>`
-    : `<a class="event-pill-action" href="mailto:${EMAIL}">Email Shemotion</a>`;
+    : '<a class="event-pill-action" href="/#contact">Contact Shemotion</a>';
   const heading = detailUrl ? `<a href="${detailUrl}">${escapeHtml(event.title)}</a>` : escapeHtml(event.title);
   return `<article class="event-pill event-listing-card">
     <div class="event-pill-content"><p class="event-pill-venue">${escapeHtml(event.eventType)} &middot; ${escapeHtml(event.venueName)}</p><h2 class="event-pill-title">${heading}</h2>

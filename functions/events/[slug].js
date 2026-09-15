@@ -1,7 +1,7 @@
 import { getPublishedEventBySlug } from "../../shared/event-store.js";
 import { expandRecurringEvents } from "../../recurrence.js";
 import { isEventPast } from "../../event-lifecycle.js";
-import { EMAIL, SITE_URL, escapeHtml, eventDescription, eventJsonLd, formatEventDate, formatEventTime, htmlResponse, pageDocument } from "../../shared/public-pages.js";
+import { SITE_URL, escapeHtml, eventDescription, eventJsonLd, formatEventDate, formatEventTime, htmlResponse, pageDocument } from "../../shared/public-pages.js";
 
 function mapUrl(event) {
   if (event.googleMapsUrl) return event.googleMapsUrl;
@@ -37,7 +37,7 @@ export async function onRequestGet({ env, params }) {
   const maps = mapUrl(occurrence);
   const booking = isCancelled || isPast ? "" : occurrence.bookingUrl
     ? `<a class="button booking-button" href="${escapeHtml(occurrence.bookingUrl)}" target="_blank" rel="noopener noreferrer" data-event-booking data-event-id="${escapeHtml(event.id)}" data-event-name="${escapeHtml(event.title)}" data-event-type="${escapeHtml(event.eventType)}" data-venue-name="${escapeHtml(event.venueName)}" data-suburb="${escapeHtml(event.suburb || "")}">${escapeHtml(event.bookingLabel || "Book now")}</a>`
-    : `<a class="button" href="mailto:${EMAIL}">Email Shemotion</a>`;
+    : '<a class="button" href="/#contact">Contact Shemotion</a>';
   const lifecycleNotice = isPast
     ? '<aside class="event-lifecycle-notice"><p>This event has ended.</p><a class="section-link" href="/events/">View upcoming Shemotion events</a></aside>'
     : "";
