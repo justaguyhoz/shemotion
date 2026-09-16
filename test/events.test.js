@@ -4,7 +4,8 @@ import { readFile } from "node:fs/promises";
 import { copyEmail, eventActionLabel, eventDestination, eventGoogleMapsUrl, setupEventDetails } from "../script.js";
 import { addCustomEventClickTracking, eventBookingMetadata, trackCustomEvent } from "../tracking.js";
 import { generateEventSlug, validateEventInput } from "../shared/events.js";
-import { eventJsonLd, formatEventTime } from "../shared/public-pages.js";
+import { eventJsonLd, formatEventTime, pageDocument } from "../shared/public-pages.js";
+import { GOOGLE_ADS_TAG_ID, injectGoogleTag } from "../shared/google-tag.js";
 import { verifyAccessRequest } from "../shared/access.js";
 import { onRequestGet as getPublicEvents } from "../functions/api/events.js";
 import { eventDateKey, monthGrid, moveMonth } from "../calendar.js";
@@ -84,6 +85,31 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.doesNotMatch(css, /html\.reveal-ready \.events \.section-heading/);
   assert.doesNotMatch(css, /guide-content-reveal|service-card-reveal/);
   assert.doesNotMatch(adminHtml, /4344672809106563|connect\.facebook\.net|facebook\.com\/tr/);
+});
+
+test("the shared Google Ads tag renders once per public page without a purchase conversion event", async () => {
+  const staticPaths = [
+    "../index.html",
+    "../private-groups-retreats/index.html",
+    "../what-is-feminine-movement-meditation/index.html",
+  ];
+  const staticPages = await Promise.all(staticPaths.map(async (path) => injectGoogleTag(await readFile(new URL(path, import.meta.url), "utf8"))));
+  const dynamicPage = pageDocument({
+    title: "Test event",
+    description: "Test event page",
+    canonical: "https://shemotion.com.au/events/test/",
+    body: "<main>Test</main>",
+  });
+
+  for (const html of [...staticPages, dynamicPage]) {
+    const head = html.match(/<head>[\s\S]*?<\/head>/)?.[0] ?? "";
+    assert.equal((head.match(new RegExp(`googletagmanager\\.com/gtag/js\\?id=${GOOGLE_ADS_TAG_ID}`, "g")) || []).length, 1);
+    assert.equal((head.match(new RegExp(`gtag\\('config', '${GOOGLE_ADS_TAG_ID}'\\)`, "g")) || []).length, 1);
+    assert.doesNotMatch(head, /gtag\(['"]event['"],\s*['"](?:purchase|conversion)['"]/i);
+  }
+
+  const reinjected = injectGoogleTag(staticPages[0]);
+  assert.equal((reinjected.match(new RegExp(`googletagmanager\\.com/gtag/js\\?id=${GOOGLE_ADS_TAG_ID}`, "g")) || []).length, 1);
 });
 
 test("feminine movement meditation guide has complete metadata and internal paths", async () => {

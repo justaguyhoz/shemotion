@@ -1,5 +1,6 @@
 import { basename } from "node:path";
-import { cp, mkdir, rm } from "node:fs/promises";
+import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { injectGoogleTag } from "../shared/google-tag.js";
 
 const output = new URL("../dist/", import.meta.url);
 await rm(output, { recursive: true, force: true });
@@ -18,4 +19,10 @@ await cp(new URL("../assets/", import.meta.url), new URL("assets/", output), {
 
 for (const directory of ["admin", "private-groups-retreats", "what-is-feminine-movement-meditation"]) {
   await cp(new URL(`../${directory}/`, import.meta.url), new URL(`${directory}/`, output), { recursive: true });
+}
+
+for (const path of ["index.html", "private-groups-retreats/index.html", "what-is-feminine-movement-meditation/index.html"]) {
+  const file = new URL(path, output);
+  const html = await readFile(file, "utf8");
+  await writeFile(file, injectGoogleTag(html));
 }
