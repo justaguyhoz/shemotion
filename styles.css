@@ -2372,6 +2372,11 @@ blockquote:hover {
     width: 100%;
   }
 
+  .guide-hero-image p {
+    right: 0;
+    max-width: min(240px, calc(100% - var(--space-md)));
+  }
+
   .guide-card-grid {
     grid-template-columns: 1fr;
   }

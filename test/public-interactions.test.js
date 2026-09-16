@@ -192,3 +192,16 @@ test("public typography uses shared relationship tokens and contains the Approac
   assert.match(css, /--space-content-group:\s*var\(--space-xl\)/);
   assert.match(css, /@media \(min-width: 561px\)[\s\S]*?\.guide-hero h1 \.no-wrap\s*{[\s\S]*?white-space:\s*normal/);
 });
+
+test("mobile guide callout is contained without relying on page-level overflow clipping", async () => {
+  const css = await readFile(new URL("../styles.css", import.meta.url), "utf8");
+  const mobileStart = css.indexOf("@media (max-width: 560px)");
+  const mobileEnd = css.indexOf("@media (prefers-reduced-motion: reduce)", mobileStart);
+  assert.notEqual(mobileStart, -1);
+  assert.notEqual(mobileEnd, -1);
+  const mobileCss = css.slice(mobileStart, mobileEnd);
+  const calloutRule = mobileCss.match(/\.guide-hero-image p\s*{([^}]*)}/)?.[1] ?? "";
+  assert.match(calloutRule, /right:\s*0/);
+  assert.match(calloutRule, /max-width:\s*min\(240px,\s*calc\(100% - var\(--space-md\)\)\)/);
+  assert.doesNotMatch(calloutRule, /right:\s*-/);
+});
