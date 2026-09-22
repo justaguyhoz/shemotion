@@ -28,7 +28,7 @@ function socialLinks(className) {
 
 export function siteHeader() {
   return `<header class="site-header" data-header>
-      <a class="brand" href="/" aria-label="Shemotion home"><img src="/assets/shemotion-logo.png" alt="Shemotion" width="1080" height="326"></a>
+      <a class="brand" href="/" aria-label="Shemotion home"><img src="/assets/shemotion-logo.png" alt="Shemotion" width="1042" height="150"></a>
       <nav class="site-nav" id="site-nav" aria-label="Main navigation">
         <a href="/events/">Events</a><a href="/private-groups-retreats/">Private Groups</a><a href="/what-is-feminine-movement-meditation/">The Approach</a><a href="/#experience">Experience</a><a href="/#coach">Meet Katty</a>${socialLinks("nav-social-links")}
       </nav>
@@ -38,7 +38,7 @@ export function siteHeader() {
 
 export function siteFooter() {
   return `<footer class="site-footer">
-      <a class="brand" href="/" aria-label="Shemotion home"><img src="/assets/shemotion-logo.png" alt="Shemotion" width="1080" height="326"></a>
+      <a class="brand" href="/" aria-label="Shemotion home"><img src="/assets/shemotion-logo.png" alt="Shemotion" width="1042" height="150"></a>
       <div class="footer-copy"><p>Feminine embodiment, movement and release</p><p>All rights reserved Shemotion.</p><p><a href="/events/">Events</a> &middot; <a href="/private-groups-retreats/">Private Groups &amp; Retreats</a></p>${socialLinks("footer-social-links")}</div>
     </footer>`;
 }
