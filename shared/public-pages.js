@@ -2,7 +2,6 @@ import { isEventPast } from "../event-lifecycle.js";
 import { googleTag } from "./google-tag.js";
 
 const SITE_URL = "https://shemotion.com.au";
-const EMAIL = "shemotion.au@gmail.com";
 
 export function escapeHtml(value = "") {
   return String(value)
@@ -98,4 +97,4 @@ export function eventJsonLd(event, canonical, now = new Date()) {
   return data;
 }
 
-export { EMAIL, SITE_URL };
+export { SITE_URL };

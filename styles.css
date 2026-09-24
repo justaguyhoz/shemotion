@@ -1763,6 +1763,38 @@ blockquote:hover {
   text-align: center;
 }
 
+.contact-card-cta {
+  align-items: center;
+  gap: 0;
+  padding-block: clamp(var(--space-lg), 3vw, var(--space-xl));
+}
+
+.contact-card-cta .eyebrow {
+  margin-bottom: var(--space-label-heading);
+}
+
+.contact-card-lead {
+  max-width: 28ch;
+  margin: 0;
+  color: var(--charcoal);
+  font-family: var(--serif);
+  font-size: clamp(1.15rem, 2vw, 1.35rem);
+  line-height: 1.45;
+  text-wrap: balance;
+}
+
+.contact-card-detail {
+  max-width: 32ch;
+  margin: var(--space-sm) 0 0;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.contact-card-cta .form-button {
+  align-self: center;
+  margin-top: var(--space-body-action);
+}
+
 .contact-form,
 .contact-form-grid {
   display: grid;

@@ -141,7 +141,7 @@ test("public events page uses the compact requested introduction", async () => {
   assert.match(source, /<p class="eyebrow">Upcoming events<\/p><h1>Shemotion Classes &amp; Workshops<\/h1><p>Feminine movement meditation experiences across the Gold Coast\.<\/p>/);
 });
 
-test("public contact paths, visible punctuation and email copying follow the sitewide policy", async () => {
+test("public contact paths and visible punctuation follow the sitewide policy", async () => {
   const paths = [
     "../index.html",
     "../private-groups-retreats/index.html",
@@ -159,12 +159,12 @@ test("public contact paths, visible punctuation and email copying follow the sit
     assert.equal((header.match(/Contact Shemotion/g) || []).length, 1);
     assert.doesNotMatch(header.match(/<nav class="site-nav"[\s\S]*?<\/nav>/)[0], />Contact<\/a>/);
   });
-  assert.match(homepage, /data-copy-email="shemotion\.au@gmail\.com"/);
-  assert.match(homepage, /data-copy-email-status role="status" aria-live="polite"/);
+  sources.forEach((source) => assert.doesNotMatch(source, /shemotion\.au@gmail\.com/i));
   assert.match(await readFile(new URL("../script.js", import.meta.url), "utf8"), /finally \{[\s\S]*window\.location\.hash === "#contact"[\s\S]*scrollIntoView/);
   assert.doesNotMatch(homepage, /Contact Me For a Tailored Quote/);
   assert.match(privateGroups, /href="\/#contact" data-private-enquiry>Discuss your event<\/a>/);
-  assert.match(privateGroups, /href="\/#contact" data-private-enquiry>Go to contact details<\/a>/);
+  assert.match(privateGroups, /Share your group, preferred date, location and the experience you're creating\. Shemotion will help shape a format that suits the setting\./);
+  assert.match(privateGroups, /href="\/#contact" data-private-enquiry>Enquire about a private group<\/a>/);
   assert.match(sharedPages, /class="header-cta" href="\/#contact">Contact Shemotion<\/a>/);
   assert.match(eventsPage, /href="\/#contact">Contact Shemotion<\/a>/);
   assert.match(eventPage, /href="\/#contact">Contact Shemotion<\/a>/);
