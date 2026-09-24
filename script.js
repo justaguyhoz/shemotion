@@ -490,7 +490,7 @@ function initialisePage() {
   setupNavigation();
 
   setupReveal([...document.querySelectorAll(
-    ".events .section-heading, .experience .section-heading, .stage, .experience-followup, .for-you .narrow, .feedback .section-heading, .coach-grid, .contact-shell"
+    ".events .section-heading, .experience .section-heading, .stage, .experience-followup, .for-you .narrow, .feedback .section-heading, .coach-grid, .organisations .section-heading, .organisations .service-card-grid, .contact-shell"
   )]);
   document.querySelectorAll("[data-pill-rotator]").forEach((container) => setupTextRotator(container));
   document.querySelectorAll("[data-quote-rotator]").forEach((container) => setupTextRotator(container, { mobileOnly: true, duration: 3700, gap: 700 }));

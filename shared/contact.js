@@ -1,8 +1,10 @@
 const INTEREST_CATEGORIES = new Set([
   "Upcoming event or booking",
   "Private group or retreat",
-  "Venue or studio partnership",
   "Workplace or organisation",
+  "Event, conference or venue",
+  "Media or interview",
+  "Venue or studio partnership",
   "Something else",
 ]);
 

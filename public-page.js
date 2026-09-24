@@ -14,7 +14,7 @@ document.querySelectorAll("[data-event-booking]").forEach((link) => {
   });
 });
 
-document.querySelectorAll("[data-private-enquiry]").forEach((link) => addCustomEventClickTracking(link, "PrivateGroupEnquiryClick"));
+document.querySelectorAll("[data-organisation-enquiry]").forEach((link) => addCustomEventClickTracking(link, "OrganisationEnquiryClick"));
 
 const serviceCards = [...document.querySelectorAll("[data-service-card]")];
 if (serviceCards.length) {

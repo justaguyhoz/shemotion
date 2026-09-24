@@ -29,7 +29,7 @@ export function siteHeader() {
   return `<header class="site-header" data-header>
       <a class="brand" href="/" aria-label="Shemotion home"><img src="/assets/shemotion-logo.png" alt="Shemotion" width="1042" height="150"></a>
       <nav class="site-nav" id="site-nav" aria-label="Main navigation">
-        <a href="/events/">Events</a><a href="/private-groups-retreats/">Private Groups</a><a href="/what-is-feminine-movement-meditation/">The Approach</a><a href="/#experience">Experience</a><a href="/#coach">Meet Katty</a>${socialLinks("nav-social-links")}
+        <a href="/events/">Events</a><a href="/private-groups-retreats/">Organisations</a><a href="/what-is-feminine-movement-meditation/">The Approach</a><a href="/#experience">Experience</a><a href="/#coach">Meet Katty</a>${socialLinks("nav-social-links")}
       </nav>
       <div class="header-actions"><a class="header-cta" href="/#contact">Contact Shemotion</a>${socialLinks("header-social-links")}<button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span><span></span><span class="sr-only">Menu</span></button></div>
     </header>`;

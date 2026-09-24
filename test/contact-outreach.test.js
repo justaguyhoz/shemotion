@@ -26,6 +26,9 @@ test("contact validation allowlists fields and rejects invalid categories", () =
     interestCategory: "Something else",
     message: "A controlled test enquiry.",
   });
+  for (const interestCategory of ["Workplace or organisation", "Event, conference or venue", "Media or interview", "Venue or studio partnership"]) {
+    assert.equal(validateContactInput({ ...result, interestCategory }).interestCategory, interestCategory);
+  }
   assert.throws(() => validateContactInput({ ...result, interestCategory: "Injected category" }));
 });
 

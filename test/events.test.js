@@ -55,7 +55,7 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.doesNotMatch(html, /announcement-bar|data-announcement-/);
   assert.match(
     html,
-    /<nav class="site-nav"[^>]*>\s*<a href="\/events\/">Events<\/a>\s*<a href="\/private-groups-retreats\/">Private Groups<\/a>\s*<a href="\/what-is-feminine-movement-meditation\/">The Approach<\/a>/
+    /<nav class="site-nav"[^>]*>\s*<a href="\/events\/">Events<\/a>\s*<a href="\/private-groups-retreats\/">Organisations<\/a>\s*<a href="\/what-is-feminine-movement-meditation\/">The Approach<\/a>/
   );
   assert.doesNotMatch(html, /<a href="#upcoming-events"[^>]*data-primary-book-now[^>]*>Upcoming<\/a>/);
   assert.match(html, /<a href="#experience">Experience<\/a>/);
@@ -123,7 +123,7 @@ test("feminine movement meditation guide has complete metadata and internal path
   assert.match(html, /<meta property="og:url" content="https:\/\/shemotion\.com\.au\/what-is-feminine-movement-meditation\/">/);
   assert.equal((html.match(/<h1[\s>]/g) || []).length, 1);
   assert.match(html, /href="\/events\/">View Upcoming Events<\/a>/);
-  assert.match(html, /href="\/private-groups-retreats\/">Private Groups &amp; Retreats<\/a>/);
+  assert.match(html, /href="\/private-groups-retreats\/">Organisations &amp; Events<\/a>/);
   assert.match(html, /href="\/">Shemotion<\/a>/);
   assert.match(html, /<h2 id="modes-title">Guided Movement and Intuitive Movement<\/h2>/);
   assert.match(html, /A Shemotion session moves from guided movement into intuitive movement and finishes with grounding meditation\./);
@@ -139,6 +139,39 @@ test("feminine movement meditation guide has complete metadata and internal path
 test("public events page uses the compact requested introduction", async () => {
   const source = await readFile(new URL("../functions/events/index.js", import.meta.url), "utf8");
   assert.match(source, /<p class="eyebrow">Upcoming events<\/p><h1>Shemotion Classes &amp; Workshops<\/h1><p>Feminine movement meditation experiences across the Gold Coast\.<\/p>/);
+});
+
+test("homepage and organisation route reflect the broader commercial positioning", async () => {
+  const homepage = await readFile(new URL("../index.html", import.meta.url), "utf8");
+  const organisations = await readFile(new URL("../private-groups-retreats/index.html", import.meta.url), "utf8");
+  const publicPageScript = await readFile(new URL("../public-page.js", import.meta.url), "utf8");
+
+  assert.equal((homepage.match(/<h1[\s>]/g) || []).length, 1);
+  assert.equal((organisations.match(/<h1[\s>]/g) || []).length, 1);
+  assert.match(homepage, /Shemotion for Women's Wellness Events and Workplace Wellbeing/);
+  assert.match(homepage, /workplace wellbeing programs, conferences, retreats and private group experiences across the Gold Coast and Brisbane/);
+  assert.match(homepage, /Workplaces and Women's Networks/);
+  assert.match(homepage, /Women's Events and Conferences/);
+  assert.match(homepage, /Studios and Wellbeing Spaces/);
+  assert.match(homepage, /<option>Event, conference or venue<\/option>/);
+  assert.match(homepage, /<option>Media or interview<\/option>/);
+  assert.doesNotMatch(homepage, /<option>Venue or studio partnership<\/option>/);
+
+  assert.match(organisations, /<title>Women's Wellbeing Events & Workplaces \| Shemotion<\/title>/);
+  assert.match(organisations, /<link rel="canonical" href="https:\/\/shemotion\.com\.au\/private-groups-retreats\/">/);
+  assert.match(organisations, /<h1>Shemotion for Organisations<\/h1>/);
+  assert.match(organisations, /Workplace Wellbeing/);
+  assert.match(organisations, /Women's Events and Conferences/);
+  assert.match(organisations, /Retreats and Private Groups/);
+  assert.match(organisations, /Studios and Wellbeing Spaces/);
+  assert.match(organisations, /Gold Coast and Brisbane/);
+  assert.match(organisations, /There is no choreography and no dance experience is required/);
+  assert.match(organisations, /data-organisation-enquiry/);
+  assert.doesNotMatch(organisations, /data-private-enquiry/);
+  assert.match(publicPageScript, /OrganisationEnquiryClick/);
+
+  const jsonLd = JSON.parse(homepage.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+  assert.deepEqual(jsonLd.areaServed.map((area) => area.name), ["Gold Coast, Queensland", "Brisbane, Queensland"]);
 });
 
 test("public contact paths and visible punctuation follow the sitewide policy", async () => {
@@ -162,9 +195,9 @@ test("public contact paths and visible punctuation follow the sitewide policy", 
   sources.forEach((source) => assert.doesNotMatch(source, /shemotion\.au@gmail\.com/i));
   assert.match(await readFile(new URL("../script.js", import.meta.url), "utf8"), /finally \{[\s\S]*window\.location\.hash === "#contact"[\s\S]*scrollIntoView/);
   assert.doesNotMatch(homepage, /Contact Me For a Tailored Quote/);
-  assert.match(privateGroups, /href="\/#contact" data-private-enquiry>Discuss your event<\/a>/);
-  assert.match(privateGroups, /Share your group, preferred date, location and the experience you're creating\. Shemotion will help shape a format that suits the setting\./);
-  assert.match(privateGroups, /href="\/#contact" data-private-enquiry>Enquire about a private group<\/a>/);
+  assert.match(privateGroups, /href="\/#contact" data-organisation-enquiry>Discuss your organisation or event<\/a>/);
+  assert.match(privateGroups, /Tell us about your group, workplace or event and we can discuss a suitable Shemotion experience\./);
+  assert.match(privateGroups, /href="\/#contact" data-organisation-enquiry>Enquire about an organisation or event<\/a>/);
   assert.match(sharedPages, /class="header-cta" href="\/#contact">Contact Shemotion<\/a>/);
   assert.match(eventsPage, /href="\/#contact">Contact Shemotion<\/a>/);
   assert.match(eventPage, /href="\/#contact">Contact Shemotion<\/a>/);
