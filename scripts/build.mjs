@@ -17,11 +17,11 @@ await cp(new URL("../assets/", import.meta.url), new URL("assets/", output), {
   filter: (source) => !excludedPhotos.has(basename(source)),
 });
 
-for (const directory of ["admin", "private-groups-retreats", "what-is-feminine-movement-meditation"]) {
+for (const directory of ["admin", "private-groups-retreats", "what-is-feminine-movement-meditation", "privacy", "terms", "cancellations-refunds"]) {
   await cp(new URL(`../${directory}/`, import.meta.url), new URL(`${directory}/`, output), { recursive: true });
 }
 
-for (const path of ["index.html", "private-groups-retreats/index.html", "what-is-feminine-movement-meditation/index.html"]) {
+for (const path of ["index.html", "private-groups-retreats/index.html", "what-is-feminine-movement-meditation/index.html", "privacy/index.html", "terms/index.html", "cancellations-refunds/index.html"]) {
   const file = new URL(path, output);
   const html = await readFile(file, "utf8");
   await writeFile(file, injectGoogleTag(html));

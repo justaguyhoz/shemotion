@@ -38,7 +38,12 @@ export function siteHeader() {
 export function siteFooter() {
   return `<footer class="site-footer">
       <a class="brand" href="/" aria-label="Shemotion home"><img src="/assets/shemotion-logo.png" alt="Shemotion" width="1042" height="150"></a>
-      <div class="footer-copy"><p>Feminine embodiment, movement and release</p><p>All rights reserved Shemotion.</p><p><a href="/events/">Events</a> &middot; <a href="/private-groups-retreats/">Private Groups &amp; Retreats</a></p>${socialLinks("footer-social-links")}</div>
+      <div class="footer-copy">
+        <p>Feminine embodiment, movement and release</p>
+        <nav class="footer-nav" aria-label="Footer navigation"><a href="/privacy/">Privacy Policy</a><a href="/terms/">Terms of Use</a><a href="/cancellations-refunds/">Cancellation &amp; Refund Policy</a><a href="/#contact">Contact</a></nav>
+        <p class="footer-meta"><span>&copy; 2026 Shemotion</span><span>ABN 88 489 599 018</span></p>
+        ${socialLinks("footer-social-links")}
+      </div>
     </footer>`;
 }
 
@@ -53,7 +58,7 @@ export function pageDocument({ title, description, canonical, body, bodyAttribut
     <title>${escapeHtml(title)}</title><meta name="description" content="${escapeHtml(description)}">${robots}
     <link rel="canonical" href="${escapeHtml(canonical)}">
     <meta property="og:type" content="website"><meta property="og:site_name" content="Shemotion"><meta property="og:title" content="${escapeHtml(title)}"><meta property="og:description" content="${escapeHtml(description)}"><meta property="og:url" content="${escapeHtml(canonical)}"><meta property="og:image" content="${image}">
-    <link rel="icon" href="/assets/favicon_shemotion.png" type="image/png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet"><script>document.documentElement.classList.add("reveal-ready")</script><link rel="stylesheet" href="/styles.css?v=20260916-6">
+    <link rel="icon" href="/assets/favicon_shemotion.png" type="image/png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet"><script>document.documentElement.classList.add("reveal-ready")</script><link rel="stylesheet" href="/styles.css?v=20260924-2">
     ${jsonLd}${googleTag()}${metaPixel()}</head><body ${bodyAttributes}>
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=4344672809106563&amp;ev=PageView&amp;noscript=1" alt=""></noscript>
     ${siteHeader()}${body}${siteFooter()}<script type="module" src="/public-page.js?v=20260915-4"></script></body></html>`;

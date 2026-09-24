@@ -185,6 +185,46 @@ test("public contact paths and visible punctuation follow the sitewide policy", 
   assert.match(css, /var\(--green\)/);
 });
 
+test("legal pages and the sitewide footer expose the required public information", async () => {
+  const publicPaths = [
+    "../index.html",
+    "../private-groups-retreats/index.html",
+    "../what-is-feminine-movement-meditation/index.html",
+    "../privacy/index.html",
+    "../terms/index.html",
+    "../cancellations-refunds/index.html",
+    "../shared/public-pages.js",
+  ];
+  const sources = await Promise.all(publicPaths.map((path) => readFile(new URL(path, import.meta.url), "utf8")));
+  sources.forEach((source) => {
+    assert.match(source, /href="\/privacy\/"/);
+    assert.match(source, /href="\/terms\/"/);
+    assert.match(source, /href="\/cancellations-refunds\/"/);
+    assert.match(source, /href="\/?#contact"/);
+    assert.match(source, /&copy; 2026 Shemotion/);
+    assert.match(source, /ABN 88 489 599 018/);
+    assert.doesNotMatch(source, /mailto:|shemotion\.au@gmail\.com/i);
+  });
+
+  const [privacy, terms, refunds] = await Promise.all([
+    readFile(new URL("../privacy/index.html", import.meta.url), "utf8"),
+    readFile(new URL("../terms/index.html", import.meta.url), "utf8"),
+    readFile(new URL("../cancellations-refunds/index.html", import.meta.url), "utf8"),
+  ]);
+  assert.match(privacy, /Google tag for Google Ads measurement/);
+  assert.match(privacy, /Meta Pixel/);
+  assert.match(privacy, /name and email address/);
+  assert.match(privacy, /phone number, if you choose to provide it/);
+  assert.match(privacy, /processed or stored outside Australia/);
+  assert.match(terms, /Nothing on this website is professional medical, psychological or therapeutic advice/);
+  assert.match(terms, /does not guarantee any particular physical, emotional or wellbeing outcome/);
+  assert.match(terms, /Australian Consumer Law/);
+  assert.match(refunds, /refunds are available up to 7 days before the event/);
+  assert.match(refunds, /A 50% deposit is required to secure the booking/);
+  assert.match(refunds, /The balance is due 7 days before the booking/);
+  assert.match(refunds, /14-day invoice terms by prior agreement/);
+});
+
 test("event slugs are SEO-friendly and remain explicit when supplied", () => {
   assert.equal(generateEventSlug("Release & Reconnect", "Tallai"), "release-and-reconnect-tallai");
   const generated = validateEventInput({ ...baseEvent, slug: "" });
@@ -439,6 +479,9 @@ test("sitemap retains published historical URLs and excludes non-public routes",
   assert.match(xml, /https:\/\/shemotion\.com\.au\/events\/public-event\//);
   assert.match(xml, /private-groups-retreats/);
   assert.match(xml, /what-is-feminine-movement-meditation/);
+  assert.match(xml, /\/privacy\//);
+  assert.match(xml, /\/terms\//);
+  assert.match(xml, /\/cancellations-refunds\//);
   assert.doesNotMatch(xml, /admin|api\/events/);
 });
 

@@ -1966,7 +1966,7 @@ blockquote:hover {
 
 .footer-copy {
   display: grid;
-  gap: 6px;
+  gap: var(--space-sm);
   text-align: right;
 }
 
@@ -1974,6 +1974,109 @@ blockquote:hover {
   margin: 0;
   color: rgba(247, 242, 236, 0.72);
   font-size: 0.92rem;
+}
+
+.footer-nav,
+.footer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-xs) var(--space-md);
+}
+
+.footer-nav {
+  font-size: 0.8rem;
+}
+
+.footer-nav a {
+  color: rgba(247, 242, 236, 0.72);
+}
+
+.footer-nav a:hover {
+  color: var(--ivory);
+}
+
+.footer-meta {
+  color: rgba(247, 242, 236, 0.56);
+  font-size: 0.76rem;
+}
+
+.legal-page {
+  background: var(--ivory);
+}
+
+.legal-hero {
+  padding-block: clamp(var(--space-xl), 8vw, calc(var(--space-xl) * 2));
+  background: var(--sand);
+}
+
+.legal-hero-inner,
+.legal-content {
+  width: min(100% - 40px, 760px);
+  margin-inline: auto;
+}
+
+.legal-hero h1 {
+  max-width: 16ch;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.legal-updated {
+  margin: var(--space-sm) 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.legal-content {
+  padding-block: clamp(var(--space-xl), 7vw, calc(var(--space-xl) * 2));
+}
+
+.legal-content section + section {
+  margin-top: var(--space-xl);
+}
+
+.legal-content h2 {
+  margin: 0 0 var(--space-md);
+  font-size: clamp(1.45rem, 3vw, 2rem);
+  text-wrap: balance;
+}
+
+.legal-content h3 {
+  margin: var(--space-lg) 0 var(--space-sm);
+  font-size: 1.08rem;
+}
+
+.legal-content p,
+.legal-content li {
+  color: var(--muted);
+  line-height: 1.75;
+  text-wrap: pretty;
+}
+
+.legal-content p {
+  margin: 0;
+}
+
+.legal-content p + p,
+.legal-content ul + p,
+.legal-content p + ul {
+  margin-top: var(--space-md);
+}
+
+.legal-content ul {
+  margin-bottom: 0;
+  padding-left: 1.25rem;
+}
+
+.legal-content li + li {
+  margin-top: var(--space-xs);
+}
+
+.legal-content a {
+  color: var(--green);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
 }
 
 @media (max-width: 1100px) {
@@ -2329,6 +2432,11 @@ blockquote:hover {
 
   .footer-copy {
     text-align: left;
+  }
+
+  .footer-nav,
+  .footer-meta {
+    justify-content: flex-start;
   }
 
   .footer-social-links {
