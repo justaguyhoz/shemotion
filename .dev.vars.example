@@ -1,2 +1,5 @@
 ACCESS_TEAM_DOMAIN=https://your-team.cloudflareaccess.com
 ACCESS_AUD=your-access-application-audience-tag
+CONTACT_WEBHOOK_URL=https://script.google.com/macros/s/your-deployment-id/exec
+CONTACT_WEBHOOK_TOKEN=use-a-unique-random-secret-of-at-least-32-characters
+OUTREACH_DASHBOARD_TOKEN=use-a-different-random-secret-of-at-least-32-characters

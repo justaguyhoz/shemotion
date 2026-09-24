@@ -17,7 +17,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
     <script>document.documentElement.classList.add("reveal-ready")</script>
-    <link rel="stylesheet" href="styles.css?v=20260916-6">
+    <link rel="stylesheet" href="styles.css?v=20260924-1">
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
@@ -241,25 +241,54 @@
           </div>
 
           <div class="contact-card">
-            <p class="eyebrow">Email Shemotion directly</p>
-            <button class="email-copy" type="button" data-copy-email="shemotion.au@gmail.com" aria-describedby="email-copy-status">
-              <span class="email-link">shemotion.au@gmail.com</span>
-              <span class="email-copy-label" data-copy-email-label>Copy email</span>
-            </button>
-            <p class="email-copy-status" id="email-copy-status" data-copy-email-status role="status" aria-live="polite"></p>
+            <form class="contact-form" data-contact-form novalidate>
+              <div class="contact-form-grid">
+                <label>
+                  <span>Name</span>
+                  <input name="name" autocomplete="name" maxlength="120" required>
+                </label>
+                <label>
+                  <span>Email</span>
+                  <input name="email" type="email" autocomplete="email" maxlength="254" required>
+                </label>
+                <label>
+                  <span>Phone <small>Optional</small></span>
+                  <input name="phone" type="tel" autocomplete="tel" maxlength="60">
+                </label>
+                <label>
+                  <span>What can we help with?</span>
+                  <select name="interestCategory" required>
+                    <option value="">Choose an option</option>
+                    <option>Upcoming event or booking</option>
+                    <option>Private group or retreat</option>
+                    <option>Venue or studio partnership</option>
+                    <option>Workplace or organisation</option>
+                    <option>Something else</option>
+                  </select>
+                </label>
+                <label class="contact-message-field">
+                  <span>Message</span>
+                  <textarea name="message" rows="5" maxlength="5000" required></textarea>
+                </label>
+              </div>
+              <p class="contact-form-status" data-contact-status role="status" aria-live="polite"></p>
+              <button class="button contact-submit" type="submit">Send enquiry</button>
+            </form>
 
-            <div class="social-links contact-social-links" aria-label="Shemotion social media links">
-              <a class="social-link" href="https://www.facebook.com/profile.php?id=61590301600564" target="_blank" rel="noopener noreferrer" aria-label="Shemotion on Facebook">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                  <path d="M14.2 8.1h2.4V4.3c-.4-.1-1.8-.2-3.4-.2-3.4 0-5.7 2.1-5.7 6v3.4H3.8v4.2h3.7V24h4.5v-6.3h3.7l.6-4.2H12v-3c0-1.2.3-2.4 2.2-2.4Z"/>
-                </svg>
-              </a>
+            <div class="contact-success" data-contact-success role="status" tabindex="-1" hidden>
+              <p class="eyebrow">Enquiry sent</p>
+              <h3>Thank you for reaching out.</h3>
+              <p>Your message is with Katty. She will reply to the email address you provided.</p>
+              <button class="button button-ghost" type="button" data-contact-another>Send another enquiry</button>
+            </div>
 
-              <a class="social-link" href="https://www.instagram.com/shemotion.au/" target="_blank" rel="noopener noreferrer" aria-label="Shemotion on Instagram">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                  <path d="M7.3 2h9.4A5.3 5.3 0 0 1 22 7.3v9.4a5.3 5.3 0 0 1-5.3 5.3H7.3A5.3 5.3 0 0 1 2 16.7V7.3A5.3 5.3 0 0 1 7.3 2Zm0 2.1a3.2 3.2 0 0 0-3.2 3.2v9.4a3.2 3.2 0 0 0 3.2 3.2h9.4a3.2 3.2 0 0 0 3.2-3.2V7.3a3.2 3.2 0 0 0-3.2-3.2H7.3Zm4.7 3.4A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5Zm0 2.1a2.4 2.4 0 1 0 2.4 2.4A2.4 2.4 0 0 0 12 9.6Zm5-2.5a1.1 1.1 0 1 1-1.1 1.1A1.1 1.1 0 0 1 17 7.1Z"/>
-                </svg>
-              </a>
+            <div class="contact-email-fallback">
+              <p>Prefer email?</p>
+              <button class="email-copy" type="button" data-copy-email="shemotion.au@gmail.com" aria-describedby="email-copy-status">
+                <span class="email-link">shemotion.au@gmail.com</span>
+                <span class="email-copy-label" data-copy-email-label>Copy email</span>
+              </button>
+              <p class="email-copy-status" id="email-copy-status" data-copy-email-status role="status" aria-live="polite"></p>
             </div>
           </div>
         </div>
@@ -337,6 +366,6 @@
       </div>
     </footer>
 
-    <script type="module" src="script.js?v=20260915-4"></script>
+    <script type="module" src="script.js?v=20260924-1"></script>
   </body>
 </html>

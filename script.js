@@ -418,6 +418,71 @@ function setupEmailCopy() {
   });
 }
 
+export async function sendContactEnquiry(payload, fetchImpl = fetch) {
+  const response = await fetchImpl("api/contact", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      accept: "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  let result = {};
+  try {
+    result = await response.json();
+  } catch {
+    // Keep the visible error generic when an upstream response is malformed.
+  }
+  if (!response.ok || result.ok !== true) {
+    throw new Error(result.error || "Your enquiry could not be sent. Please try again.");
+  }
+  return result;
+}
+
+export function setupContactForm(root = document, fetchImpl = fetch) {
+  const form = root.querySelector("[data-contact-form]");
+  if (!form) return;
+  const status = root.querySelector("[data-contact-status]");
+  const success = root.querySelector("[data-contact-success]");
+  const another = root.querySelector("[data-contact-another]");
+  const submit = form.querySelector("button[type='submit']");
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    const payload = Object.fromEntries(new FormData(form).entries());
+    submit.disabled = true;
+    submit.setAttribute("aria-busy", "true");
+    status.textContent = "Sending your enquiry…";
+    status.classList.remove("is-error");
+
+    try {
+      await sendContactEnquiry(payload, fetchImpl);
+      form.reset();
+      status.textContent = "";
+      form.hidden = true;
+      success.hidden = false;
+      success.focus();
+    } catch (error) {
+      status.textContent = error.message || "Your enquiry could not be sent. Please try again.";
+      status.classList.add("is-error");
+    } finally {
+      submit.disabled = false;
+      submit.removeAttribute("aria-busy");
+    }
+  });
+
+  another?.addEventListener("click", () => {
+    success.hidden = true;
+    form.hidden = false;
+    form.querySelector("input, select, textarea")?.focus();
+  });
+}
+
 function initialisePage() {
   const primaryBookNow = document.querySelector("[data-primary-book-now]");
   addCustomEventClickTracking(primaryBookNow, "BookNowClick");
@@ -431,6 +496,7 @@ function initialisePage() {
   document.querySelectorAll("[data-quote-rotator]").forEach((container) => setupTextRotator(container, { mobileOnly: true, duration: 3700, gap: 700 }));
   setupFaq();
   setupEmailCopy();
+  setupContactForm();
   loadPublicEvents();
 }
 

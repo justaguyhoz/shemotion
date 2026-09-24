@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Shemotion Outreach Dashboard</title>
+    <link rel="icon" href="../../assets/favicon_shemotion.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="outreach.css?v=20260924-1">
+  </head>
+  <body>
+    <header class="dashboard-header">
+      <a href="../../" aria-label="View Shemotion website"><img src="../../assets/shemotion-logo.png" alt="Shemotion"></a>
+      <nav aria-label="Admin navigation">
+        <a href="../">Events admin</a>
+        <a href="../../">View website</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="page-heading">
+        <div>
+          <p class="eyebrow">Private reporting</p>
+          <h1>Outreach Dashboard</h1>
+          <p>Opportunity progress and aggregate website-enquiry trends.</p>
+        </div>
+        <p class="last-updated" data-last-updated></p>
+      </div>
+
+      <section class="filters" aria-labelledby="filter-title">
+        <div>
+          <p class="eyebrow" id="filter-title">Reporting period</p>
+          <select data-date-filter aria-labelledby="filter-title">
+            <option value="7">Last 7 days</option>
+            <option value="30">Last 30 days</option>
+            <option value="month">This month</option>
+            <option value="custom">Custom</option>
+            <option value="all" selected>All time</option>
+          </select>
+        </div>
+        <form class="custom-range" data-custom-range hidden>
+          <label>From<input type="date" name="start" required></label>
+          <label>To<input type="date" name="end" required></label>
+          <button type="submit">Apply</button>
+        </form>
+      </section>
+
+      <p class="dashboard-status" data-dashboard-status role="status" aria-live="polite">Loading outreach reporting…</p>
+
+      <div data-dashboard-content hidden>
+        <section class="metric-grid" data-metrics aria-label="Outreach totals"></section>
+
+        <section class="breakdown-grid">
+          <article class="panel">
+            <p class="eyebrow">Opportunity streams</p>
+            <div class="breakdown" data-stream-breakdown></div>
+          </article>
+          <article class="panel">
+            <p class="eyebrow">Recorded outcomes</p>
+            <div class="breakdown" data-outcome-breakdown></div>
+          </article>
+          <article class="panel enquiry-panel">
+            <p class="eyebrow">Website enquiries</p>
+            <div class="breakdown" data-enquiry-breakdown></div>
+          </article>
+        </section>
+
+        <section class="records-section" aria-labelledby="records-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Allowlisted tracker view</p>
+              <h2 id="records-title">Opportunity records</h2>
+            </div>
+            <p data-record-count></p>
+          </div>
+          <div class="table-shell">
+            <table>
+              <thead>
+                <tr>
+                  <th>Priority</th>
+                  <th>Target</th>
+                  <th>Stream</th>
+                  <th>Status</th>
+                  <th>Sent</th>
+                  <th>Outcome type</th>
+                  <th>Response date</th>
+                  <th>Last activity</th>
+                  <th>Response / outcome</th>
+                </tr>
+              </thead>
+              <tbody data-records></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script type="module" src="outreach.js?v=20260924-1"></script>
+  </body>
+</html>
