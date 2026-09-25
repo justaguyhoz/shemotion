@@ -493,6 +493,46 @@ export function setupContactForm(root = document, fetchImpl = fetch, attribution
   });
 }
 
+export function setupInstagramGallery(root = document, view = window) {
+  const grid = root.querySelector(".instagram-grid");
+  const previous = root.querySelector("[data-instagram-previous]");
+  const next = root.querySelector("[data-instagram-next]");
+  const counter = root.querySelector("[data-instagram-counter]");
+  const cards = grid ? [...grid.querySelectorAll(".instagram-card")] : [];
+  if (!grid || !previous || !next || !counter || cards.length < 2) return;
+
+  let activeIndex = 0;
+  let updateFrame;
+  const reducedMotion = view.matchMedia("(prefers-reduced-motion: reduce)");
+  const cardOffset = (card) => card.offsetLeft - grid.offsetLeft;
+  const update = () => {
+    activeIndex = cards.reduce((closest, card, index) => (
+      Math.abs(cardOffset(card) - grid.scrollLeft) < Math.abs(cardOffset(cards[closest]) - grid.scrollLeft) ? index : closest
+    ), 0);
+    counter.textContent = `${activeIndex + 1} / ${cards.length}`;
+    previous.disabled = activeIndex === 0;
+    next.disabled = activeIndex === cards.length - 1;
+  };
+  const requestUpdate = () => {
+    view.cancelAnimationFrame(updateFrame);
+    updateFrame = view.requestAnimationFrame(update);
+  };
+  const moveTo = (index) => {
+    const target = Math.max(0, Math.min(cards.length - 1, index));
+    grid.scrollTo({ left: cardOffset(cards[target]), behavior: reducedMotion.matches ? "auto" : "smooth" });
+    activeIndex = target;
+    counter.textContent = `${target + 1} / ${cards.length}`;
+    previous.disabled = target === 0;
+    next.disabled = target === cards.length - 1;
+  };
+
+  previous.addEventListener("click", () => moveTo(activeIndex - 1));
+  next.addEventListener("click", () => moveTo(activeIndex + 1));
+  grid.addEventListener("scroll", requestUpdate, { passive: true });
+  view.addEventListener("resize", requestUpdate);
+  update();
+}
+
 function initialisePage() {
   const contactAttribution = captureContactAttribution();
   const primaryBookNow = document.querySelector("[data-primary-book-now]");
@@ -501,13 +541,14 @@ function initialisePage() {
   setupNavigation();
 
   setupReveal([...document.querySelectorAll(
-    ".events .section-heading, .experience .section-heading, .stage, .experience-followup, .for-you .narrow, .feedback .section-heading, .coach-grid, .organisations .section-heading, .organisations .service-card-grid, .contact-shell"
+    ".events .section-heading, .experience .section-heading, .stage, .experience-followup, .for-you .narrow, .feedback .section-heading, .coach-grid, .organisations .section-heading, .organisations .service-card-grid, .contact-shell, .instagram [data-reveal]"
   )]);
   document.querySelectorAll("[data-pill-rotator]").forEach((container) => setupTextRotator(container));
   document.querySelectorAll("[data-quote-rotator]").forEach((container) => setupTextRotator(container, { mobileOnly: true, duration: 3700, gap: 700 }));
   setupFaq();
   setupEmailCopy();
   setupContactForm(document, fetch, contactAttribution);
+  setupInstagramGallery();
   loadPublicEvents();
 }
 

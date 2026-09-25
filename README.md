@@ -19,6 +19,8 @@ Public routes include static pages and Pages Functions backed by the same D1 eve
 - `/private-groups-retreats/` is a static service-area page.
 - `/what-is-feminine-movement-meditation/` is the static educational guide.
 
+The three featured homepage Instagram posts are configured in `shared/instagram-gallery.js` and rendered as static cards during the production build.
+
 Public events use the List view only. The admin retains its calendar and shared `calendar.js` utilities; saved locations, coordinates, Google Maps links and Places search remain available.
 
 The build excludes four unused source photographs (`about-me-pic.jpg`, `cardio-release.jpg`, `cardio.jpg`, `feel.jpg`) from `dist/assets/`. Keep these originals in the repository; remove an exclusion if a photograph is used again.

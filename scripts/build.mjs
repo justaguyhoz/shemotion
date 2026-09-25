@@ -1,6 +1,7 @@
 import { basename } from "node:path";
 import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { injectGoogleTag } from "../shared/google-tag.js";
+import { injectInstagramGallery } from "../shared/instagram-gallery.js";
 
 const output = new URL("../dist/", import.meta.url);
 await rm(output, { recursive: true, force: true });
@@ -24,5 +25,6 @@ for (const directory of ["admin", "private-groups-retreats", "what-is-feminine-m
 for (const path of ["index.html", "private-groups-retreats/index.html", "what-is-feminine-movement-meditation/index.html", "privacy/index.html", "terms/index.html", "cancellations-refunds/index.html"]) {
   const file = new URL(path, output);
   const html = await readFile(file, "utf8");
-  await writeFile(file, injectGoogleTag(html));
+  const withHomepageContent = path === "index.html" ? injectInstagramGallery(html) : html;
+  await writeFile(file, injectGoogleTag(withHomepageContent));
 }
