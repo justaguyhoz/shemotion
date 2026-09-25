@@ -12,7 +12,14 @@ function cleanValue(value) {
 }
 
 export function captureContactAttribution(location = globalThis.location, storage = globalThis.sessionStorage) {
-  const fallback = { sourcePath: location?.pathname || "/", utmSource: "", utmMedium: "", utmCampaign: "", utmContent: "", utmTerm: "" };
+  const referrer = (() => {
+    try {
+      const url = new URL(globalThis.document?.referrer || "");
+      if (!new Set(["http:", "https:"]).has(url.protocol) || url.origin === location?.origin) return "";
+      return `${url.origin}${url.pathname}`.slice(0, 500);
+    } catch { return ""; }
+  })();
+  const fallback = { sourcePath: location?.pathname || "/", referrerUrl: referrer, utmSource: "", utmMedium: "", utmCampaign: "", utmContent: "", utmTerm: "" };
   if (!storage) return fallback;
   try {
     const existing = JSON.parse(storage.getItem(STORAGE_KEY) || "null");

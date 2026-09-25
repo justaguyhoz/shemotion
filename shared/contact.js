@@ -46,6 +46,17 @@ function optionalSourcePath(value) {
   return path;
 }
 
+function optionalReferrerUrl(value) {
+  const text = singleLine(value ?? "", 500, false);
+  if (!text) return "";
+  let url;
+  try { url = new URL(text); } catch { throw new Error("Invalid contact field"); }
+  if (!new Set(["http:", "https:"]).has(url.protocol)) throw new Error("Invalid contact field");
+  url.search = "";
+  url.hash = "";
+  return url.toString().slice(0, 500);
+}
+
 function optionalSubmissionId(value) {
   const result = singleLine(value ?? "", 64, false);
   if (!result) return "";
@@ -68,11 +79,12 @@ export function validateContactInput(input) {
   const marketingConsent = optionalConsent(input.marketingConsent);
   const submissionId = optionalSubmissionId(input.submissionId);
   const sourcePath = optionalSourcePath(input.sourcePath);
+  const referrerUrl = optionalReferrerUrl(input.referrerUrl);
   const attribution = Object.fromEntries(UTM_FIELDS.map((field) => [field, singleLine(input[field] ?? "", 200, false)]));
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error("Invalid contact field");
   if (phone && !/^[0-9+()\-.\s]{5,60}$/.test(phone)) throw new Error("Invalid contact field");
   if (!INTEREST_CATEGORIES.has(interestCategory)) throw new Error("Invalid contact field");
 
-  return { name, email, phone, interestCategory, message, marketingConsent, submissionId, sourcePath, ...attribution };
+  return { name, email, phone, interestCategory, message, marketingConsent, submissionId, sourcePath, referrerUrl, ...attribution };
 }

@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../admin.css?v=20260925-1">
-    <link rel="stylesheet" href="contacts.css?v=20260925-1">
+    <link rel="stylesheet" href="contacts.css?v=20260925-2">
   </head>
   <body>
     <header class="admin-header">
@@ -21,12 +21,14 @@
     <main>
       <div class="dashboard-heading contacts-heading">
         <div class="page-heading"><p class="eyebrow">First-party relationships</p><h1>Contacts</h1><p>Contact details, consent status and enquiry history in one place.</p></div>
+        <div class="dashboard-actions"><button class="text-button" type="button" data-add-contact>Add contact</button></div>
       </div>
 
       <form class="contact-filters" data-contact-filters>
         <label class="search-field">Search by name or email<input type="search" name="search" maxlength="120" autocomplete="off"></label>
         <label>Contact type<select name="type"><option value="">All types</option><option value="consumer">Consumer</option><option value="organisation">Organisation</option><option value="media">Media</option><option value="hr_people_culture">HR / People &amp; Culture</option><option value="event_organiser">Event organiser</option><option value="other">Other</option></select></label>
         <label>Marketing<select name="marketing"><option value="">All consent states</option><option value="subscribed">Subscribed</option><option value="not_given">Not subscribed</option><option value="unsubscribed">Unsubscribed</option></select></label>
+        <label>Acquisition source<select name="sourcePlatform"><option value="">All sources</option><option value="google_ads">Google Ads</option><option value="google_organic">Google Organic</option><option value="facebook_ads">Facebook Ads</option><option value="facebook_organic">Facebook Organic</option><option value="instagram_ads">Instagram Ads</option><option value="instagram_organic">Instagram Organic</option><option value="outreach">Outreach</option><option value="referral">Referral</option><option value="event">Event</option><option value="direct">Direct</option><option value="email">Email</option><option value="other">Other</option><option value="unknown">Unknown</option></select></label>
         <label>Status<select name="status"><option value="active">Active</option><option value="archived">Archived</option><option value="">All</option></select></label>
         <label>Sort<select name="sort"><option value="activity">Recent activity</option><option value="first_contact">First contact</option><option value="name">Name</option><option value="email">Email</option></select></label>
         <button class="primary-button" type="submit">Apply</button>
@@ -53,6 +55,7 @@
             <label>Phone<input name="phone" maxlength="60"></label>
             <label>Contact type<select name="contactType"><option value="consumer">Consumer</option><option value="organisation">Organisation</option><option value="media">Media</option><option value="hr_people_culture">HR / People &amp; Culture</option><option value="event_organiser">Event organiser</option><option value="other">Other</option></select></label>
             <label>Status<select name="status"><option value="active">Active</option><option value="archived">Archived</option></select></label>
+            <label class="field-wide">Internal notes<textarea name="adminNotes" rows="3" maxlength="5000"></textarea></label>
             <div class="contact-edit-meta" data-contact-meta></div>
             <p class="form-error" data-contact-edit-error role="alert"></p>
             <button class="primary-button" type="submit">Save contact</button>
@@ -64,6 +67,40 @@
         </section>
       </div>
     </main>
-    <script type="module" src="contacts.js?v=20260925-1"></script>
+
+    <dialog class="contact-create-dialog" data-contact-create-dialog>
+      <form class="contact-create-form" data-contact-create-form>
+        <div class="contact-create-heading"><div><p class="eyebrow">Manual entry</p><h2>Add contact</h2></div><button class="icon-button" type="button" aria-label="Close" data-contact-create-close>&times;</button></div>
+
+        <fieldset><legend>Contact details</legend><div class="contact-create-grid">
+          <label>First name<input name="firstName" maxlength="120" required></label>
+          <label>Last name<input name="lastName" maxlength="120" required></label>
+          <label>Email<input name="email" type="email" maxlength="254" required></label>
+          <label>Phone <span class="optional-label">Optional</span><input name="phone" maxlength="60"></label>
+          <label>Contact type<select name="contactType" required><option value="consumer">Consumer</option><option value="organisation">Organisation</option><option value="media">Media</option><option value="hr_people_culture">HR / People &amp; Culture</option><option value="event_organiser">Event organiser</option><option value="other">Other</option></select></label>
+          <label>Acquisition source<select name="sourcePlatform"><option value="unknown" selected>Unknown</option><option value="google_ads">Google Ads</option><option value="google_organic">Google Organic</option><option value="facebook_ads">Facebook Ads</option><option value="facebook_organic">Facebook Organic</option><option value="instagram_ads">Instagram Ads</option><option value="instagram_organic">Instagram Organic</option><option value="outreach">Outreach</option><option value="referral">Referral</option><option value="event">Event</option><option value="direct">Direct</option><option value="email">Email</option><option value="other">Other</option></select></label>
+          <label class="field-wide">Source detail <span class="optional-label">Optional</span><input name="source" maxlength="200" placeholder="For example, historic website contact form"></label>
+          <label>Original contact date <span class="optional-label">Optional</span><input name="originalContactAt" type="datetime-local"></label>
+          <label class="field-wide">Internal notes <span class="optional-label">Optional</span><textarea name="adminNotes" rows="3" maxlength="5000"></textarea></label>
+        </div></fieldset>
+
+        <fieldset><legend>Optional initial enquiry</legend>
+          <label class="contact-create-toggle"><input name="includeEnquiry" type="checkbox" value="yes" data-initial-enquiry-toggle><span>Add an enquiry or historic message to this contact</span></label>
+          <div class="contact-create-grid" data-initial-enquiry-fields hidden>
+            <label>Enquiry type<select name="enquiryType"><option value="">Choose an option</option><option value="Historic website enquiry">Historic website enquiry</option><option value="Phone enquiry">Phone enquiry</option><option value="Email enquiry">Email enquiry</option><option value="Event enquiry">Event enquiry</option><option value="Referral enquiry">Referral enquiry</option><option value="Workplace or organisation">Workplace or organisation</option><option value="Media or interview">Media or interview</option><option value="Something else">Something else</option></select></label>
+            <label>Enquiry date <span class="optional-label">Defaults to original contact date</span><input name="enquiryAt" type="datetime-local"></label>
+            <label class="field-wide">Original message<textarea name="message" rows="5" maxlength="5000"></textarea></label>
+            <label class="field-wide">Enquiry source <span class="optional-label">Optional</span><input name="enquirySource" maxlength="200"></label>
+            <label class="field-wide">Enquiry internal note <span class="optional-label">Optional</span><textarea name="enquiryAdminNotes" rows="3" maxlength="5000"></textarea></label>
+          </div>
+        </fieldset>
+
+        <div class="manual-consent-note"><strong>Marketing status: Not subscribed</strong><p>Manual creation never records marketing consent. Consent requires separate, explicit evidence.</p></div>
+        <p class="form-error" data-contact-create-error role="alert"></p>
+        <a class="text-button existing-contact-link" href="#" data-existing-contact hidden>Open existing contact</a>
+        <div class="contact-create-actions"><button class="text-button" type="button" data-contact-create-cancel>Cancel</button><button class="primary-button" type="submit">Create contact</button></div>
+      </form>
+    </dialog>
+    <script type="module" src="contacts.js?v=20260925-2"></script>
   </body>
 </html>

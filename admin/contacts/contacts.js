@@ -4,11 +4,19 @@ const workspace = document.querySelector("[data-contacts-workspace]");
 const list = document.querySelector("[data-contacts-list]");
 const detail = document.querySelector("[data-contact-detail]");
 const editForm = document.querySelector("[data-contact-edit-form]");
+const createDialog = document.querySelector("[data-contact-create-dialog]");
+const createForm = document.querySelector("[data-contact-create-form]");
 const typeLabels = {
   consumer: "Consumer", organisation: "Organisation", media: "Media",
   hr_people_culture: "HR / People & Culture", event_organiser: "Event organiser", other: "Other",
 };
 const marketingLabels = { subscribed: "Subscribed", not_given: "Not subscribed", unsubscribed: "Unsubscribed" };
+const sourcePlatformLabels = {
+  google_ads: "Google Ads", google_organic: "Google Organic", facebook_ads: "Facebook Ads",
+  facebook_organic: "Facebook Organic", instagram_ads: "Instagram Ads", instagram_organic: "Instagram Organic",
+  outreach: "Outreach", referral: "Referral", event: "Event", direct: "Direct", email: "Email",
+  other: "Other", unknown: "Unknown",
+};
 let contacts = [];
 let selectedContactId = "";
 
@@ -37,7 +45,11 @@ async function apiRequest(url, options = {}) {
   });
   let data = {};
   try { data = await response.json(); } catch {}
-  if (!response.ok) throw new Error(data.error || "The request could not be completed.");
+  if (!response.ok) {
+    const error = new Error(data.error || "The request could not be completed.");
+    if (data.existingContactId) error.existingContactId = data.existingContactId;
+    throw error;
+  }
   return data;
 }
 
@@ -56,7 +68,8 @@ function renderContacts() {
       element("span", { text: contact.email }),
       ...(contact.phone ? [element("span", { text: contact.phone })] : []),
       element("span", { className: "contact-list-meta", text: `${typeLabels[contact.contactType] || "Other"} · ${marketingLabels[contact.marketingStatus]}` }),
-      element("span", { className: "contact-list-date", text: `First source ${contact.firstSource || "Not recorded"}` }),
+      element("span", { className: "contact-list-date", text: `Source ${sourcePlatformLabels[contact.sourcePlatform] || "Unknown"}` }),
+      element("span", { className: "contact-list-date", text: `Source detail ${contact.firstSource || "Not recorded"}` }),
       element("span", { className: "contact-list-date", text: `First contact ${displayDate(contact.firstContactAt)}` }),
       element("span", { className: "contact-list-date", text: `Last activity ${displayDate(contact.lastActivityAt)}` })
     );
@@ -101,7 +114,7 @@ function renderConsent(contact, consents) {
 
 function renderAttribution(enquiry) {
   const values = [
-    ["Source", enquiry.source], ["Page", enquiry.sourceUrl], ["UTM source", enquiry.utmSource],
+    ["Source", enquiry.source], ["Page", enquiry.sourceUrl], ["Referrer", enquiry.referrerUrl], ["UTM source", enquiry.utmSource],
     ["UTM medium", enquiry.utmMedium], ["UTM campaign", enquiry.utmCampaign],
     ["UTM content", enquiry.utmContent], ["UTM term", enquiry.utmTerm],
   ].filter(([, value]) => value);
@@ -109,7 +122,7 @@ function renderAttribution(enquiry) {
   values.forEach(([term, value]) => {
     wrapper.append(element("dt", { text: term }));
     const description = element("dd");
-    description.append(term === "Page" ? safeLink(value, value) : document.createTextNode(value));
+    description.append(["Page", "Referrer"].includes(term) ? safeLink(value, value) : document.createTextNode(value));
     wrapper.append(description);
   });
   return wrapper;
@@ -157,7 +170,13 @@ function renderActivity(enquiries) {
       } catch (error) { feedback.textContent = error.message; feedback.classList.add("is-error"); }
       finally { save.disabled = false; }
     });
-    article.append(heading, message, renderAttribution(enquiry), element("p", { className: "notification-state", text: `Notification: ${enquiry.notificationStatus}` }), form);
+    article.append(
+      heading, message,
+      element("p", { className: "notification-state", text: `Acquisition source: ${sourcePlatformLabels[enquiry.sourcePlatform] || "Unknown"}` }),
+      renderAttribution(enquiry),
+      element("p", { className: "notification-state", text: `Notification: ${enquiry.notificationRequired ? enquiry.notificationStatus : "not required"}` }),
+      form
+    );
     activity.append(article);
   });
 }
@@ -171,12 +190,13 @@ async function openContact(id, updateHistory = true) {
     const contact = data.contact;
     document.querySelector("[data-contact-title]").textContent = displayName(contact);
     document.querySelector("[data-contact-email]").textContent = contact.email;
-    for (const name of ["id", "firstName", "lastName", "phone", "contactType", "status"]) editForm.elements[name].value = contact[name] ?? "";
+    for (const name of ["id", "firstName", "lastName", "phone", "contactType", "status", "adminNotes"]) editForm.elements[name].value = contact[name] ?? "";
     const meta = document.querySelector("[data-contact-meta]");
     meta.replaceChildren();
-    const source = element("p", { text: `First source: ${contact.firstSource}` });
+    const sourcePlatform = element("p", { text: `Acquisition source: ${sourcePlatformLabels[contact.sourcePlatform] || "Unknown"}` });
+    const source = element("p", { text: `Source detail: ${contact.firstSource}` });
     if (contact.firstSourceUrl) source.append(" · ", safeLink(contact.firstSourceUrl, "Open source page"));
-    meta.append(source, element("p", { text: `First contact: ${displayDate(contact.firstContactAt)}` }), element("p", { text: `Last activity: ${displayDate(contact.lastActivityAt)}` }));
+    meta.append(sourcePlatform, source, element("p", { text: `First contact: ${displayDate(contact.firstContactAt)}` }), element("p", { text: `Last activity: ${displayDate(contact.lastActivityAt)}` }));
     renderConsent(contact, data.consents);
     renderActivity(data.enquiries);
     detail.hidden = false;
@@ -217,6 +237,69 @@ editForm.addEventListener("submit", async (event) => {
     await openContact(payload.id, false);
   } catch (error) { errorNode.textContent = error.message; }
   finally { submit.disabled = false; }
+});
+
+function dateTimeToIso(value) {
+  if (!value) return "";
+  const date = new Date(value);
+  return Number.isNaN(date.valueOf()) ? value : date.toISOString();
+}
+
+function setInitialEnquiryVisibility() {
+  const enabled = createForm.elements.includeEnquiry.checked;
+  const fields = document.querySelector("[data-initial-enquiry-fields]");
+  fields.hidden = !enabled;
+  createForm.elements.enquiryType.required = enabled;
+  createForm.elements.message.required = enabled;
+}
+
+function closeCreateDialog() {
+  createDialog.close();
+  createForm.reset();
+  document.querySelector("[data-contact-create-error]").textContent = "";
+  document.querySelector("[data-existing-contact]").hidden = true;
+  setInitialEnquiryVisibility();
+}
+
+document.querySelector("[data-add-contact]").addEventListener("click", () => {
+  createForm.reset();
+  document.querySelector("[data-contact-create-error]").textContent = "";
+  document.querySelector("[data-existing-contact]").hidden = true;
+  setInitialEnquiryVisibility();
+  createDialog.showModal();
+  createForm.elements.firstName.focus();
+});
+document.querySelector("[data-contact-create-close]").addEventListener("click", closeCreateDialog);
+document.querySelector("[data-contact-create-cancel]").addEventListener("click", closeCreateDialog);
+document.querySelector("[data-initial-enquiry-toggle]").addEventListener("change", setInitialEnquiryVisibility);
+createForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (!createForm.reportValidity()) return;
+  const errorNode = document.querySelector("[data-contact-create-error]");
+  const existingLink = document.querySelector("[data-existing-contact]");
+  const submit = createForm.querySelector("button[type='submit']");
+  errorNode.textContent = "";
+  existingLink.hidden = true;
+  submit.disabled = true;
+  try {
+    const payload = Object.fromEntries(new FormData(createForm).entries());
+    payload.includeEnquiry = createForm.elements.includeEnquiry.checked;
+    payload.originalContactAt = dateTimeToIso(payload.originalContactAt);
+    payload.enquiryAt = dateTimeToIso(payload.enquiryAt);
+    const data = await apiRequest("../../api/admin/contacts", { method: "POST", body: JSON.stringify(payload) });
+    createDialog.close();
+    createForm.reset();
+    selectedContactId = String(data.contactId);
+    await loadContacts();
+    await openContact(data.contactId);
+    status.textContent = "Contact created.";
+  } catch (error) {
+    errorNode.textContent = error.message;
+    if (error.existingContactId) {
+      existingLink.href = `?contact=${encodeURIComponent(error.existingContactId)}`;
+      existingLink.hidden = false;
+    }
+  } finally { submit.disabled = false; }
 });
 
 loadContacts();

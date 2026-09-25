@@ -1,4 +1,7 @@
-import { CONTACT_STATUSES, CONTACT_TYPES, MARKETING_STATUSES } from "../../../../shared/contacts.js";
+import {
+  CONTACT_STATUSES, CONTACT_TYPES, MARKETING_STATUSES, SOURCE_PLATFORMS,
+  ManualContactExistsError, createManualContact, validateManualContactInput,
+} from "../../../../shared/contacts.js";
 import { jsonResponse } from "../../../../shared/events.js";
 
 const HEADERS = { "cache-control": "no-store, private", "x-content-type-options": "nosniff" };
@@ -29,6 +32,7 @@ function rowToContact(row) {
     status: row.status,
     marketingStatus: row.marketing_status,
     marketingConsentAt: row.marketing_consent_at || "",
+    sourcePlatform: row.first_source_platform,
     firstSource: row.first_source,
     firstSourceUrl: row.first_source_url,
     firstContactAt: row.first_contact_at,
@@ -41,6 +45,7 @@ export async function processContactsListRequest({ request, env }) {
   const contactType = safeFilter(url.searchParams.get("type"), CONTACT_TYPES);
   const status = safeFilter(url.searchParams.get("status"), CONTACT_STATUSES);
   const marketing = safeFilter(url.searchParams.get("marketing"), MARKETING_STATUSES);
+  const sourcePlatform = safeFilter(url.searchParams.get("sourcePlatform"), SOURCE_PLATFORMS);
   const search = safeSearch(url.searchParams.get("search"));
   const sort = safeFilter(url.searchParams.get("sort"), Object.keys(SORTS), "activity");
   const conditions = [];
@@ -48,6 +53,7 @@ export async function processContactsListRequest({ request, env }) {
 
   if (contactType) { conditions.push("c.contact_type = ?"); values.push(contactType); }
   if (status) { conditions.push("c.status = ?"); values.push(status); }
+  if (sourcePlatform) { conditions.push("c.first_source_platform = ?"); values.push(sourcePlatform); }
   if (marketing === "not_given") conditions.push("latest.id IS NULL");
   if (marketing === "subscribed") conditions.push("latest.status = 'granted'");
   if (marketing === "unsubscribed") conditions.push("latest.status = 'withdrawn'");
@@ -83,4 +89,23 @@ export async function processContactsListRequest({ request, env }) {
 
 export function onRequestGet(context) {
   return processContactsListRequest(context);
+}
+
+export async function processContactCreateRequest({ request, env }) {
+  let input;
+  try { input = validateManualContactInput(await request.json()); }
+  catch { return jsonResponse({ error: "Please check the contact details." }, 400, HEADERS); }
+  try {
+    const result = await createManualContact(env.DB, input);
+    return jsonResponse({ ok: true, contactId: result.contactId }, 201, HEADERS);
+  } catch (error) {
+    if (error instanceof ManualContactExistsError) {
+      return jsonResponse({ error: "A contact with this email already exists.", existingContactId: error.contactId }, 409, HEADERS);
+    }
+    return jsonResponse({ error: "The contact could not be created." }, 500, HEADERS);
+  }
+}
+
+export function onRequestPost(context) {
+  return processContactCreateRequest(context);
 }

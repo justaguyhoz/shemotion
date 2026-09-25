@@ -14,6 +14,8 @@ function contactResponse(row) {
     status: row.status,
     firstSource: row.first_source,
     firstSourceUrl: row.first_source_url,
+    sourcePlatform: row.first_source_platform,
+    firstReferrerUrl: row.first_referrer_url,
     firstUtmSource: row.first_utm_source,
     firstUtmMedium: row.first_utm_medium,
     firstUtmCampaign: row.first_utm_campaign,
@@ -23,6 +25,7 @@ function contactResponse(row) {
     lastActivityAt: row.last_activity_at,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
+    adminNotes: row.admin_notes,
     marketingStatus: row.marketing_status,
     marketingConsentAt: row.marketing_consent_at || "",
     marketingConsentSource: row.marketing_consent_source || "",
@@ -38,6 +41,8 @@ function enquiryResponse(row) {
     message: row.message,
     source: row.source,
     sourceUrl: row.source_url,
+    sourcePlatform: row.source_platform,
+    referrerUrl: row.referrer_url,
     utmSource: row.utm_source,
     utmMedium: row.utm_medium,
     utmCampaign: row.utm_campaign,
@@ -47,6 +52,7 @@ function enquiryResponse(row) {
     status: row.status,
     adminNotes: row.admin_notes,
     notificationStatus: row.notification_status,
+    notificationRequired: Boolean(row.notification_required),
   };
 }
 
@@ -106,10 +112,10 @@ export async function processContactUpdateRequest({ request, params, env }) {
   try {
     const result = await env.DB.prepare(`
       UPDATE contacts
-      SET first_name = ?, last_name = ?, phone = ?, contact_type = ?, status = ?, updated_at = CURRENT_TIMESTAMP
+      SET first_name = ?, last_name = ?, phone = ?, contact_type = ?, status = ?, admin_notes = ?, updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
       RETURNING id
-    `).bind(input.firstName, input.lastName, input.phone, input.contactType, input.status, id).first();
+    `).bind(input.firstName, input.lastName, input.phone, input.contactType, input.status, input.adminNotes, id).first();
     if (!result) return jsonResponse({ error: "Contact not found." }, 404, HEADERS);
     return jsonResponse({ ok: true }, 200, HEADERS);
   } catch {
