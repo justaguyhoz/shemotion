@@ -1,5 +1,6 @@
 import { setupNavigation } from "./navigation.js";
 import { addCustomEventClickTracking, eventBookingMetadata } from "./tracking.js";
+import { captureContactAttribution } from "./attribution.js";
 
 const BRISBANE_TIMEZONE = "Australia/Brisbane";
 
@@ -439,7 +440,15 @@ export async function sendContactEnquiry(payload, fetchImpl = fetch) {
   return result;
 }
 
-export function setupContactForm(root = document, fetchImpl = fetch) {
+export function contactFormPayload(form, attribution = {}, uuidFactory = () => crypto.randomUUID()) {
+  const payload = Object.fromEntries(new FormData(form).entries());
+  payload.marketingConsent = Boolean(form.elements.marketingConsent?.checked);
+  payload.submissionId = form.dataset.submissionId || uuidFactory();
+  form.dataset.submissionId = payload.submissionId;
+  return { ...payload, ...attribution };
+}
+
+export function setupContactForm(root = document, fetchImpl = fetch, attribution = captureContactAttribution()) {
   const form = root.querySelector("[data-contact-form]");
   if (!form) return;
   const status = root.querySelector("[data-contact-status]");
@@ -454,7 +463,7 @@ export function setupContactForm(root = document, fetchImpl = fetch) {
       return;
     }
 
-    const payload = Object.fromEntries(new FormData(form).entries());
+    const payload = contactFormPayload(form, attribution);
     submit.disabled = true;
     submit.setAttribute("aria-busy", "true");
     status.textContent = "Sending your enquiry…";
@@ -463,6 +472,7 @@ export function setupContactForm(root = document, fetchImpl = fetch) {
     try {
       await sendContactEnquiry(payload, fetchImpl);
       form.reset();
+      delete form.dataset.submissionId;
       status.textContent = "";
       form.hidden = true;
       success.hidden = false;
@@ -484,6 +494,7 @@ export function setupContactForm(root = document, fetchImpl = fetch) {
 }
 
 function initialisePage() {
+  const contactAttribution = captureContactAttribution();
   const primaryBookNow = document.querySelector("[data-primary-book-now]");
   addCustomEventClickTracking(primaryBookNow, "BookNowClick");
 
@@ -496,7 +507,7 @@ function initialisePage() {
   document.querySelectorAll("[data-quote-rotator]").forEach((container) => setupTextRotator(container, { mobileOnly: true, duration: 3700, gap: 700 }));
   setupFaq();
   setupEmailCopy();
-  setupContactForm();
+  setupContactForm(document, fetch, contactAttribution);
   loadPublicEvents();
 }
 

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Shemotion Contacts</title>
+    <link rel="icon" href="../../assets/favicon_shemotion.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../admin.css?v=20260925-1">
+    <link rel="stylesheet" href="contacts.css?v=20260925-1">
+  </head>
+  <body>
+    <header class="admin-header">
+      <a href="../../" aria-label="View Shemotion website"><img src="../../assets/shemotion-logo.png" alt="Shemotion"></a>
+      <nav aria-label="Admin navigation"><a href="../">Events</a><a href="../outreach/">Outreach</a><a href="../../">View website</a></nav>
+    </header>
+
+    <main>
+      <div class="dashboard-heading contacts-heading">
+        <div class="page-heading"><p class="eyebrow">First-party relationships</p><h1>Contacts</h1><p>Contact details, consent status and enquiry history in one place.</p></div>
+      </div>
+
+      <form class="contact-filters" data-contact-filters>
+        <label class="search-field">Search by name or email<input type="search" name="search" maxlength="120" autocomplete="off"></label>
+        <label>Contact type<select name="type"><option value="">All types</option><option value="consumer">Consumer</option><option value="organisation">Organisation</option><option value="media">Media</option><option value="hr_people_culture">HR / People &amp; Culture</option><option value="event_organiser">Event organiser</option><option value="other">Other</option></select></label>
+        <label>Marketing<select name="marketing"><option value="">All consent states</option><option value="subscribed">Subscribed</option><option value="not_given">Not subscribed</option><option value="unsubscribed">Unsubscribed</option></select></label>
+        <label>Status<select name="status"><option value="active">Active</option><option value="archived">Archived</option><option value="">All</option></select></label>
+        <label>Sort<select name="sort"><option value="activity">Recent activity</option><option value="first_contact">First contact</option><option value="name">Name</option><option value="email">Email</option></select></label>
+        <button class="primary-button" type="submit">Apply</button>
+      </form>
+
+      <p class="notice" data-contacts-status role="status" aria-live="polite">Loading contacts...</p>
+
+      <div class="contacts-workspace" data-contacts-workspace hidden>
+        <section class="contacts-list-panel" aria-labelledby="contacts-list-title">
+          <div class="contacts-list-heading"><h2 id="contacts-list-title">Contact records</h2><p data-contact-count></p></div>
+          <div class="contacts-list" data-contacts-list></div>
+        </section>
+
+        <section class="contact-detail" data-contact-detail aria-labelledby="contact-detail-title" hidden>
+          <div class="contact-detail-heading">
+            <div><p class="eyebrow">Contact record</p><h2 id="contact-detail-title" data-contact-title></h2><p data-contact-email></p></div>
+            <button class="text-button contact-detail-close" type="button" data-contact-close>Back to contacts</button>
+          </div>
+
+          <form class="contact-edit-form" data-contact-edit-form>
+            <input type="hidden" name="id">
+            <label>First name<input name="firstName" maxlength="120"></label>
+            <label>Last name<input name="lastName" maxlength="120"></label>
+            <label>Phone<input name="phone" maxlength="60"></label>
+            <label>Contact type<select name="contactType"><option value="consumer">Consumer</option><option value="organisation">Organisation</option><option value="media">Media</option><option value="hr_people_culture">HR / People &amp; Culture</option><option value="event_organiser">Event organiser</option><option value="other">Other</option></select></label>
+            <label>Status<select name="status"><option value="active">Active</option><option value="archived">Archived</option></select></label>
+            <div class="contact-edit-meta" data-contact-meta></div>
+            <p class="form-error" data-contact-edit-error role="alert"></p>
+            <button class="primary-button" type="submit">Save contact</button>
+          </form>
+
+          <section class="consent-panel" aria-labelledby="consent-title"><p class="eyebrow">Marketing consent</p><h3 id="consent-title" data-consent-status></h3><dl data-consent-details></dl><div class="consent-history" data-consent-history></div></section>
+
+          <section class="activity-section" aria-labelledby="activity-title"><div class="activity-heading"><div><p class="eyebrow">Relationship history</p><h3 id="activity-title">Enquiries and activity</h3></div><p data-activity-count></p></div><div class="activity-list" data-activity-list></div></section>
+        </section>
+      </div>
+    </main>
+    <script type="module" src="contacts.js?v=20260925-1"></script>
+  </body>
+</html>

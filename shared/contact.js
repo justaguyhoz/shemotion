@@ -8,6 +8,11 @@ const INTEREST_CATEGORIES = new Set([
   "Something else",
 ]);
 
+export const MARKETING_CONSENT_TEXT = "Yes, I'd like to hear about upcoming Shemotion events and experiences.";
+export const MARKETING_CONSENT_VERSION = "2026-09-25";
+
+const UTM_FIELDS = ["utmSource", "utmMedium", "utmCampaign", "utmContent", "utmTerm"];
+
 function singleLine(value, maximumLength, required = true) {
   if (typeof value !== "string") {
     if (!required && (value === undefined || value === null)) return "";
@@ -28,6 +33,28 @@ function messageText(value) {
   return result;
 }
 
+function optionalConsent(value) {
+  if (value === undefined || value === null || value === "" || value === false) return false;
+  if (value === true || value === "yes") return true;
+  throw new Error("Invalid contact field");
+}
+
+function optionalSourcePath(value) {
+  const path = singleLine(value ?? "", 500, false);
+  if (!path) return "";
+  if (!path.startsWith("/") || path.startsWith("//") || /[?#]/.test(path)) throw new Error("Invalid contact field");
+  return path;
+}
+
+function optionalSubmissionId(value) {
+  const result = singleLine(value ?? "", 64, false);
+  if (!result) return "";
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(result)) {
+    throw new Error("Invalid contact field");
+  }
+  return result.toLowerCase();
+}
+
 export function validateContactInput(input) {
   if (!input || Object.prototype.toString.call(input) !== "[object Object]") {
     throw new Error("Invalid contact request");
@@ -38,10 +65,14 @@ export function validateContactInput(input) {
   const phone = singleLine(input.phone ?? "", 60, false);
   const interestCategory = singleLine(input.interestCategory, 120);
   const message = messageText(input.message);
+  const marketingConsent = optionalConsent(input.marketingConsent);
+  const submissionId = optionalSubmissionId(input.submissionId);
+  const sourcePath = optionalSourcePath(input.sourcePath);
+  const attribution = Object.fromEntries(UTM_FIELDS.map((field) => [field, singleLine(input[field] ?? "", 200, false)]));
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error("Invalid contact field");
   if (phone && !/^[0-9+()\-.\s]{5,60}$/.test(phone)) throw new Error("Invalid contact field");
   if (!INTEREST_CATEGORIES.has(interestCategory)) throw new Error("Invalid contact field");
 
-  return { name, email, phone, interestCategory, message };
+  return { name, email, phone, interestCategory, message, marketingConsent, submissionId, sourcePath, ...attribution };
 }

@@ -20,6 +20,7 @@ button, input, select, textarea { font: inherit; }
 button { cursor: pointer; }
 .admin-header { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 18px clamp(20px, 5vw, 64px); background: rgba(255, 250, 244, .9); border-bottom: 1px solid var(--sand); backdrop-filter: blur(16px); }
 .admin-header img { display: block; width: clamp(150px, 18vw, 220px); height: auto; }
+.admin-header nav { display: flex; align-items: center; flex-wrap: wrap; justify-content: flex-end; gap: 10px 20px; }
 .header-link { color: var(--green); font-size: .78rem; font-weight: 600; text-decoration: none; text-transform: uppercase; }
 main { width: min(1280px, calc(100% - 40px)); margin: 0 auto; padding: 52px 0 100px; }
 .dashboard-heading { display: flex; align-items: end; justify-content: space-between; gap: 32px; margin-bottom: 26px; }
@@ -136,6 +137,8 @@ button:focus-visible, a:focus-visible { outline: 3px solid rgba(47, 74, 61, .3);
   main { width: min(100% - 28px, 1120px); padding-top: 42px; }
   .admin-header { padding: 14px; }
   .admin-header img { width: 140px; }
+  .admin-header nav { gap: 6px 12px; }
+  .header-link { font-size: .68rem; }
   .dashboard-heading { align-items: flex-start; flex-direction: column; gap: 20px; }
   .dashboard-actions { width: 100%; justify-content: flex-start; }
   .event-list { grid-template-columns: 1fr; }

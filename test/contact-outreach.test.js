@@ -5,6 +5,7 @@ import { sanitizeOutreachSnapshot } from "../shared/outreach.js";
 import { processContactRequest } from "../functions/api/contact.js";
 import { processOutreachRequest } from "../functions/api/admin/outreach.js";
 import { filterSnapshot, periodBounds, recordActivityDate, summarise } from "../admin/outreach/outreach.js";
+import { MemoryContactsDb } from "./helpers/memory-contacts-db.js";
 
 const URL = "https://script.google.com/macros/s/example/exec";
 const CONTACT_TOKEN = "c".repeat(32);
@@ -17,6 +18,14 @@ test("contact validation allowlists fields and rejects invalid categories", () =
     phone: "+61 400 000 000",
     interestCategory: "Something else",
     message: "A controlled test enquiry.",
+    marketingConsent: false,
+    submissionId: "",
+    sourcePath: "",
+    utmSource: "",
+    utmMedium: "",
+    utmCampaign: "",
+    utmContent: "",
+    utmTerm: "",
     ignored: "not forwarded",
   });
   assert.deepEqual(result, {
@@ -25,6 +34,14 @@ test("contact validation allowlists fields and rejects invalid categories", () =
     phone: "+61 400 000 000",
     interestCategory: "Something else",
     message: "A controlled test enquiry.",
+    marketingConsent: false,
+    submissionId: "",
+    sourcePath: "",
+    utmSource: "",
+    utmMedium: "",
+    utmCampaign: "",
+    utmContent: "",
+    utmTerm: "",
   });
   for (const interestCategory of ["Workplace or organisation", "Event, conference or venue", "Media or interview", "Venue or studio partnership"]) {
     assert.equal(validateContactInput({ ...result, interestCategory }).interestCategory, interestCategory);
@@ -34,7 +51,9 @@ test("contact validation allowlists fields and rejects invalid categories", () =
 
 test("contact bridge keeps tokens server-side and returns a PII-free success", async () => {
   let forwarded;
-  const request = new Request("https://shemotion.com.au/api/contact", {
+  let fetchCalls = 0;
+  const db = new MemoryContactsDb();
+  const request = () => new Request("https://shemotion.com.au/api/contact", {
     method: "POST",
     headers: { "content-type": "application/json", origin: "https://shemotion.com.au" },
     body: JSON.stringify({
@@ -43,19 +62,27 @@ test("contact bridge keeps tokens server-side and returns a PII-free success", a
       phone: "",
       interestCategory: "Something else",
       message: "Controlled test",
+      submissionId: "55555555-5555-4555-8555-555555555555",
     }),
   });
-  const response = await processContactRequest({
-    request,
-    env: { CONTACT_WEBHOOK_URL: URL, CONTACT_WEBHOOK_TOKEN: CONTACT_TOKEN },
-  }, async (_url, options) => {
+  const fetchImpl = async (_url, options) => {
+    fetchCalls += 1;
     forwarded = JSON.parse(options.body);
     return new Response(JSON.stringify({ ok: true, action: "contact_submit" }), { status: 200 });
+  };
+  const context = () => ({
+    request: request(),
+    env: { CONTACT_WEBHOOK_URL: URL, CONTACT_WEBHOOK_TOKEN: CONTACT_TOKEN, DB: db },
   });
+  const response = await processContactRequest(context(), fetchImpl);
   assert.equal(response.status, 200);
   assert.deepEqual(await response.json(), { ok: true });
   assert.equal(forwarded.token, CONTACT_TOKEN);
   assert.equal(forwarded.payload.email, "test@example.com");
+  const repeated = await processContactRequest(context(), fetchImpl);
+  assert.equal(repeated.status, 200);
+  assert.deepEqual(await repeated.json(), { ok: true });
+  assert.equal(fetchCalls, 1);
 });
 
 test("outreach bridge strips forbidden fields and exposes only aggregate enquiry data", async () => {
