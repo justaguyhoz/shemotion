@@ -256,12 +256,12 @@ function validateContactPayload_(payload) {
   };
 }
 
-function readTrackerRows_(spreadsheetId, sheetName) {
+function readTrackerRows_(spreadsheetId, sheetName, fullIdentityRead) {
   var quotedSheetName = "'" + sheetName.replace(/'/g, "''") + "'";
-  var range = quotedSheetName + '!A1:ZZ' + String(MAX_TRACKER_ROWS_ + 1);
+  var range = quotedSheetName + '!A1:ZZ' + (fullIdentityRead ? '' : String(MAX_TRACKER_ROWS_ + 1));
   var endpoint = 'https://sheets.googleapis.com/v4/spreadsheets/' +
     encodeURIComponent(spreadsheetId) + '/values/' + encodeURIComponent(range) +
-    '?majorDimension=ROWS&valueRenderOption=FORMATTED_VALUE&dateTimeRenderOption=FORMATTED_STRING';
+    '?majorDimension=ROWS&valueRenderOption=' + (fullIdentityRead ? 'FORMULA' : 'FORMATTED_VALUE') + '&dateTimeRenderOption=FORMATTED_STRING';
 
   var response;
   try {
@@ -283,17 +283,41 @@ function readTrackerRows_(spreadsheetId, sheetName) {
 
   var payload;
   try {
-    payload = JSON.parse(response.getContentText());
+    var responseText = response.getContentText();
+    if (fullIdentityRead && responseText.length > 2 * 1024 * 1024) throw new Error('identity_source_too_large');
+    payload = JSON.parse(responseText);
   } catch (error) {
     throw publicError_('upstream_error');
   }
 
   var values = payload && Array.isArray(payload.values) ? payload.values : [];
+  if (!fullIdentityRead && values.length && values[0].some(function (header) { return normalizeHeader_(header) === 'activity_id'; })) {
+    // Validate the full raw grid, including rows beyond the legacy cap and formulas.
+    // Business fields still use their original formatted values below.
+    var raw = readTrackerRows_(spreadsheetId, sheetName, true);
+    var formatted = trackerRowsFromValues_(values);
+    if (raw.length !== formatted.length || raw.some(function (row, index) { return row.activityId !== formatted[index].activityId; })) {
+      throw publicError_('identity_validation_failed');
+    }
+    return formatted;
+  }
+  return trackerRowsFromValues_(values);
+}
+
+function trackerRowsFromValues_(values) {
   if (!values.length) {
     return [];
   }
 
   var headerIndexes = buildHeaderIndex_(values[0]);
+  var identityEnabled = values[0].some(function (header) { return normalizeHeader_(header) === 'activity_id'; });
+  var identity;
+  if (identityEnabled) {
+    identity = inspectOutreachIds_(values);
+    if (identity.errors.length || identity.missingRows.length || values.length >= MAX_TRACKER_ROWS_ + 1) {
+      throw publicError_('identity_validation_failed');
+    }
+  }
   var rows = [];
   values.slice(1, MAX_TRACKER_ROWS_ + 1).forEach(function (sourceRow) {
     if (!Array.isArray(sourceRow)) {
@@ -314,6 +338,7 @@ function readTrackerRows_(spreadsheetId, sheetName) {
     }
 
     if (hasValue) {
+      if (identityEnabled) outputRow.activityId = sourceRow[identity.column];
       rows.push(outputRow);
     }
   });
@@ -516,6 +541,7 @@ function safeErrorCode_(error) {
     unauthorized: true,
     configuration_error: true,
     upstream_error: true,
+    identity_validation_failed: true,
     method_not_allowed: true
   };
   return error && allowed[error.publicCode] ? error.publicCode : 'internal_error';

@@ -33,9 +33,17 @@ export function sanitizeOutreachSnapshot(payload) {
   if (!payload || payload.ok !== true) throw new Error("Invalid outreach response");
 
   const sourceRows = Array.isArray(payload.tracker?.rows) ? payload.tracker.rows.slice(0, 5000) : [];
+  const identified = sourceRows.some((row) => Object.hasOwn(row || {}, "activityId"));
+  const ids = new Set();
   const rows = sourceRows.map((source) => {
     const row = {};
     for (const field of TRACKER_FIELDS) row[field] = safeText(source?.[field]);
+    if (identified) {
+      const id = source?.activityId;
+      if (typeof id !== "string" || !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id) || ids.has(id.toLowerCase())) throw new Error("Invalid outreach identity");
+      ids.add(id.toLowerCase());
+      row.activityId = id;
+    }
     return row;
   }).filter((row) => Object.values(row).some(Boolean));
 
