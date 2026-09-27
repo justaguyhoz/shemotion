@@ -20,6 +20,12 @@ function testOutreachIdSnapshot_(sheet) {
   var values = range.getDisplayValues();
   var formulas = range.getFormulas();
   var audit = inspectOutreachIds_(values);
+  var headers = values[0].map(function (value) { return String(value || '').trim().toLowerCase(); });
+  ['target', 'status'].forEach(function (header) {
+    if (headers.filter(function (value) { return value === header; }).length > 1) {
+      audit.errors.push({ code: 'ambiguous_required_header', row: 1 });
+    }
+  });
   if (audit.headerPresent && formulas.some(function (row) { return Boolean(row[audit.column]); })) {
     throw new Error('identity_formula_forbidden');
   }

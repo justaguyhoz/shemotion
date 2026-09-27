@@ -6,6 +6,7 @@ import { createHash } from "node:crypto";
 import { sanitizeOutreachSnapshot } from "../shared/outreach.js";
 import { outreachFacts } from "../shared/activity-feed.js";
 import { onRequest } from "../functions/api/internal/activity-feed/v1.js";
+import { rehearsalGrid, rehearsalHeaders, fixtureUuid } from "./helpers/outreach-rehearsal-fixture.js";
 
 const root = new URL("../integrations/google-apps-script/", import.meta.url);
 const identityCode = await readFile(new URL("outreach-identity.gs", root), "utf8");
@@ -108,6 +109,17 @@ test("duplicate, malformed, whitespace, formula, duplicate-header and wrong-shee
 test("invalid generator results and UUID collisions fail without a write plan", () => {
   const vm = core();
   for (const generate of [() => "invalid", () => id(1)]) assert.throws(() => vm.planOutreachIds_([headers, row(), row({ activity_id: "" })], generate), /generator_invalid_or_collision/);
+});
+
+test("disposable runner refuses ambiguous required headers without any cell writes", () => {
+  for (const header of ["Target", " status "]) {
+    const { vm, state } = rehearsal([[...headers, header], [...row({ activity_id: "" }), "ambiguous"]]);
+    const result = vm.dryRunTestOutreachIds();
+    assert.equal(result.blocked, true);
+    assert.ok(result.audit.errors.some((error) => error.code === "ambiguous_required_header"));
+    assert.throws(() => vm.backfillTestOutreachIds());
+    assert.equal(state.writes.length, 0);
+  }
 });
 
 test("legacy bridge remains unchanged without the header; sanitized IDs are validated and pass through", () => {
@@ -222,4 +234,35 @@ test("exported HTTP entry point is release-locked regardless of credentials or e
   assert.ok(manifest.oauthScopes.includes("https://www.googleapis.com/auth/spreadsheets.readonly"));
   assert.ok(!manifest.oauthScopes.includes("https://www.googleapis.com/auth/spreadsheets"));
   assert.doesNotMatch(bridgeCode, /setValue\(|appendRow\(|backfillTest|assignNewTest/);
+});
+
+test("observed 20-column tracker structure preserves all business cells and formula metadata through column U assignment", () => {
+  const vm = core();
+  const grid = rehearsalGrid();
+  const blocked = vm.planOutreachIds_(grid, () => assert.fail("invalid grid must not generate"));
+  assert.equal(blocked.audit.populatedRows.length, 7);
+  assert.equal(blocked.audit.missingRows.length, 3);
+  assert.equal(blocked.audit.validIdCount, 2);
+  assert.deepEqual(clone(blocked.audit.errors).map((e) => e.code), ["duplicate_id", "malformed_id"]);
+  assert.equal(blocked.writes.length, 0);
+  grid[5][20] = ""; // Operator declares the copied fixture to be new outreach.
+  grid[6][20] = fixtureUuid(3); // Explicit correction of the malformed test fixture.
+  const metadata = { notes: { P9: "Synthetic cell note" }, formats: { A9: "TEXT" }, validation: { J9: ["Sent", "Replied"] }, order: grid.map((r) => r[1]) };
+  const before = JSON.stringify({ business: grid.map((r) => r.slice(0, 20)), metadata });
+  let next = 100;
+  const plan = vm.planOutreachIds_(grid, () => fixtureUuid(next++));
+  assert.equal(plan.writes.length, 4);
+  assert.ok(plan.writes.every((w) => w.column === 21));
+  const assigned = applyPlan(grid, plan);
+  assert.equal(JSON.stringify({ business: assigned.map((r) => r.slice(0, 20)), metadata }), before);
+  assert.equal(assigned[8][15], '="SYNTHETIC "&"FORMULA"');
+  assert.equal(assigned[3][20], fixtureUuid(1));
+  assert.equal(vm.planOutreachIds_(assigned, () => assert.fail("idempotent")).writes.length, 0);
+  const bridge = clone(vm.trackerRowsFromValues_(assigned));
+  const legacy = clone(vm.trackerRowsFromValues_(assigned.map((r) => r.slice(0, 20))));
+  assert.deepEqual(bridge.map(({ activityId, ...rest }) => rest), legacy);
+  const facts = outreachFacts({ ok: true, action: "outreach_snapshot", tracker: { rows: bridge } }, new Date("2026-09-26T00:00:00Z"));
+  assert.equal(facts.length, 7);
+  assert.doesNotMatch(JSON.stringify(facts), /fixture@example|SYNTHETIC PRIVATE|SYNTHETIC PERSON|SYNTHETIC FORMULA/);
+  assert.equal(rehearsalHeaders[20], "activity_id");
 });

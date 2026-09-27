@@ -2,8 +2,9 @@
 
 ## Status and implementation gate
 
-Prepared server-side source boundary; not activated or configured. No production
-source was read or changed. NOA ingestion is not implemented. The exported
+Prepared server-side source boundary; not activated or configured. Production
+Sheet metadata and its header were inspected for the disposable rehearsal;
+no production source was changed. NOA ingestion is not implemented. The exported
 `onRequest` is code-locked to HTTP 404 regardless of environment secrets. Only
 local tests call `processActivityFeed`. Unlocking requires separate release approval.
 
@@ -214,10 +215,14 @@ implementation was overwritten. The temporary originals remain intact.
 
 ## Sheet architecture and identity ownership
 
-Repository source headers: Priority, Target, Category, Contact route, Website,
-Pitch angle, Desired outcome, Status, Draft date, Sent date, Follow-up date,
-Response / outcome, Coverage / backlink URL, Stream, Outcome Type, Response Date,
-Last Activity Date. Headers are looked up by name, not fixed column positions.
+Observed live header (metadata/header-only inspection, 2026-09-26): Priority,
+Target, Category, Contact person, Contact route, Email / Form, Website, Pitch
+angle, Desired outcome, Status, Draft date, Sent date, Follow-up date,
+Response / outcome, Coverage / backlink URL, Notes, Stream, Outcome Type,
+Response Date, Last Activity Date. There are 20 business columns; activity_id
+belongs in U (21). Earlier compact fixtures omitted private fields and put it
+in R; that fixture is not a production column map. Bridge headers are looked up
+by name, not fixed column positions.
 Append `activity_id` as the rightmost used column, within A:ZZ. Do not rename or
 shift business columns. IDs are literal text values, never formulas.
 
@@ -256,14 +261,111 @@ Rules:
 - Sort/move entire rows, INCLUDING ID. Partial-column sorting breaks association
   and must be prohibited operationally; UUID validation cannot detect that error.
 
-## Disposable Sheet rehearsal (manual, not performed live)
+## Disposable Outreach ID Rehearsal
 
-Local Node fixtures execute the real `.gs` code with a mocked Sheet, Properties,
-LockService and Utilities. They are not a claim that Google Sheets was contacted.
-No Google Sheet tool was used. Rehearse Google permissions and behavior manually:
+Dates: preparation 2026-09-26; native Sheet rehearsal completed 2026-09-27
+(Australia/Brisbane). Branch: codex/shemotion-activity-identity-prep, starting
+commit d9218f0bcf86cd20f1ba94d18241bc6a0f1ba7c5. No production execution.
+Final fetch observed independent origin/main commit aa0a168 (legal-page wording
+only); no merge/rebase was performed. This task does not update main.
+
+### Environment and evidence boundary
+
+A private native copy named `[DISPOSABLE] Outreach ID Rehearsal 2026-09-26`
+was created in the Shemotion account's ChatGPT folder. Its tab is
+`Outreach Tracker`, with the observed 20-column structure. Copied body rows
+were removed/cleared before synthetic fixtures were written; production was
+not edited. The copy was confirmed unshared. Its initial copy/revision history
+may retain source content: keep it private; do not publish or share it as a
+PII-free template. Test source is `test/helpers/outreach-rehearsal-fixture.js`.
+
+Native Sheet API reads/writes exercised the real cell model. The repository's
+pure UUID planner ran locally on those exact read-back values; only its reviewed
+ID-cell writes were replayed to the disposable copy. Actual assigned IDs used
+Node crypto.randomUUID, validated as v4. This is NOT evidence that the bound
+Apps Script runner or Utilities.getUuid executed in Google. Those were tested
+in the local VM; live authorization, script locking and protected-cell execution
+remain manual gates. No Apps Script deployment or triggers were created.
+
+### Captured results
+
+| Check | Observed result |
+| --- | --- |
+| Header | activity_id appended at U; 20 business header values retained |
+| Initial dry-run | 7 eligible records; 3 blanks; 2 distinct valid IDs; duplicate at rows 5/6; malformed row 7; whole assignment blocked; 0 writes |
+| Dry-run integrity | Native CellData before/after identical, including formulas, notes, formatting and validation |
+| Controlled fixture repair | Copied row 6 declared new and U6 cleared; malformed fixture U7 explicitly corrected to a known synthetic UUID; neither was silently repaired |
+| Clean dry-run | 7 eligible; 4 blanks; 3 valid; no errors; proposed cells U2/U3/U6/U9 only |
+| Assignment | 4 unique v4 UUIDs assigned; all existing valid IDs preserved |
+| Business integrity | A:T CellData identical before/after assignment, including formula in P9, note, format, validation and row order |
+| Idempotency | Immediate rerun: 0 writes; all 7 IDs valid |
+| Mutable fields | Target, category, priority, status, sent/follow-up/response/activity dates, response/outcome and website/coverage edited; original UUID unchanged |
+| Copied row | Full row copy retained UUID; duplicate detected; entire plan blocked with 0 writes |
+| Copy recovery | Explicitly declared new outreach; ONLY copied U cell cleared; new UUID assigned; original retained |
+| New row | New blank-ID synthetic row received one different UUID; no business-cell change during assignment |
+| Total generated | 6 UUIDs (4 initial, 1 new, 1 copy); final 9 identified records, no missing/invalid/duplicate IDs |
+| Reorder | Full A:U descending Target sort preserved the ID-keyed business CellData mapping |
+| Filter | Basic filter enabled and cleared; read-back cells unchanged |
+| Protection | Non-warning U:U protection installed on disposable only; owner-only editor list and requestingUserCanEdit=true returned |
+| Bridge | Actual final synthetic grid projected locally; business output exactly matched legacy projection after removing activityId |
+| Feed | 9 safe facts; deterministic totals: 9 contacted, 1 dated reply, 8 sent/1 replied, 8 high-priority, 0 due/overdue; unknown outcomes retained as unknown |
+| Privacy | Synthetic person/email/pitch/private-note/formula/response sentinels absent from feed; tracker and derived provenance retained |
+
+The blocked plan halts every assignment, not merely the erroneous rows. Valid
+ID count means distinct valid IDs, not the number of cells matching a UUID regex.
+The formula, note and validation are synthetic fixtures, not production content.
+The later intentional edit/copy/sort steps are distinct from the ID-only integrity
+comparison. No visual screenshot was taken; native cell/format metadata is the
+verification evidence, not a claim of visual browser QA.
+
+Local VM tests additionally prove production-target refusal, changed-snapshot
+refusal, duplicate activity_id headers, ID formulas, unsafe scope, malformed IDs,
+partial-write recovery and ambiguous required Target/Status header refusal. The
+last check was added to the test-only runner; serving bridge behavior is unchanged.
+Snapshot hashing covers values/formulas, not every formatting property; human
+and other-script edits must remain paused during assignment. ScriptLock alone
+is not a lock on collaborators or other Apps Script projects.
+
+### Writer inventory and blockers
+
+| Class / mechanism | Evidence and column behavior | ID consequence / production status |
+| --- | --- | --- |
+| A: human Sheet editors | Manual tracker is established; named actors and actual editing practices not confirmed | Can create/copy/edit/reorder/delete, paste formulas or import data. Rightmost U is compatible only with full-row sort/copy rules; protected IDs and explicit new-record assignment required. BLOCKER: owner confirmation |
+| B: repository contact-webhook.gs | Sheets API GET plus named-header projection; manifest spreadsheets.readonly; no append/setValue/import writes | Rightmost U supported; no automatic assignment. Reader, not writer |
+| B: test-tools/outreach-id-rehearsal.gs | New test-only owner-operated writer; named headers plus reviewed cell coordinates; production deny gate | Only blank ID/header setValue; no business writes; explicit initial/new-record modes; no triggers. NOT a production runner |
+| B/F: deployed/bound scripts and installable triggers | Repository cannot enumerate deployed script versions, triggers or other projects | May use positional ranges or append/import; compatibility and ID handling UNKNOWN. BLOCKER |
+| C: Shemotion admin | functions/api/admin/outreach.js requests snapshot; shared sanitizer reads; no tracker write route found | No row creation/edit/copy/assignment; adding U does not shift named fields |
+| D: Opportunity Radar | Separate checkout a31b2619f51d1292100f1e09a98f43be60bd92a6; app/api/opportunities/route.ts/createManualConnection writes its D1 model; no Sheets/CSV writer found in app/db/lib/worker | Not a verified Sheet writer. Any operator export/copy handoff or deployment outside this checkout remains UNKNOWN |
+| E/F: automation, forms, Zapier/Make/n8n, CSV/XLSX imports/exports | No integration writer found in reviewed repository; external configuration not inspected | Position/header assumptions, ID preservation and new-row handling UNKNOWN. BLOCKER: owner inventory |
+
+No code search can establish that external writers do not exist. Confirm actor,
+trigger, range/header mapping, copy/import/export behavior and pause procedure
+for each before approving rollout. Exports must preserve IDs for existing records;
+imports must not replace them or reuse them for genuinely new outreach. Retired
+IDs must never be recycled. No automatic assignment path is approved or installed.
+Recommended initial mode: explicit periodic owner-operated ID assignment, after
+reviewing genuinely new blank-ID rows, rather than modifying every writer now.
+
+### Permissions and remaining live checks
+
+Recommend ordinary editors can edit A:T but cannot edit U, with owner-controlled
+ID recovery and assignment. Google documents that the owner can always edit
+protected ranges: [Protection reference](https://developers.google.com/apps-script/reference/spreadsheet/protection).
+The actual disposable protection was verified; no additional editor was invited.
+Ordinary-editor denial, full-row sorting with protected U, and bound Apps Script
+owner execution still require live testing. Protection may constrain normal
+editors' sorting: use filter views or owner full-row sorts, never partial A:T
+sorts that detach IDs. Script execution needs an authorized identity able to edit
+U; do not solve permissions with a broadly privileged public web app.
+
+The approved account must complete the following manual bound-script rehearsal.
+This is the remaining execution gate, not permission to change production:
 
 1. Create a NEW blank Sheet named `[DISPOSABLE] Outreach IDs`; add tab `Tracker`.
-   Use the headers above, plus activity_id. Do not copy production PII.
+   Use the observed 20 headers above plus activity_id in U, and ONLY the synthetic
+   fixture. Use a fresh blank file for any second-editor test; do not share the
+   native copy's potentially sensitive revision history. Keep the prepared
+   native rehearsal copy as private evidence.
 2. Add synthetic rows: two blank IDs, two distinct valid UUIDs, a blank row, a
    duplicated UUID and one malformed UUID. The local fixture source is
    `test/outreach-identity.test.js`; use its synthetic UUIDs, never real records.
@@ -296,6 +398,11 @@ No Google Sheet tool was used. Rehearse Google permissions and behavior manually
 10. Verify a formula in the ID column is rejected even if it displays a UUID.
     Edits after dry-run require a new dry-run. Review audit results and retain
     the disposable Sheet as evidence. No web deployment or production secret setup.
+11. Protect U for owner assignment only. With an approved ordinary test editor,
+    verify normal fields editable and U edits denied. As owner, create a genuinely
+    new blank-ID row and run explicit assignment into protected U. Verify full-row
+    sorting permissions and use filter views where required. Record execution
+    logs and counts without private values, then remove test-editor access.
 
 Writes are cell-scoped and not transactional. A failure may leave some UUIDs
 assigned. Preserve them, re-read, run dry-run, inspect remaining blanks, and
@@ -305,27 +412,43 @@ backfill remains resumable; new-record retries require the remaining row list.
 
 ## Proposed production rollout (requires separate explicit approval)
 
-1. Finish the disposable Google Sheet rehearsal above and capture results.
-   Inventory all live writers and agree who controls new-row assignment.
-2. Back up/export the live tracker and record its version. Pause all editors,
-   sorting, imports and external writers for the maintenance window.
-3. Approve an owner-operated, production-targeted backfill runner separately.
+1. Finish bound Apps Script and ordinary-editor tests above; capture evidence.
+   Confirm every writer, deployed script/trigger and import/export path with the
+   owner. Resolve all UNKNOWN entries before requesting production approval.
+2. Approve an owner-operated, production-targeted backfill runner separately.
    The provided test runner intentionally REFUSES production and has no bypass.
    Do not simply remove its guard. Keep the serving bridge read-only.
-4. Preview the entire live grid: proposed rightmost activity_id header, blank-ID
-   row count, invalid/duplicate report, and source size below the bridge cap.
-   Resolve existing identity ambiguities manually. No writes on validation errors.
-5. With approval of that exact dry-run, write the header and UUIDs ONLY to blank
-   ID cells. Re-read all rows; prove uniqueness, valid UUID format, zero missing
-   IDs, unchanged business cells and idempotent second run. Protect the ID column.
-6. Only after another deployment approval, publish both the updated bridge and
+3. Back up/export production, save its version and restricted business-cell
+   snapshot (values/formulas/notes/formatting/validation/order). Verify recovery.
+4. Pause all editors, sorts, imports and script/automation writers; re-read and
+   verify exact source identity, header structure and size below the bridge cap.
+5. Append rightmost activity_id (U only if header is still the observed A:T).
+   Protect the whole ID column for approved owner assignment; no broad editor grant.
+6. Run the separately approved runner in dry-run mode; inspect eligible/blank/
+   valid counts, duplicate/malformed/ambiguous-header errors and zero-write report.
+7. Abort on any error or changed source snapshot. No silent repair. Approve the
+   exact clean plan before any UUID assignment.
+8. Assign only blank eligible ID cells. Preserve all pre-existing IDs. On partial
+   failure retain successful assignments, re-read and approve a fresh remaining plan.
+9. Re-read business CellData and verify the pre-write snapshot/checksum unchanged;
+   validate every ID, uniqueness, blanks and record count. Resolve discrepancies
+   before resuming work, without overwriting business data from an old backup.
+10. Rerun dry-run and assignment: zero additional IDs; record audit counts and
+    secure evidence, not private row contents in public logs.
+11. Only after another deployment approval, publish both the updated bridge and
    outreach-identity.gs. Preserve its existing read-only Sheet scope. Confirm
-   legacy admin report and the identified snapshot with the real source.
-7. Separately approve service-secret setup and remove the HTTP release lock.
+    legacy admin fields, named-header lookup, UUID output and privacy with production.
+12. Resume editing under protected-ID rules. Owner periodically reviews new rows;
+    copies of new outreach clear ONLY the copied ID after identifying the original.
+    Restore accidentally erased original IDs from history instead of regenerating.
+13. Monitor new/copy/import/sort behavior, missing-ID failures and writer compatibility.
+14. Separately approve service-secret setup and remove the HTTP release lock.
    Set the outreach-ready flag only after bridge verification. Configure edge
    rate limiting and verify privacy/authentication before any NOA consumer.
-8. Resume editors using the new-record policy. No sending, write-back or
-   follow-up automation is part of this process.
+15. Only then consider NOA ingestion. No sending, write-back or follow-up automation.
+
+Production UUID rollout is NOT recommended for approval yet: unknown writers,
+live bound-script execution and ordinary-editor permission checks remain blockers.
 
 ## Rollback
 
@@ -339,6 +462,11 @@ and audit evidence; no automated destructive rollback is provided.
 
 ## Local validation
 
+- Rehearsal checkpoint (2026-09-27): full suite 109/109 passed (Node includes
+  helper-module discovery); focused UUID/feed suite 30/30 passed. Build, JS/GS
+  syntax checks, whitespace checks and targeted changed-file credential scan
+  passed. Gitleaks unavailable; no scanner was installed. No typecheck script
+  exists. No runtime/server/frontend module changed in this checkpoint.
 - `npm test`: full repository suite, including feed and real Apps Script code
   executed in local VM fixtures. Focused sandbox runs also use
   `--test-isolation=none` to avoid the child-process spawn restriction.
@@ -349,5 +477,6 @@ and audit evidence; no automated destructive rollback is provided.
 - `git diff --check` plus no-index whitespace checks for new files.
 - Targeted credential-pattern scan; synthetic privacy sentinels and test tokens
   are fixtures, never real credentials. Gitleaks is not available on PATH.
-- Tests use injected mock D1 and bridge responses only. They do not verify a
-  live Cloudflare deployment, real D1 binding, account-level firewall, or Sheet.
+- Automated tests use mock D1 and bridge responses. The separate native Sheet
+  rehearsal above verifies cell behavior, not a deployed Apps Script, Cloudflare
+  deployment, real D1 binding, account-level firewall or production activation.
