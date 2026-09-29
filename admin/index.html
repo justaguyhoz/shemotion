@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="admin.css?v=20260813-1">
+    <link rel="stylesheet" href="admin.css?v=20260929-1">
   </head>
   <body>
     <header class="admin-header">
@@ -41,6 +41,19 @@
         <button class="is-active" type="button" data-admin-view="list" aria-pressed="true">List</button>
         <button type="button" data-admin-view="calendar" aria-pressed="false">Calendar</button>
       </div>
+      <section class="admin-list-controls" data-admin-list-controls aria-label="Find events">
+        <div class="admin-event-filters" role="group" aria-label="Filter event list">
+          <button class="is-active" type="button" data-admin-filter="active" aria-pressed="true">Active</button>
+          <button type="button" data-admin-filter="drafts" aria-pressed="false">Drafts</button>
+          <button type="button" data-admin-filter="past" aria-pressed="false">Past</button>
+          <button type="button" data-admin-filter="all" aria-pressed="false">All</button>
+        </div>
+        <label class="admin-event-search">
+          <span class="visually-hidden">Search events</span>
+          <input type="search" placeholder="Search events" autocomplete="off" data-admin-search>
+        </label>
+        <p class="admin-result-count" data-admin-result-count aria-live="polite"></p>
+      </section>
       <div class="event-list" data-event-list data-admin-list-view aria-live="polite">
         <p>Loading events...</p>
       </div>
@@ -188,6 +201,6 @@
       </form>
     </dialog>
 
-    <script type="module" src="admin.js?v=20260813-2"></script>
+    <script type="module" src="admin.js?v=20260929-1"></script>
   </body>
 </html>

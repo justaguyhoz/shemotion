@@ -13,6 +13,7 @@
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
 body { margin: 0; background: var(--ivory); color: var(--charcoal); font: 16px/1.55 var(--sans); }
 img, svg { max-width: 100%; }
@@ -38,9 +39,16 @@ h3 { font-size: 1.4rem; }
 .notice { min-height: 24px; color: var(--green); }
 .notice.is-error, .form-error { color: var(--danger); }
 .event-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
-.admin-view-switch { display: flex; gap: 4px; width: fit-content; margin: 0 0 24px; padding: 4px; background: rgba(231, 222, 213, .65); border-radius: 999px; }
+.admin-view-switch { display: flex; gap: 4px; width: fit-content; margin: 0 0 16px; padding: 4px; background: rgba(231, 222, 213, .65); border-radius: 999px; }
 .admin-view-switch button { padding: 8px 18px; border: 0; border-radius: 999px; background: transparent; color: var(--muted); font-weight: 600; }
 .admin-view-switch button.is-active { background: var(--green); color: var(--white); }
+.admin-list-controls { display: grid; grid-template-columns: auto minmax(220px, 320px) auto; align-items: center; justify-content: start; gap: 12px 16px; margin-bottom: 20px; }
+.admin-event-filters { display: flex; flex-wrap: wrap; gap: 4px; width: fit-content; padding: 4px; background: rgba(231, 222, 213, .65); border-radius: 999px; }
+.admin-event-filters button { min-height: 40px; padding: 8px 15px; border: 0; border-radius: 999px; background: transparent; color: var(--muted); font-size: .82rem; font-weight: 600; }
+.admin-event-filters button.is-active { background: var(--white); color: var(--green); box-shadow: 0 2px 8px rgba(79, 74, 69, .08); }
+.admin-event-search { width: 100%; }
+.admin-event-search input { min-height: 48px; padding-inline: 16px; background: var(--white); }
+.admin-result-count { margin: 0; color: var(--muted); font-size: .78rem; white-space: nowrap; }
 .admin-calendar[hidden], .event-list[hidden] { display: none; }
 .calendar-heading { display: grid; grid-template-columns: 40px minmax(0, 1fr) 40px; align-items: center; gap: 14px; margin-bottom: 16px; }
 .calendar-heading h2 { text-align: center; }
@@ -141,6 +149,11 @@ button:focus-visible, a:focus-visible { outline: 3px solid rgba(47, 74, 61, .3);
   .header-link { font-size: .68rem; }
   .dashboard-heading { align-items: flex-start; flex-direction: column; gap: 20px; }
   .dashboard-actions { width: 100%; justify-content: flex-start; }
+  .admin-list-controls { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .admin-event-filters { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); width: 100%; border-radius: 10px; }
+  .admin-event-filters button { min-width: 0; padding-inline: 8px; }
+  .admin-event-search input { min-height: 46px; }
+  .admin-result-count { padding-left: 2px; }
   .event-list { grid-template-columns: 1fr; }
   .admin-event-button { min-height: 138px; padding: 12px 14px; }
   .admin-event-button h3 { margin-top: 4px; }

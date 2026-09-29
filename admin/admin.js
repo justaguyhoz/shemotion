@@ -1,8 +1,19 @@
 import { eventDateKey, initialCalendarMonth, monthGrid, monthLabel, moveMonth } from "../calendar.js";
 import { expandRecurringEvents } from "../recurrence.js";
+import {
+  ADMIN_EVENT_FILTERS,
+  adminEventCountLabel,
+  adminEventEmptyMessage,
+  adminEventTiming,
+  filterAndSortAdminEvents,
+} from "./event-list.js";
 
 const list = document.querySelector("[data-event-list]");
 const notice = document.querySelector("[data-notice]");
+const listControls = document.querySelector("[data-admin-list-controls]");
+const filterButtons = [...document.querySelectorAll("[data-admin-filter]")];
+const eventSearch = document.querySelector("[data-admin-search]");
+const resultCount = document.querySelector("[data-admin-result-count]");
 const dialog = document.querySelector("[data-event-dialog]");
 const form = document.querySelector("[data-event-form]");
 const formError = document.querySelector("[data-form-error]");
@@ -24,6 +35,25 @@ let initialFormState = "";
 let allowDialogClose = false;
 let placeSearchTimer;
 let placeSessionToken = "";
+const filterStorageKey = "shemotion-admin-event-filter";
+let activeEventFilter = savedEventFilter();
+
+function savedEventFilter() {
+  try {
+    const saved = sessionStorage.getItem(filterStorageKey);
+    return ADMIN_EVENT_FILTERS.has(saved) ? saved : "active";
+  } catch {
+    return "active";
+  }
+}
+
+function saveEventFilter(value) {
+  try {
+    sessionStorage.setItem(filterStorageKey, value);
+  } catch {
+    // Filtering still works if session storage is unavailable.
+  }
+}
 
 formGrid.addEventListener("scroll", () => {
   if (formGrid.scrollLeft) formGrid.scrollLeft = 0;
@@ -106,40 +136,56 @@ async function searchGooglePlaces(query) {
   }
 }
 
-function eventStatuses(event) {
+function eventStatuses(event, now) {
   const statuses = [event.isPublished ? "Published" : "Draft"];
-  if (event.startAt && Date.parse(event.endAt || event.startAt) < Date.now()) statuses.push("Past");
+  if (adminEventTiming(event, now).isPast) statuses.push("Past");
   if (["Sold out", "Cancelled"].includes(event.availabilityStatus)) statuses.push(event.availabilityStatus);
   return statuses;
 }
 
-function eventDateParts(event) {
+function eventDateParts(event, now) {
   if (event.dateStatus === "tbc") return { date: "Date to be confirmed", time: "" };
-  const date = new Date(event.startAt);
+  const date = new Date(adminEventTiming(event, now).displayStartAt || event.startAt);
   return { date: compactDateFormatter.format(date), time: compactTimeFormatter.format(date) };
 }
 
 function renderEvents() {
+  const now = new Date();
+  const search = eventSearch.value;
+  const filteredEvents = filterAndSortAdminEvents(events, {
+    filter: activeEventFilter,
+    search,
+    now,
+  });
+  filterButtons.forEach((button) => {
+    const active = button.dataset.adminFilter === activeEventFilter;
+    button.classList.toggle("is-active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+  resultCount.textContent = adminEventCountLabel(filteredEvents.length, activeEventFilter);
   list.replaceChildren();
-  if (!events.length) {
-    list.append(element("p", { className: "empty-state", text: "No events yet. Add the first Shemotion experience." }));
+  if (!filteredEvents.length) {
+    list.append(element("p", {
+      className: "empty-state",
+      text: adminEventEmptyMessage(activeEventFilter, Boolean(search.trim())),
+    }));
     renderAdminCalendar();
     return;
   }
 
-  for (const event of events) {
+  for (const event of filteredEvents) {
     const article = element("article", { className: "admin-event" });
     const open = element("button", { className: "admin-event-button" });
     open.type = "button";
     open.setAttribute("aria-label", `Edit ${event.title} at ${event.venueName}`);
     const meta = element("div", { className: "event-meta" });
-    for (const status of eventStatuses(event)) {
+    for (const status of eventStatuses(event, now)) {
       meta.append(element("span", {
         className: `status ${status.toLowerCase().replaceAll(" ", "-")}`,
         text: status,
       }));
     }
-    const date = eventDateParts(event);
+    const date = eventDateParts(event, now);
     open.append(
       meta,
       element("p", { className: "admin-event-date", text: date.date }),
@@ -611,10 +657,18 @@ dialog.addEventListener("click", (event) => {
   if (event.target === dialog) requestClose();
 });
 
+filterButtons.forEach((button) => button.addEventListener("click", () => {
+  activeEventFilter = button.dataset.adminFilter;
+  saveEventFilter(activeEventFilter);
+  renderEvents();
+}));
+eventSearch.addEventListener("input", renderEvents);
+
 document.querySelectorAll("[data-admin-view]").forEach((button) => button.addEventListener("click", () => {
   const calendar = button.dataset.adminView === "calendar";
   document.querySelector("[data-admin-list-view]").hidden = calendar;
   document.querySelector("[data-admin-calendar-view]").hidden = !calendar;
+  listControls.hidden = calendar;
   document.querySelectorAll("[data-admin-view]").forEach((viewButton) => {
     const active = viewButton === button;
     viewButton.classList.toggle("is-active", active);
