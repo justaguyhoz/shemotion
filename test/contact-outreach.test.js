@@ -154,6 +154,39 @@ test("outreach bridge logs upstream HTTP status without response content", async
   assert.doesNotMatch(JSON.stringify(logs), /private upstream response/);
 });
 
+test("outreach bridge retries one transient Apps Script 404", async () => {
+  const logs = [];
+  let fetchCalls = 0;
+  const response = await processOutreachRequest({
+    env: { CONTACT_WEBHOOK_URL: URL, OUTREACH_DASHBOARD_TOKEN: OUTREACH_TOKEN },
+  }, async () => {
+    fetchCalls += 1;
+    if (fetchCalls === 1) return new Response("temporary Google response", { status: 404 });
+    return new Response(JSON.stringify({
+      ok: true,
+      action: "outreach_snapshot",
+      tracker: { rows: [] },
+      enquiries: { items: [] },
+    }), { status: 200 });
+  }, {
+    warn(event, details) {
+      logs.push({ level: "warn", event, details });
+    },
+    error(event, details) {
+      logs.push({ level: "error", event, details });
+    },
+  });
+
+  assert.equal(fetchCalls, 2);
+  assert.equal(response.status, 200);
+  assert.deepEqual(logs, [{
+    level: "warn",
+    event: "outreach_bridge_retry",
+    details: { code: "http_error", upstreamStatus: 404 },
+  }]);
+  assert.doesNotMatch(JSON.stringify(logs), /temporary Google response|example\/exec|o{32}/);
+});
+
 test("date filters use last activity, response and sent dates in priority order", () => {
   const rows = [
     { status: "Sent", sentDate: "2026-09-01", responseDate: "", lastActivityDate: "", outcomeType: "", responseOutcome: "" },
