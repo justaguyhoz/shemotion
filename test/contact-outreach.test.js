@@ -113,6 +113,47 @@ test("outreach bridge strips forbidden fields and exposes only aggregate enquiry
   assert.deepEqual(result.enquiries.items[0], { timestamp: "2026-09-24T01:00:00.000Z", category: "Booking" });
 });
 
+test("outreach bridge logs safe failure codes without secrets or upstream payloads", async () => {
+  const logs = [];
+  const response = await processOutreachRequest({
+    env: { CONTACT_WEBHOOK_URL: URL, OUTREACH_DASHBOARD_TOKEN: OUTREACH_TOKEN },
+  }, async () => new Response(JSON.stringify({
+    ok: false,
+    error: "upstream_error",
+    privateDetail: "visitor@example.com",
+  }), { status: 200 }), {
+    error(event, details) {
+      logs.push({ event, details });
+    },
+  });
+
+  assert.equal(response.status, 502);
+  assert.deepEqual(await response.json(), { error: "Outreach reporting is temporarily unavailable." });
+  assert.deepEqual(logs, [{
+    event: "outreach_bridge_failure",
+    details: { code: "apps_script_upstream_error" },
+  }]);
+  assert.doesNotMatch(JSON.stringify(logs), /visitor@example\.com|example\/exec|o{32}/);
+});
+
+test("outreach bridge logs upstream HTTP status without response content", async () => {
+  const logs = [];
+  const response = await processOutreachRequest({
+    env: { CONTACT_WEBHOOK_URL: URL, OUTREACH_DASHBOARD_TOKEN: OUTREACH_TOKEN },
+  }, async () => new Response("private upstream response", { status: 503 }), {
+    error(event, details) {
+      logs.push({ event, details });
+    },
+  });
+
+  assert.equal(response.status, 502);
+  assert.deepEqual(logs, [{
+    event: "outreach_bridge_failure",
+    details: { code: "http_error", upstreamStatus: 503 },
+  }]);
+  assert.doesNotMatch(JSON.stringify(logs), /private upstream response/);
+});
+
 test("date filters use last activity, response and sent dates in priority order", () => {
   const rows = [
     { status: "Sent", sentDate: "2026-09-01", responseDate: "", lastActivityDate: "", outcomeType: "", responseOutcome: "" },

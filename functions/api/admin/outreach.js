@@ -7,7 +7,18 @@ const RESPONSE_HEADERS = {
   "x-content-type-options": "nosniff",
 };
 
-export async function processOutreachRequest({ env }, fetchImpl = fetch) {
+function safeFailureDetails(error) {
+  if (typeof error?.bridgeCode === "string") {
+    const details = { code: error.bridgeCode };
+    if (Number.isInteger(error.bridgeStatus)) details.upstreamStatus = error.bridgeStatus;
+    return details;
+  }
+  if (error?.message === "Unexpected bridge response") return { code: "action_mismatch" };
+  if (error?.message === "Invalid outreach response") return { code: "snapshot_invalid" };
+  return { code: "unexpected_error" };
+}
+
+export async function processOutreachRequest({ env }, fetchImpl = fetch, logger = console) {
   try {
     const config = getAppsScriptConfig(env, "OUTREACH_DASHBOARD_TOKEN");
     const payload = await callAppsScript(config.url, {
@@ -16,7 +27,8 @@ export async function processOutreachRequest({ env }, fetchImpl = fetch) {
     }, fetchImpl);
     if (payload.action !== "outreach_snapshot") throw new Error("Unexpected bridge response");
     return jsonResponse(sanitizeOutreachSnapshot(payload), 200, RESPONSE_HEADERS);
-  } catch {
+  } catch (error) {
+    logger.error("outreach_bridge_failure", safeFailureDetails(error));
     return jsonResponse({ error: "Outreach reporting is temporarily unavailable." }, 502, RESPONSE_HEADERS);
   }
 }
