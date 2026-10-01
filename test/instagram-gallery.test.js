@@ -51,6 +51,11 @@ test("Instagram gallery reserves media dimensions and has responsive accessible 
 
   assert.match(css, /\.instagram-card-media[\s\S]*aspect-ratio:\s*4\s*\/\s*5/);
   assert.match(css, /@media \(max-width: 700px\)[\s\S]*\.instagram-grid[\s\S]*overflow-x:\s*auto[\s\S]*scrollbar-width:\s*none/);
+  assert.match(css, /@media \(max-width: 700px\)[\s\S]*scroll-snap-type:\s*x proximity/);
+  assert.match(css, /@media \(max-width: 700px\)[\s\S]*\.instagram-track[\s\S]*padding-right:[^;]+/);
+  assert.match(css, /@media \(max-width: 700px\)[\s\S]*\.instagram-card[\s\S]*min\(70vw, 300px\)/);
+  const mobileStyles = css.slice(css.indexOf("@media (max-width: 700px)"), css.indexOf("@media (max-width: 560px)"));
+  assert.doesNotMatch(mobileStyles, /\.instagram-card-group\[aria-hidden="true"\][\s\S]*display:\s*none/);
   assert.match(css, /\.instagram-grid::\-webkit-scrollbar[\s\S]*display:\s*none/);
   assert.match(css, /@media \(hover: hover\) and \(pointer: fine\) and \(prefers-reduced-motion: no-preference\)[\s\S]*\.instagram-card:hover/);
   assert.match(script, /\.instagram \[data-reveal\]/);

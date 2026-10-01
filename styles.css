@@ -2811,17 +2811,15 @@ blockquote:hover {
     padding: 4px clamp(20px, 5vw, 76px) 14px;
     overflow-x: auto;
     overscroll-behavior-inline: contain;
-    scroll-snap-type: x mandatory;
+    scroll-padding-inline: clamp(20px, 5vw, 76px);
+    scroll-snap-type: x proximity;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
   }
 
   .instagram-track {
     animation: none;
-  }
-
-  .instagram-card-group[aria-hidden="true"] {
-    display: none;
+    padding-right: clamp(20px, 5vw, 76px);
   }
 
   .instagram-grid::-webkit-scrollbar {
@@ -2829,9 +2827,9 @@ blockquote:hover {
   }
 
   .instagram-card {
-    flex: 0 0 min(52vw, 210px);
-    width: min(52vw, 210px);
-    min-width: min(52vw, 210px);
+    flex: 0 0 min(70vw, 300px);
+    width: min(70vw, 300px);
+    min-width: min(70vw, 300px);
     scroll-snap-align: start;
   }
 
@@ -3222,10 +3220,6 @@ blockquote:hover {
 
   .instagram-grid {
     overflow-x: auto;
-  }
-
-  .instagram-card-group[aria-hidden="true"] {
-    display: none;
   }
 
   .faq-answer {
