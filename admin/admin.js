@@ -1,5 +1,6 @@
 import { eventDateKey, initialCalendarMonth, monthGrid, monthLabel, moveMonth } from "../calendar.js";
 import { expandRecurringEvents } from "../recurrence.js";
+import { eventBookingPresentation, eventBookingState } from "../event-booking.js";
 import {
   ADMIN_EVENT_FILTERS,
   adminEventCountLabel,
@@ -139,7 +140,8 @@ async function searchGooglePlaces(query) {
 function eventStatuses(event, now) {
   const statuses = [event.isPublished ? "Published" : "Draft"];
   if (adminEventTiming(event, now).isPast) statuses.push("Past");
-  if (["Sold out", "Cancelled"].includes(event.availabilityStatus)) statuses.push(event.availabilityStatus);
+  const booking = eventBookingPresentation(event);
+  if (booking.statusLabel) statuses.push(booking.statusLabel);
   return statuses;
 }
 
@@ -409,10 +411,20 @@ function setLocationMode(value) {
   }
 }
 
+function bookingStateValue(event) {
+  const state = eventBookingState(event);
+  if (state === "open") return event.availabilityStatus === "Limited spaces" ? "Limited spaces" : "Booking open";
+  if (state === "sold_out") return "Sold out";
+  if (state === "not_required") return "No booking required";
+  if (state === "cancelled") return "Cancelled";
+  return "Coming soon";
+}
+
 function applyEventToForm(event, { includeSchedule = true } = {}) {
-  for (const name of ["title", "slug", "eventType", "audience", "shortDescription", "bookingLabel", "bookingUrl", "availabilityStatus", "displayOrder", "recurrenceFrequency", "recurrenceUntil"]) {
+  for (const name of ["title", "slug", "eventType", "audience", "shortDescription", "bookingLabel", "bookingUrl", "imageUrl", "displayOrder", "recurrenceFrequency", "recurrenceUntil"]) {
     form.elements[name].value = event[name] ?? "";
   }
+  form.elements.availabilityStatus.value = bookingStateValue(event);
   locationSelect.value = event.locationId ? String(event.locationId) : "new";
   if (![...locationSelect.options].some((option) => option.value === locationSelect.value)) locationSelect.value = "new";
   if (locationSelect.value === "new") {
@@ -437,7 +449,7 @@ function defaultForm(prefillDate = "") {
   form.elements.eventType.value = "Class";
   form.elements.audience.value = "Women only";
   form.elements.bookingLabel.value = "Book now";
-  form.elements.availabilityStatus.value = "Available";
+  form.elements.availabilityStatus.value = "Booking open";
   form.elements.displayOrder.value = "0";
   form.elements.dateStatus.value = "scheduled";
   form.elements.recurrenceFrequency.value = "none";
@@ -469,6 +481,8 @@ function openForm(event = null, prefillDate = "", options = {}) {
     defaultForm(prefillDate);
   }
   updateDateFields();
+  updateBookingFields();
+  updateImagePreview();
   allowDialogClose = false;
   dialog.showModal();
   initialFormState = currentFormState();
@@ -501,6 +515,7 @@ function formPayload(locationId = null) {
     timezone: "Australia/Brisbane", audience: data.get("audience"),
     shortDescription: data.get("shortDescription"), bookingLabel: data.get("bookingLabel"),
     bookingUrl: data.get("bookingUrl"), availabilityStatus: data.get("availabilityStatus"),
+    imageUrl: data.get("imageUrl"),
     isPublished: data.get("isPublished") === "on", displayOrder: Number(data.get("displayOrder") || 0),
     recurrenceFrequency: data.get("recurrenceFrequency"), recurrenceUntil: data.get("recurrenceUntil"),
   };
@@ -522,13 +537,59 @@ function updateDateFields() {
   }
 }
 
+function updateBookingFields() {
+  const state = form.elements.availabilityStatus.value;
+  const open = state === "Booking open" || state === "Limited spaces";
+  const comingSoon = state === "Coming soon";
+  const soldOut = state === "Sold out";
+  const urlField = form.querySelector("[data-booking-url-field]");
+  const labelField = form.querySelector("[data-booking-label-field]");
+  const optional = form.querySelector("[data-booking-url-optional]");
+  const help = form.querySelector("[data-booking-help]");
+  urlField.hidden = state === "No booking required" || state === "Cancelled";
+  labelField.hidden = !(open || soldOut);
+  form.elements.bookingUrl.required = open;
+  optional.textContent = open ? "Required" : "Optional";
+  help.textContent = open
+    ? "A valid event booking URL is required. Custom button text is optional."
+    : comingSoon
+      ? "The event stays public with a Coming Soon status and no active booking button."
+      : soldOut
+        ? "No booking button is shown unless you provide an intentional waitlist URL."
+        : state === "No booking required"
+          ? "Event information remains visible without a booking button."
+          : "Cancelled events are removed from public upcoming-event lists.";
+}
+
+function updateImagePreview() {
+  const preview = form.querySelector("[data-event-image-preview]");
+  const wrap = form.querySelector("[data-event-image-preview-wrap]");
+  const value = form.elements.imageUrl.value.trim();
+  if (!value) {
+    preview.removeAttribute("src");
+    wrap.hidden = true;
+    return;
+  }
+  preview.src = value;
+  preview.alt = `${form.elements.title.value.trim() || "Event"} image preview`;
+  wrap.hidden = false;
+}
+
 locationSelect.addEventListener("change", () => setLocationMode(locationSelect.value));
 templateSelect.addEventListener("change", () => {
   const template = events.find((event) => String(event.id) === templateSelect.value);
   if (template) applyEventToForm(template, { includeSchedule: false });
   updateDateFields();
+  updateBookingFields();
+  updateImagePreview();
 });
 form.elements.dateStatus.addEventListener("change", updateDateFields);
+form.elements.availabilityStatus.addEventListener("change", updateBookingFields);
+form.elements.imageUrl.addEventListener("input", updateImagePreview);
+form.elements.title.addEventListener("input", updateImagePreview);
+form.querySelector("[data-event-image-preview]").addEventListener("error", () => {
+  form.querySelector("[data-event-image-preview-wrap]").hidden = true;
+});
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();

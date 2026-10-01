@@ -1,4 +1,5 @@
 import { expandRecurringEvents } from "../recurrence.js";
+import { eventBookingState } from "../event-booking.js";
 import { rowToPublicEvent } from "./events.js";
 
 const PUBLIC_EVENT_COLUMNS = `
@@ -8,7 +9,7 @@ const PUBLIC_EVENT_COLUMNS = `
   COALESCE(locations.address, events.address) AS address,
   events.date_status, events.start_at, events.end_at, events.timezone,
   events.audience, events.short_description, events.booking_label, events.booking_url,
-  events.availability_status, events.recurrence_frequency, events.recurrence_until,
+  events.availability_status, events.image_url, events.recurrence_frequency, events.recurrence_until,
   events.display_order, events.location_id, locations.latitude, locations.longitude,
   locations.google_maps_url`;
 
@@ -22,7 +23,8 @@ export async function getUpcomingPublicEvents(db, now = new Date().toISOString()
     ORDER BY CASE WHEN date_status = 'tbc' THEN 1 ELSE 0 END, start_at ASC, display_order ASC
   `).all();
 
-  return expandRecurringEvents(result.results.map(rowToPublicEvent), now, rangeEnd);
+  return expandRecurringEvents(result.results.map(rowToPublicEvent), now, rangeEnd)
+    .filter((event) => eventBookingState(event) !== "cancelled");
 }
 
 export async function getPublishedEventBySlug(db, slug) {

@@ -15,7 +15,7 @@ export async function onRequestGet({ env }) {
              COALESCE(locations.address, events.address) AS address,
              events.date_status, events.start_at, events.end_at, events.timezone,
              events.audience, events.short_description, events.booking_label, events.booking_url,
-             events.availability_status, events.is_published, events.display_order,
+             events.availability_status, events.image_url, events.is_published, events.display_order,
              events.recurrence_frequency, events.recurrence_until, events.location_id,
              events.created_at, events.updated_at,
              locations.latitude, locations.longitude, locations.google_maps_url
@@ -46,8 +46,8 @@ export async function onRequestPost({ request, env }) {
       INSERT INTO events (
         title, slug, event_type, venue_name, suburb, address, date_status, start_at, end_at, timezone,
         audience, short_description, booking_label, booking_url, availability_status,
-        is_published, display_order, recurrence_frequency, recurrence_until, location_id
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        image_url, is_published, display_order, recurrence_frequency, recurrence_until, location_id
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       RETURNING *
     `).bind(...eventValues(validation.event)).first();
     return jsonResponse({ event: rowToAdminEvent(result) }, 201);

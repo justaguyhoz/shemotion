@@ -50,6 +50,7 @@ function eventRow(overrides = {}) {
     booking_label: baseEvent.bookingLabel,
     booking_url: baseEvent.bookingUrl,
     availability_status: baseEvent.availabilityStatus,
+    image_url: null,
     recurrence_frequency: baseEvent.recurrenceFrequency,
     recurrence_until: baseEvent.recurrenceUntil,
     display_order: baseEvent.displayOrder,
@@ -151,7 +152,7 @@ test("a past published event page stays indexable, shows ended messaging and rem
   assert.match(html, />View upcoming Shemotion events<\/a>/);
   assert.match(html, /Lifecycle Event/);
   assert.match(html, /Example Venue/);
-  assert.match(html, /<dt>Availability<\/dt><dd>Ended<\/dd>/);
+  assert.match(html, /<dt>Booking<\/dt><dd>Ended<\/dd>/);
   assert.doesNotMatch(html, /data-event-booking|https:\/\/events\.example\.com\/lifecycle/);
   assert.doesNotMatch(html, /<meta name="robots" content="noindex">/);
 
@@ -178,6 +179,6 @@ test("cancelled future events remain cancelled, not past, and cannot be booked",
   const response = await getEventPage({ env: detailEnv(row), params: { slug: row.slug } });
   const html = await response.text();
   assert.equal(response.status, 200);
-  assert.match(html, /<dt>Availability<\/dt><dd>Cancelled<\/dd>/);
+  assert.match(html, /<dt>Booking<\/dt><dd>Cancelled<\/dd>/);
   assert.doesNotMatch(html, /This event has ended\.|data-event-booking|https:\/\/events\.example\.com\/lifecycle/);
 });

@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="admin.css?v=20260929-1">
+    <link rel="stylesheet" href="admin.css?v=20261001-2">
   </head>
   <body>
     <header class="admin-header">
@@ -157,35 +157,61 @@
           <label>Venue name<input name="venueName" maxlength="120" required data-location-field></label>
           <label>Suburb<input name="suburb" maxlength="80" data-location-field></label>
           <label class="field-wide">Address<input name="address" maxlength="200" data-location-field></label>
-          <label>Date status
-            <select name="dateStatus" required>
-              <option value="scheduled">Scheduled</option>
-              <option value="tbc">Date to be confirmed</option>
-            </select>
-          </label>
-          <span aria-hidden="true"></span>
-          <label>Start date<input name="startDate" type="date" data-date-field required></label>
-          <label>Start time<input name="startTime" type="time" data-date-field required></label>
-          <label>End date<input name="endDate" type="date" data-date-field></label>
-          <label>End time<input name="endTime" type="time" data-date-field></label>
-          <label>Repeats
-            <select name="recurrenceFrequency">
-              <option value="none">Does not repeat</option>
-              <option value="weekly">Every week</option>
-              <option value="fortnightly">Every fortnight</option>
-              <option value="monthly">Every month</option>
-            </select>
-          </label>
-          <label>Repeat until <span class="optional-label">Optional</span><input name="recurrenceUntil" type="date"></label>
+          <fieldset class="form-section field-wide">
+            <legend>Event timing</legend>
+            <div class="form-section-grid">
+              <label>Date state
+                <select name="dateStatus" required>
+                  <option value="scheduled">Confirmed date and time</option>
+                  <option value="tbc">Date to be confirmed</option>
+                </select>
+              </label>
+              <span aria-hidden="true"></span>
+              <label>Start date<input name="startDate" type="date" data-date-field required></label>
+              <label>Start time<input name="startTime" type="time" data-date-field required></label>
+              <label>End date<input name="endDate" type="date" data-date-field></label>
+              <label>End time<input name="endTime" type="time" data-date-field></label>
+              <label>Repeats
+                <select name="recurrenceFrequency">
+                  <option value="none">Does not repeat</option>
+                  <option value="weekly">Every week</option>
+                  <option value="fortnightly">Every fortnight</option>
+                  <option value="monthly">Every month</option>
+                </select>
+              </label>
+              <label>Repeat until <span class="optional-label">Optional</span><input name="recurrenceUntil" type="date"></label>
+            </div>
+          </fieldset>
           <label>Audience<input name="audience" maxlength="80" value="Women only" required></label>
-          <label>Availability
-            <select name="availabilityStatus" required>
-              <option>Available</option><option>Limited spaces</option><option>Sold out</option><option>Cancelled</option>
-            </select>
-          </label>
           <label class="field-wide"><span>Short description <span class="optional-label">Optional</span></span><textarea name="shortDescription" maxlength="600" rows="4"></textarea></label>
-          <label>Booking button text<input name="bookingLabel" maxlength="60" value="Book now" required></label>
-          <label>Booking URL<input name="bookingUrl" type="url" maxlength="500" placeholder="https://"></label>
+          <fieldset class="form-section field-wide">
+            <legend>Booking</legend>
+            <div class="form-section-grid">
+              <label>Booking state
+                <select name="availabilityStatus" required>
+                  <option>Booking open</option>
+                  <option>Limited spaces</option>
+                  <option>Coming soon</option>
+                  <option>Sold out</option>
+                  <option>No booking required</option>
+                  <option>Cancelled</option>
+                </select>
+              </label>
+              <p class="field-help" data-booking-help></p>
+              <label data-booking-url-field>Booking URL <span class="optional-label" data-booking-url-optional></span><input name="bookingUrl" type="url" maxlength="500" placeholder="https://"></label>
+              <label data-booking-label-field>Booking button text<input name="bookingLabel" maxlength="60" value="Book now"></label>
+            </div>
+          </fieldset>
+          <fieldset class="form-section field-wide">
+            <legend>Media</legend>
+            <div class="form-section-grid media-fields">
+              <label>Event image URL <span class="optional-label">HTTPS or /assets/ path</span><input name="imageUrl" type="text" maxlength="500" placeholder="/assets/event-artwork.jpg" data-event-image-input></label>
+              <div class="event-image-preview" data-event-image-preview-wrap hidden>
+                <img data-event-image-preview alt="Event image preview">
+                <p>Event card preview</p>
+              </div>
+            </div>
+          </fieldset>
           <label>Display order<input name="displayOrder" type="number" min="-1000" max="1000" value="0"></label>
           <label class="checkbox-field"><input name="isPublished" type="checkbox"> Published</label>
         </div>
@@ -201,6 +227,6 @@
       </form>
     </dialog>
 
-    <script type="module" src="admin.js?v=20260929-1"></script>
+    <script type="module" src="admin.js?v=20261001-2"></script>
   </body>
 </html>

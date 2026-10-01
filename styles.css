@@ -33,6 +33,10 @@
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 132px;
@@ -565,6 +569,44 @@ p:last-child {
   pointer-events: none;
 }
 
+.event-pill-media {
+  position: relative;
+  min-width: 0;
+  aspect-ratio: 4 / 3;
+  margin: -18px -20px 4px -24px;
+  overflow: hidden;
+  background: var(--charcoal);
+}
+
+.event-pill-media img {
+  display: block;
+}
+
+.event-pill-media-backdrop,
+.event-detail-media-backdrop {
+  position: absolute;
+  inset: -8%;
+  width: 116%;
+  height: 116%;
+  object-fit: cover;
+  filter: blur(16px) brightness(0.62);
+  opacity: 0.9;
+}
+
+.event-pill-media-artwork {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 280ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .event-pill.has-image:hover .event-pill-media-artwork {
+    transform: scale(1.015);
+  }
+}
+
 .event-pill:hover {
   transform: translateY(-5px);
   border-color: rgba(47, 74, 61, 0.34);
@@ -684,6 +726,28 @@ p:last-child {
   color: var(--muted);
   font-size: clamp(1.05rem, 2vw, 1.25rem);
   line-height: 1.75;
+}
+
+.event-detail-media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  max-width: 760px;
+  margin-top: 32px;
+  overflow: hidden;
+  background: var(--charcoal);
+  border-radius: 8px;
+  box-shadow: 0 18px 48px rgba(79, 74, 69, 0.12);
+}
+
+.event-detail-media img {
+  display: block;
+}
+
+.event-detail-media-artwork {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .event-facts {
@@ -1353,6 +1417,12 @@ p:last-child {
 .status-cancelled {
   color: #7b3d37;
   background: #f0dcd8;
+}
+
+.status-coming-soon,
+.status-not-required {
+  color: var(--brown);
+  background: #eee5dc;
 }
 
 .event-pill-action:not(.button) {
@@ -2955,6 +3025,14 @@ blockquote:hover {
     min-height: 0;
     padding: 22px 20px 22px 26px;
     border-radius: 8px;
+  }
+
+  .event-pill-media {
+    margin: -22px -20px 2px -26px;
+  }
+
+  .event-detail-media {
+    margin-top: var(--space-lg);
   }
 
   .faq-list {

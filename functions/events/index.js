@@ -1,15 +1,19 @@
 import { getUpcomingPublicEvents } from "../../shared/event-store.js";
 import { SITE_URL, escapeHtml, eventDescription, formatEventDate, formatEventTime, htmlResponse, pageDocument } from "../../shared/public-pages.js";
+import { eventBookingPresentation, eventImageUrl } from "../../event-booking.js";
 
 function eventCard(event) {
   const detailUrl = event.slug ? `/events/${encodeURIComponent(event.slug)}/` : null;
-  const status = ["Limited spaces", "Sold out", "Cancelled"].includes(event.availabilityStatus)
-    ? `<span class="event-pill-status status-${event.availabilityStatus.toLowerCase().replaceAll(" ", "-")}">${escapeHtml(event.availabilityStatus)}</span>` : "";
-  const booking = event.availabilityStatus === "Cancelled" ? "" : event.bookingUrl
-    ? `<a class="event-pill-action button booking-button" href="${escapeHtml(event.bookingUrl)}" target="_blank" rel="noopener noreferrer" data-event-booking data-event-id="${escapeHtml(event.id)}" data-event-name="${escapeHtml(event.title)}" data-event-type="${escapeHtml(event.eventType)}" data-venue-name="${escapeHtml(event.venueName)}" data-suburb="${escapeHtml(event.suburb || "")}">${escapeHtml(event.bookingLabel || "Book now")}</a>`
-    : '<a class="event-pill-action" href="/#contact">Contact Shemotion</a>';
+  const presentation = eventBookingPresentation(event);
+  const status = presentation.statusLabel
+    ? `<span class="event-pill-status status-${presentation.state.replaceAll("_", "-")}">${escapeHtml(presentation.statusLabel)}</span>` : "";
+  const booking = presentation.action
+    ? `<a class="event-pill-action button booking-button" href="${escapeHtml(presentation.action.href)}" target="_blank" rel="noopener noreferrer" data-event-booking data-event-id="${escapeHtml(event.id)}" data-event-name="${escapeHtml(event.title)}" data-event-type="${escapeHtml(event.eventType)}" data-venue-name="${escapeHtml(event.venueName)}" data-suburb="${escapeHtml(event.suburb || "")}">${escapeHtml(presentation.action.label)}</a>`
+    : "";
+  const imageUrl = eventImageUrl(event);
+  const media = imageUrl ? `<div class="event-pill-media"><img class="event-pill-media-backdrop" src="${escapeHtml(imageUrl)}" alt="" aria-hidden="true" loading="lazy" decoding="async"><img class="event-pill-media-artwork" src="${escapeHtml(imageUrl)}" alt="${escapeHtml(`${event.title} event artwork`)}" loading="lazy" decoding="async"></div>` : "";
   const heading = detailUrl ? `<a href="${detailUrl}">${escapeHtml(event.title)}</a>` : escapeHtml(event.title);
-  return `<article class="event-pill event-listing-card">
+  return `<article class="event-pill event-listing-card${imageUrl ? " has-image" : ""}">${media}
     <div class="event-pill-content"><p class="event-pill-venue">${escapeHtml(event.eventType)} &middot; ${escapeHtml(event.venueName)}</p><h2 class="event-pill-title">${heading}</h2>
     <div class="event-pill-meta"><span>${escapeHtml(formatEventDate(event))}</span><span>${escapeHtml(formatEventTime(event))}</span>${event.suburb ? `<span>${escapeHtml(event.suburb)}</span>` : ""}</div>${status}
     <p class="event-pill-description">${escapeHtml(eventDescription(event))}</p></div>

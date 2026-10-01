@@ -1,10 +1,10 @@
 import { RECURRENCE_OPTIONS } from "../recurrence.js";
+import { BOOKING_STATE_OPTIONS, eventBookingState } from "../event-booking.js";
 
 export const AVAILABILITY_OPTIONS = [
+  ...BOOKING_STATE_OPTIONS,
+  // Accepted during the migration window so older rows remain editable.
   "Available",
-  "Limited spaces",
-  "Sold out",
-  "Cancelled",
 ];
 
 export const EVENT_TYPES = ["Class", "Workshop", "Retreat", "Private event"];
@@ -26,6 +26,7 @@ export const EVENT_FIELDS = [
   "bookingLabel",
   "bookingUrl",
   "availabilityStatus",
+  "imageUrl",
   "isPublished",
   "displayOrder",
   "recurrenceFrequency",
@@ -46,6 +47,7 @@ const LIMITS = {
   shortDescription: 600,
   bookingLabel: 60,
   bookingUrl: 500,
+  imageUrl: 500,
   recurrenceFrequency: 20,
 };
 
@@ -80,7 +82,6 @@ export function validateEventInput(input) {
     "venueName",
     "dateStatus",
     "audience",
-    "bookingLabel",
     "availabilityStatus",
   ];
   const errors = [];
@@ -102,7 +103,9 @@ export function validateEventInput(input) {
   event.startAt = cleanText(event.startAt) || null;
   event.endAt = cleanText(event.endAt) || null;
   event.timezone = cleanText(event.timezone) || "Australia/Brisbane";
+  event.bookingLabel = cleanText(event.bookingLabel);
   event.bookingUrl = cleanText(event.bookingUrl) || null;
+  event.imageUrl = cleanText(event.imageUrl) || null;
   event.isPublished = event.isPublished === true || event.isPublished === 1;
   event.displayOrder = Number.isInteger(Number(event.displayOrder)) ? Number(event.displayOrder) : 0;
   event.recurrenceFrequency = cleanText(event.recurrenceFrequency) || "none";
@@ -143,6 +146,22 @@ export function validateEventInput(input) {
     }
     if (event.bookingUrl.length > LIMITS.bookingUrl) errors.push("bookingUrl is too long.");
   }
+  if (event.imageUrl) {
+    try {
+      const isLocal = event.imageUrl.startsWith("/") && !event.imageUrl.startsWith("//");
+      const absolute = isLocal ? null : new URL(event.imageUrl);
+      if (!isLocal && absolute.protocol !== "https:") errors.push("imageUrl must use https or a root-relative site path.");
+    } catch {
+      errors.push("imageUrl must be a valid https URL or root-relative site path.");
+    }
+    if (event.imageUrl.length > LIMITS.imageUrl) errors.push("imageUrl is too long.");
+  }
+  const bookingState = eventBookingState(event);
+  if (bookingState === "open" && !event.bookingUrl) errors.push("bookingUrl is required when booking is open.");
+  if (bookingState === "open" && !event.bookingLabel) event.bookingLabel = "Book now";
+  if (bookingState === "sold_out" && event.bookingUrl && (!event.bookingLabel || /^book\s*now$/i.test(event.bookingLabel))) {
+    event.bookingLabel = "Join Waitlist";
+  }
   if (event.displayOrder < -1000 || event.displayOrder > 1000) errors.push("displayOrder must be between -1000 and 1000.");
 
   return errors.length ? { errors } : { event };
@@ -166,6 +185,7 @@ export function rowToPublicEvent(row) {
     bookingLabel: row.booking_label,
     bookingUrl: row.booking_url,
     availabilityStatus: row.availability_status,
+    imageUrl: row.image_url || null,
     recurrenceFrequency: row.recurrence_frequency || "none",
     recurrenceUntil: row.recurrence_until,
     displayOrder: row.display_order || 0,
@@ -202,6 +222,7 @@ export function eventValues(event) {
     event.bookingLabel,
     event.bookingUrl,
     event.availabilityStatus,
+    event.imageUrl,
     event.isPublished ? 1 : 0,
     event.displayOrder,
     event.recurrenceFrequency,

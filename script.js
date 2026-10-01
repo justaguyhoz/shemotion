@@ -1,6 +1,7 @@
 import { setupNavigation } from "./navigation.js";
 import { addCustomEventClickTracking, eventBookingMetadata } from "./tracking.js";
 import { captureContactAttribution } from "./attribution.js";
+import { eventBookingPresentation, eventBookingState, eventImageUrl } from "./event-booking.js";
 
 const BRISBANE_TIMEZONE = "Australia/Brisbane";
 
@@ -24,13 +25,12 @@ function compactTime(date) {
 }
 
 export function eventDestination(event) {
-  if (event.availabilityStatus === "Cancelled") return null;
-  return event.bookingUrl || "#contact";
+  return eventBookingPresentation(event).action?.href || null;
 }
 
 export function eventActionLabel(event) {
-  if (!event.bookingUrl) return "Contact Shemotion";
-  return "BOOK NOW";
+  const presentation = eventBookingPresentation(event);
+  return presentation.action?.label || presentation.statusLabel || "";
 }
 
 export function eventGoogleMapsUrl(event) {
@@ -49,10 +49,31 @@ function element(tag, options = {}) {
 }
 
 export function createEventCard(event, idPrefix = "event") {
+  const booking = eventBookingPresentation(event);
   const destination = eventDestination(event);
   const card = element("article", { className: "event-pill" });
   card.dataset.eventId = String(event.id);
-  if (event.availabilityStatus === "Cancelled") card.classList.add("is-cancelled");
+  if (eventBookingState(event) === "cancelled") card.classList.add("is-cancelled");
+
+  const imageUrl = eventImageUrl(event);
+  let media;
+  if (imageUrl) {
+    card.classList.add("has-image");
+    media = element("div", { className: "event-pill-media" });
+    const backdrop = element("img", { className: "event-pill-media-backdrop" });
+    backdrop.src = imageUrl;
+    backdrop.alt = "";
+    backdrop.setAttribute("aria-hidden", "true");
+    backdrop.loading = "lazy";
+    backdrop.decoding = "async";
+    const image = element("img");
+    image.className = "event-pill-media-artwork";
+    image.src = imageUrl;
+    image.alt = `${event.title} event artwork`;
+    image.loading = "lazy";
+    image.decoding = "async";
+    media.append(backdrop, image);
+  }
 
   const content = element("div", { className: "event-pill-content" });
   const meta = element("div", { className: "event-pill-meta" });
@@ -71,10 +92,10 @@ export function createEventCard(event, idPrefix = "event") {
     element("h3", { className: "event-pill-title", text: event.title }),
     meta
   );
-  if (["Limited spaces", "Sold out", "Cancelled"].includes(event.availabilityStatus)) {
+  if (booking.statusLabel) {
     content.append(element("span", {
-      className: `event-pill-status status-${event.availabilityStatus.toLowerCase().replaceAll(" ", "-")}`,
-      text: event.availabilityStatus,
+      className: `event-pill-status status-${booking.state.replaceAll("_", "-")}`,
+      text: booking.statusLabel,
     }));
   }
   if (event.recurrenceFrequency && event.recurrenceFrequency !== "none") {
@@ -122,18 +143,17 @@ export function createEventCard(event, idPrefix = "event") {
 
   if (destination) {
     const action = element("a", {
-      className: `event-pill-action${event.bookingUrl ? " button booking-button" : ""}`,
+      className: "event-pill-action button booking-button",
       text: eventActionLabel(event),
     });
     action.href = destination;
-    if (event.bookingUrl) {
-      action.target = "_blank";
-      action.rel = "noopener noreferrer";
-      addCustomEventClickTracking(action, "EventBookingClick", () => eventBookingMetadata(event));
-    }
+    action.target = "_blank";
+    action.rel = "noopener noreferrer";
+    addCustomEventClickTracking(action, "EventBookingClick", () => eventBookingMetadata(event));
     actions.append(action);
   }
 
+  if (media) card.append(media);
   card.append(content, actions);
   if (details) card.append(details);
   return card;
@@ -359,9 +379,16 @@ function setupEventCarousel(list, cards) {
   updateControls();
 }
 
+export function setUpcomingEventsVisibility(section, primaryAction, hasEvents) {
+  if (section) section.hidden = !hasEvents;
+  if (primaryAction) primaryAction.hidden = !hasEvents;
+}
+
 async function loadPublicEvents() {
   const list = document.querySelector("#events-list");
   if (!list) return;
+  const section = document.querySelector("[data-events-section]");
+  const primaryAction = document.querySelector("[data-primary-book-now]");
 
   try {
     const response = await fetch(`api/events?fresh=${Date.now()}`, {
@@ -374,23 +401,19 @@ async function loadPublicEvents() {
     list.replaceChildren();
     list.setAttribute("aria-busy", "false");
     if (!events.length) {
-      list.append(element("p", {
-        className: "events-empty",
-        text: "New Shemotion dates are coming soon.",
-      }));
+      setUpcomingEventsVisibility(section, primaryAction, false);
       return;
     }
 
+    setUpcomingEventsVisibility(section, primaryAction, true);
     const cards = events.map(createEventCard);
     list.append(...cards);
     setupEventCarousel(list, cards);
     setupEventDetails(cards);
   } catch {
-    list.replaceChildren(element("p", {
-      className: "events-empty",
-      text: "Upcoming dates could not be loaded right now. Please check back soon.",
-    }));
+    list.replaceChildren();
     list.setAttribute("aria-busy", "false");
+    setUpcomingEventsVisibility(section, primaryAction, false);
     console.error("Shemotion events could not be loaded.");
   } finally {
     if (window.location.hash === "#contact") {

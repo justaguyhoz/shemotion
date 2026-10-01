@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { copyEmail, eventActionLabel, eventDestination, eventGoogleMapsUrl, setupEventDetails } from "../script.js";
+import { copyEmail, eventActionLabel, eventDestination, eventGoogleMapsUrl, setUpcomingEventsVisibility, setupEventDetails } from "../script.js";
 import { addCustomEventClickTracking, eventBookingMetadata, trackCustomEvent } from "../tracking.js";
 import { generateEventSlug, validateEventInput } from "../shared/events.js";
 import { eventJsonLd, formatEventTime, pageDocument } from "../shared/public-pages.js";
@@ -45,7 +45,8 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   const css = await readFile(new URL("../styles.css", import.meta.url), "utf8");
   assert.match(html, /4344672809106563/);
   assert.equal((html.match(/fbq\('track', 'PageView'\)/g) || []).length, 1);
-  assert.match(html, /<a class="button booking-button" href="#upcoming-events" data-primary-book-now>Book Now<\/a>/);
+  assert.match(html, /<a class="button booking-button" href="#upcoming-events" data-primary-book-now hidden>Book Now<\/a>/);
+  assert.match(html, /data-events-section hidden/);
   assert.equal((html.match(/data-primary-book-now/g) || []).length, 1);
   assert.equal((html.match(/href="#upcoming-events"/g) || []).length, 1);
   assert.ok(
@@ -199,8 +200,8 @@ test("public contact paths and visible punctuation follow the sitewide policy", 
   assert.match(privateGroups, /Tell us about your group, workplace or event and we can discuss a suitable Shemotion experience\./);
   assert.match(privateGroups, /href="\/#contact" data-organisation-enquiry>Enquire about an organisation or event<\/a>/);
   assert.match(sharedPages, /class="header-cta" href="\/#contact">Contact Shemotion<\/a>/);
-  assert.match(eventsPage, /href="\/#contact">Contact Shemotion<\/a>/);
-  assert.match(eventPage, /href="\/#contact">Contact Shemotion<\/a>/);
+  assert.doesNotMatch(eventsPage, /event-pill-action[^>]*href="\/#contact"/);
+  assert.doesNotMatch(eventPage, /event-detail-actions[^]*href="\/#contact"/);
 
   const visibleText = (html) => html
     .replace(/<script[\s\S]*?<\/script>/gi, "")
@@ -311,18 +312,29 @@ test("event booking tracking sends non-sensitive metadata once", () => {
 test("central event-card implementation tracks only genuine booking URLs", async () => {
   const source = await readFile(new URL("../script.js", import.meta.url), "utf8");
   assert.equal((source.match(/"EventBookingClick"/g) || []).length, 1);
-  assert.match(source, /if \(event\.bookingUrl\) \{[\s\S]*addCustomEventClickTracking\(action, "EventBookingClick"/);
+  assert.match(source, /if \(destination\) \{[\s\S]*addCustomEventClickTracking\(action, "EventBookingClick"/);
   assert.doesNotMatch(source, /mailto:shemotion\.au@gmail\.com[\s\S]{0,250}EventBookingClick/);
 });
 
-test("event pills use the venue link or homepage contact section without dead booking controls", () => {
-  assert.equal(eventDestination(baseEvent), "#contact");
-  assert.equal(eventActionLabel(baseEvent), "Contact Shemotion");
+test("event pills expose only intentional booking destinations and preserve custom CTA text", () => {
+  assert.equal(eventDestination(baseEvent), null);
+  assert.equal(eventActionLabel(baseEvent), "Coming Soon");
   assert.equal(eventDestination({ ...baseEvent, availabilityStatus: "Cancelled" }), null);
-  const bookable = { ...baseEvent, bookingUrl: "https://example.com/class" };
+  const bookable = { ...baseEvent, availabilityStatus: "Booking open", bookingUrl: "https://example.com/class" };
   assert.equal(eventDestination(bookable), "https://example.com/class");
-  assert.equal(eventActionLabel(bookable), "BOOK NOW");
-  assert.equal(eventActionLabel({ ...bookable, bookingLabel: "" }), "BOOK NOW");
+  assert.equal(eventActionLabel(bookable), "Book with Reinvigr8");
+  assert.equal(eventActionLabel({ ...bookable, bookingLabel: "" }), "Book Now");
+});
+
+test("homepage event visibility collapses both the section and primary CTA when empty", () => {
+  const section = { hidden: false };
+  const primaryAction = { hidden: false };
+  setUpcomingEventsVisibility(section, primaryAction, false);
+  assert.equal(section.hidden, true);
+  assert.equal(primaryAction.hidden, true);
+  setUpcomingEventsVisibility(section, primaryAction, true);
+  assert.equal(section.hidden, false);
+  assert.equal(primaryAction.hidden, false);
 });
 
 function eventDetailsCardStub() {
