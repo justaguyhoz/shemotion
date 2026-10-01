@@ -57,17 +57,18 @@ test("Instagram gallery reserves media dimensions and has responsive accessible 
 
   assert.match(css, /\.instagram-card-media[\s\S]*aspect-ratio:\s*3\s*\/\s*4/);
   assert.match(css, /@media \(max-width: 700px\)[\s\S]*\.instagram-grid[\s\S]*overflow:\s*hidden[\s\S]*touch-action:\s*pan-y/);
-  assert.match(css, /@media \(max-width: 700px\)[\s\S]*\.instagram-track[\s\S]*animation:\s*instagram-stream 30s linear infinite/);
-  assert.match(css, /@media \(max-width: 700px\)[\s\S]*\.instagram-card[\s\S]*clamp\(116px, 31vw, 148px\)/);
+  assert.match(css, /@media \(max-width: 700px\)[\s\S]*\.instagram-track[\s\S]*animation:\s*instagram-stream 22s linear infinite/);
+  assert.match(css, /@media \(max-width: 700px\)[\s\S]*\.instagram-card-group[\s\S]*gap:\s*8px[\s\S]*padding-right:\s*8px/);
+  assert.match(css, /@media \(max-width: 700px\)[\s\S]*\.instagram-card[\s\S]*clamp\(88px, 27vw, 116px\)/);
   assert.match(css, /\.instagram-grid::\-webkit-scrollbar[\s\S]*display:\s*none/);
   assert.match(css, /@media \(hover: hover\) and \(pointer: fine\) and \(prefers-reduced-motion: no-preference\)[\s\S]*\.instagram-card:hover/);
   assert.match(script, /\.instagram \[data-reveal\]/);
   assert.match(script, /export function setupInstagramGallery/);
   assert.match(css, /@keyframes instagram-stream/);
-  assert.match(css, /translateX\(calc\(-50% - var\(--instagram-half-gap\)\)\)/);
+  assert.match(css, /translateX\(-50%\)/);
   assert.match(css, /animation:\s*instagram-stream 36s linear infinite/);
   assert.match(css, /\.instagram-track\s*\{[\s\S]*gap:\s*0[\s\S]*animation:\s*instagram-stream 36s linear infinite/);
-  assert.match(css, /\.instagram-grid:hover \.instagram-track,[\s\S]*animation-play-state:\s*paused/);
+  assert.match(css, /@media \(hover: hover\) and \(pointer: fine\) and \(prefers-reduced-motion: no-preference\)[\s\S]*\.instagram-grid:hover \.instagram-track,[\s\S]*animation-play-state:\s*paused/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.instagram-track[\s\S]*animation:\s*none[\s\S]*\.instagram-grid[\s\S]*overflow-x:\s*auto/);
   assert.match(script, /grid\.setAttribute\("aria-label", "Featured Instagram posts"\)/);
   assert.match(script, /setupInstagramGallery\(\)/);

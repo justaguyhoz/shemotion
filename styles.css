@@ -1631,7 +1631,6 @@ p:last-child {
 }
 
 .instagram-track {
-  --instagram-half-gap: clamp(6px, 0.8vw, 10px);
   width: max-content;
   gap: 0;
   animation: instagram-stream 36s linear infinite;
@@ -1641,14 +1640,8 @@ p:last-child {
   padding-right: clamp(12px, 1.6vw, 20px);
 }
 
-.instagram-grid:hover .instagram-track,
-.instagram-grid:focus-within .instagram-track,
-.instagram-grid:active .instagram-track {
-  animation-play-state: paused;
-}
-
 @keyframes instagram-stream {
-  to { transform: translateX(calc(-50% - var(--instagram-half-gap))); }
+  to { transform: translateX(-50%); }
 }
 
 .instagram-card {
@@ -1744,6 +1737,11 @@ p:last-child {
 }
 
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .instagram-grid:hover .instagram-track,
+  .instagram-grid:focus-within .instagram-track {
+    animation-play-state: paused;
+  }
+
   .instagram-card:hover {
     transform: translateY(-4px);
     border-color: rgba(47, 74, 61, 0.3);
@@ -2778,7 +2776,12 @@ blockquote:hover {
   }
 
   .instagram-track {
-    animation: instagram-stream 30s linear infinite;
+    animation: instagram-stream 22s linear infinite;
+  }
+
+  .instagram-card-group {
+    gap: 8px;
+    padding-right: 8px;
   }
 
   .instagram-grid::-webkit-scrollbar {
@@ -2786,9 +2789,9 @@ blockquote:hover {
   }
 
   .instagram-card {
-    flex: 0 0 clamp(116px, 31vw, 148px);
-    width: clamp(116px, 31vw, 148px);
-    min-width: clamp(116px, 31vw, 148px);
+    flex: 0 0 clamp(88px, 27vw, 116px);
+    width: clamp(88px, 27vw, 116px);
+    min-width: clamp(88px, 27vw, 116px);
   }
 
   .instagram-action {
