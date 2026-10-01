@@ -7,7 +7,7 @@ import {
   injectInstagramGallery,
 } from "../shared/instagram-gallery.js";
 
-test("curated Instagram gallery uses three verified Shemotion posts and local images", async () => {
+test("curated Instagram gallery uses three verified Shemotion posts and their exact local cover images", async () => {
   assert.equal(FEATURED_INSTAGRAM_POSTS.length, 3);
   assert.deepEqual(FEATURED_INSTAGRAM_POSTS.map(({ url }) => url), [
     "https://www.instagram.com/shemotion.au/reel/DaHg1VgsNw8/",
@@ -15,6 +15,11 @@ test("curated Instagram gallery uses three verified Shemotion posts and local im
     "https://www.instagram.com/shemotion.au/reel/DccwuXITHcL/",
   ]);
   assert.equal(INSTAGRAM_PROFILE_URL, "https://www.instagram.com/shemotion.au/");
+  assert.deepEqual(FEATURED_INSTAGRAM_POSTS.map(({ image }) => image), [
+    "assets/instagram-DaHg1VgsNw8.jpg",
+    "assets/instagram-DdlfA3SRB2c.jpg",
+    "assets/instagram-DccwuXITHcL.jpg",
+  ]);
 
   await Promise.all(FEATURED_INSTAGRAM_POSTS.map(async (post) => {
     assert.match(post.url, /^https:\/\/www\.instagram\.com\/shemotion\.au\/(?:p|reel)\/[A-Za-z0-9_-]+\/$/);
@@ -37,6 +42,7 @@ test("homepage build injects accessible static Instagram cards between Contact a
   assert.equal((rendered.match(/loading="lazy"/g) || []).length >= 6, true);
   assert.match(rendered, /class="instagram-track"/);
   assert.match(rendered, /aria-hidden="true" tabindex="-1"/);
+  assert.doesNotMatch(rendered, /instagram-card-copy|View on Instagram/);
   assert.equal((rendered.match(/target="_blank" rel="noopener noreferrer"/g) || []).length >= 4, true);
   assert.doesNotMatch(rendered, /INSTAGRAM_GALLERY_CARDS/);
   assert.match(rendered, /Follow Shemotion/);
@@ -49,21 +55,20 @@ test("Instagram gallery reserves media dimensions and has responsive accessible 
   const css = await readFile(new URL("../styles.css", import.meta.url), "utf8");
   const script = await readFile(new URL("../script.js", import.meta.url), "utf8");
 
-  assert.match(css, /\.instagram-card-media[\s\S]*aspect-ratio:\s*4\s*\/\s*5/);
-  assert.match(css, /@media \(max-width: 700px\)[\s\S]*\.instagram-grid[\s\S]*overflow-x:\s*auto[\s\S]*scrollbar-width:\s*none/);
-  assert.match(css, /@media \(max-width: 700px\)[\s\S]*scroll-snap-type:\s*x proximity/);
-  assert.match(css, /@media \(max-width: 700px\)[\s\S]*\.instagram-track[\s\S]*padding-right:[^;]+/);
-  assert.match(css, /@media \(max-width: 700px\)[\s\S]*\.instagram-card[\s\S]*min\(70vw, 300px\)/);
-  const mobileStyles = css.slice(css.indexOf("@media (max-width: 700px)"), css.indexOf("@media (max-width: 560px)"));
-  assert.doesNotMatch(mobileStyles, /\.instagram-card-group\[aria-hidden="true"\][\s\S]*display:\s*none/);
+  assert.match(css, /\.instagram-card-media[\s\S]*aspect-ratio:\s*3\s*\/\s*4/);
+  assert.match(css, /@media \(max-width: 700px\)[\s\S]*\.instagram-grid[\s\S]*overflow:\s*hidden[\s\S]*touch-action:\s*pan-y/);
+  assert.match(css, /@media \(max-width: 700px\)[\s\S]*\.instagram-track[\s\S]*animation:\s*instagram-stream 30s linear infinite/);
+  assert.match(css, /@media \(max-width: 700px\)[\s\S]*\.instagram-card[\s\S]*clamp\(116px, 31vw, 148px\)/);
   assert.match(css, /\.instagram-grid::\-webkit-scrollbar[\s\S]*display:\s*none/);
   assert.match(css, /@media \(hover: hover\) and \(pointer: fine\) and \(prefers-reduced-motion: no-preference\)[\s\S]*\.instagram-card:hover/);
   assert.match(script, /\.instagram \[data-reveal\]/);
   assert.match(script, /export function setupInstagramGallery/);
   assert.match(css, /@keyframes instagram-stream/);
-  assert.match(css, /animation:\s*instagram-stream 44s linear infinite/);
+  assert.match(css, /translateX\(calc\(-50% - var\(--instagram-half-gap\)\)\)/);
+  assert.match(css, /animation:\s*instagram-stream 36s linear infinite/);
+  assert.match(css, /\.instagram-track\s*\{[\s\S]*gap:\s*0[\s\S]*animation:\s*instagram-stream 36s linear infinite/);
   assert.match(css, /\.instagram-grid:hover \.instagram-track,[\s\S]*animation-play-state:\s*paused/);
-  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.instagram-track[\s\S]*animation:\s*none/);
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.instagram-track[\s\S]*animation:\s*none[\s\S]*\.instagram-grid[\s\S]*overflow-x:\s*auto/);
   assert.match(script, /grid\.setAttribute\("aria-label", "Featured Instagram posts"\)/);
   assert.match(script, /setupInstagramGallery\(\)/);
 });

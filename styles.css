@@ -1631,8 +1631,10 @@ p:last-child {
 }
 
 .instagram-track {
+  --instagram-half-gap: clamp(6px, 0.8vw, 10px);
   width: max-content;
-  animation: instagram-stream 44s linear infinite;
+  gap: 0;
+  animation: instagram-stream 36s linear infinite;
 }
 
 .instagram-card-group {
@@ -1640,24 +1642,23 @@ p:last-child {
 }
 
 .instagram-grid:hover .instagram-track,
-.instagram-grid:focus-within .instagram-track {
+.instagram-grid:focus-within .instagram-track,
+.instagram-grid:active .instagram-track {
   animation-play-state: paused;
 }
 
 @keyframes instagram-stream {
-  to { transform: translateX(-50%); }
+  to { transform: translateX(calc(-50% - var(--instagram-half-gap))); }
 }
 
 .instagram-card {
-  display: flex;
-  width: clamp(176px, 19vw, 224px);
-  min-width: clamp(176px, 19vw, 224px);
+  display: block;
+  width: clamp(148px, 16vw, 210px);
+  min-width: clamp(148px, 16vw, 210px);
   overflow: hidden;
-  flex-direction: column;
-  background: var(--white-soft);
-  border: 1px solid rgba(201, 184, 166, 0.58);
-  border-radius: 8px;
-  box-shadow: 0 16px 42px rgba(79, 74, 69, 0.09);
+  background: var(--stone);
+  border-radius: 4px;
+  box-shadow: 0 10px 28px rgba(79, 74, 69, 0.1);
   transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 280ms ease, border-color 280ms ease;
 }
 
@@ -1665,7 +1666,7 @@ p:last-child {
   position: relative;
   display: block;
   overflow: hidden;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 3 / 4;
   background: var(--stone);
 }
 
@@ -1674,69 +1675,31 @@ p:last-child {
   height: 100%;
   object-fit: cover;
   object-position: var(--instagram-position, 50% 50%);
-  filter: saturate(0.78) contrast(0.97);
+  filter: none;
   transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .instagram-reel-mark {
   position: absolute;
-  top: var(--space-sm);
-  right: var(--space-sm);
+  top: 8px;
+  right: 8px;
   display: grid;
-  width: 36px;
-  height: 36px;
+  width: 24px;
+  height: 24px;
   place-items: center;
-  background: rgba(47, 74, 61, 0.86);
-  border: 1px solid rgba(247, 242, 236, 0.64);
+  background: rgba(20, 20, 20, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.7);
   border-radius: 50%;
-  box-shadow: 0 5px 18px rgba(47, 74, 61, 0.2);
+  box-shadow: 0 3px 10px rgba(20, 20, 20, 0.18);
 }
 
 .instagram-reel-mark span {
   width: 0;
   height: 0;
   margin-left: 2px;
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-  border-left: 8px solid var(--ivory);
-}
-
-.instagram-card-copy {
-  display: grid;
-  flex: 1;
-  gap: var(--space-sm);
-  padding: clamp(14px, 1.6vw, 18px);
-  color: var(--muted);
-  font-size: 0.92rem;
-  line-height: 1.6;
-}
-
-.instagram-card-type {
-  color: var(--green);
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  line-height: 1.4;
-  text-transform: uppercase;
-}
-
-.instagram-card-copy strong {
-  color: var(--charcoal);
-  font-family: var(--serif);
-  font-size: clamp(1.08rem, 1.5vw, 1.28rem);
-  font-weight: 400;
-  line-height: 1.2;
-  text-wrap: balance;
-}
-
-.instagram-card-link {
-  align-self: end;
-  margin-top: var(--space-xs);
-  color: var(--green);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 6px solid var(--ivory);
 }
 
 .instagram-action {
@@ -2809,17 +2772,13 @@ blockquote:hover {
     max-width: none;
     margin-inline: calc(-1 * clamp(20px, 5vw, 76px));
     padding: 4px clamp(20px, 5vw, 76px) 14px;
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
-    scroll-padding-inline: clamp(20px, 5vw, 76px);
-    scroll-snap-type: x proximity;
+    overflow: hidden;
     scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
   }
 
   .instagram-track {
-    animation: none;
-    padding-right: clamp(20px, 5vw, 76px);
+    animation: instagram-stream 30s linear infinite;
   }
 
   .instagram-grid::-webkit-scrollbar {
@@ -2827,10 +2786,9 @@ blockquote:hover {
   }
 
   .instagram-card {
-    flex: 0 0 min(70vw, 300px);
-    width: min(70vw, 300px);
-    min-width: min(70vw, 300px);
-    scroll-snap-align: start;
+    flex: 0 0 clamp(116px, 31vw, 148px);
+    width: clamp(116px, 31vw, 148px);
+    min-width: clamp(116px, 31vw, 148px);
   }
 
   .instagram-action {
