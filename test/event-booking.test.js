@@ -163,11 +163,11 @@ test("event imagery is optional in data, cards and detail pages", async () => {
   assert.equal(rowToPublicEvent(row({ image_url: null })).imageUrl, null);
 
   const withImage = await (await getEventPage({ env: detailEnv(row()), params: { slug: "release-and-reconnect-tallai" } })).text();
-  assert.match(withImage, /class="event-detail-media"/);
+  assert.match(withImage, /class="event-detail-media event-media-frame fit-contain"/);
   assert.match(withImage, /src="\/assets\/meditation\.jpg"/);
 
   const withoutImage = await (await getEventPage({ env: detailEnv(row({ image_url: null })), params: { slug: "release-and-reconnect-tallai" } })).text();
-  assert.doesNotMatch(withoutImage, /class="event-detail-media"/);
+  assert.doesNotMatch(withoutImage, /class="event-detail-media event-media-frame/);
 });
 
 test("event-card artwork uses a responsive landscape frame without cropping important content", async () => {
@@ -177,6 +177,8 @@ test("event-card artwork uses a responsive landscape frame without cropping impo
   assert.match(css, /\.event-pill-media-artwork\s*\{[\s\S]*object-fit:\s*contain;/);
   assert.match(css, /\.event-pill-media-backdrop,[\s\S]*object-fit:\s*cover;/);
   assert.match(css, /@media \(max-width: 560px\)[\s\S]*\.event-pill-media/);
-  assert.match(script, /className: "event-pill-media"/);
+  assert.match(script, /className: `event-pill-media event-media-frame fit-/);
+  assert.match(css, /object-position:\s*var\(--event-focal-x, 50%\) var\(--event-focal-y, 50%\)/);
+  assert.match(css, /\.event-media-frame\.fit-cover/);
   assert.doesNotMatch(script, /swiper|slick|embla/i);
 });

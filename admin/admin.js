@@ -29,6 +29,9 @@ const locationForm = document.querySelector("[data-location-form]");
 const locationError = document.querySelector("[data-location-error]");
 const placeSearch = document.querySelector("[data-place-search]");
 const placeResults = document.querySelector("[data-place-results]");
+const imageFile = form.querySelector("[data-event-image-file]");
+const imageUpload = form.querySelector("[data-event-image-upload]");
+const imageUploadStatus = form.querySelector("[data-event-image-upload-status]");
 let events = [];
 let locations = [];
 let adminCalendarMonth;
@@ -421,7 +424,7 @@ function bookingStateValue(event) {
 }
 
 function applyEventToForm(event, { includeSchedule = true } = {}) {
-  for (const name of ["title", "slug", "eventType", "audience", "shortDescription", "bookingLabel", "bookingUrl", "imageUrl", "displayOrder", "recurrenceFrequency", "recurrenceUntil"]) {
+  for (const name of ["title", "slug", "eventType", "audience", "shortDescription", "bookingLabel", "bookingUrl", "imageUrl", "imageFocalX", "imageFocalY", "imageFit", "displayOrder", "recurrenceFrequency", "recurrenceUntil"]) {
     form.elements[name].value = event[name] ?? "";
   }
   form.elements.availabilityStatus.value = bookingStateValue(event);
@@ -453,6 +456,9 @@ function defaultForm(prefillDate = "") {
   form.elements.displayOrder.value = "0";
   form.elements.dateStatus.value = "scheduled";
   form.elements.recurrenceFrequency.value = "none";
+  form.elements.imageFit.value = "contain";
+  form.elements.imageFocalX.value = "50";
+  form.elements.imageFocalY.value = "50";
   form.elements.startDate.value = prefillDate;
   locationSelect.value = "new";
   setLocationMode("new");
@@ -464,6 +470,9 @@ function currentFormState() {
 
 function openForm(event = null, prefillDate = "", options = {}) {
   form.reset();
+  imageFile.value = "";
+  imageUpload.disabled = true;
+  imageUploadStatus.textContent = "";
   formError.textContent = "";
   const duplicate = Boolean(options.duplicate);
   form.elements.id.value = event && !duplicate ? event.id : "";
@@ -515,7 +524,8 @@ function formPayload(locationId = null) {
     timezone: "Australia/Brisbane", audience: data.get("audience"),
     shortDescription: data.get("shortDescription"), bookingLabel: data.get("bookingLabel"),
     bookingUrl: data.get("bookingUrl"), availabilityStatus: data.get("availabilityStatus"),
-    imageUrl: data.get("imageUrl"),
+    imageUrl: data.get("imageUrl"), imageFit: data.get("imageFit"),
+    imageFocalX: Number(data.get("imageFocalX")), imageFocalY: Number(data.get("imageFocalY")),
     isPublished: data.get("isPublished") === "on", displayOrder: Number(data.get("displayOrder") || 0),
     recurrenceFrequency: data.get("recurrenceFrequency"), recurrenceUntil: data.get("recurrenceUntil"),
   };
@@ -562,17 +572,77 @@ function updateBookingFields() {
 }
 
 function updateImagePreview() {
-  const preview = form.querySelector("[data-event-image-preview]");
   const wrap = form.querySelector("[data-event-image-preview-wrap]");
   const value = form.elements.imageUrl.value.trim();
+  const focalX = Number(form.elements.imageFocalX.value || 50);
+  const focalY = Number(form.elements.imageFocalY.value || 50);
+  const fit = form.elements.imageFit.value === "cover" ? "cover" : "contain";
+  form.querySelector("[data-focal-x-output]").value = `${focalX}%`;
+  form.querySelector("[data-focal-y-output]").value = `${focalY}%`;
   if (!value) {
-    preview.removeAttribute("src");
+    form.querySelectorAll("[data-event-image-preview], [data-event-image-backdrop]").forEach((image) => image.removeAttribute("src"));
     wrap.hidden = true;
     return;
   }
-  preview.src = value;
-  preview.alt = `${form.elements.title.value.trim() || "Event"} image preview`;
+  wrap.querySelectorAll(".event-media-frame").forEach((preview) => {
+    preview.classList.toggle("fit-cover", fit === "cover");
+    preview.classList.toggle("fit-contain", fit !== "cover");
+    preview.style.setProperty("--event-focal-x", `${focalX}%`);
+    preview.style.setProperty("--event-focal-y", `${focalY}%`);
+  });
+  form.querySelectorAll("[data-event-image-preview]").forEach((preview) => {
+    preview.src = value;
+    preview.alt = `${form.elements.title.value.trim() || "Event"} image preview`;
+  });
+  form.querySelectorAll("[data-event-image-backdrop]").forEach((preview) => { preview.src = value; });
   wrap.hidden = false;
+}
+
+async function optimisedUpload(file) {
+  if (!/^image\/(jpeg|png|webp)$/.test(file.type)) throw new Error("Choose a JPG, PNG or WebP image.");
+  if (file.size > 8 * 1024 * 1024) throw new Error("Images must be 8 MB or smaller.");
+  const image = await createImageBitmap(file);
+  const scale = Math.min(1, 2000 / Math.max(image.width, image.height));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(image.width * scale);
+  canvas.height = Math.round(image.height * scale);
+  canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+  image.close();
+  return new Promise((resolve, reject) => canvas.toBlob(
+    (blob) => blob ? resolve(new File([blob], `${file.name.replace(/\.[^.]+$/, "")}.webp`, { type: "image/webp" })) : reject(new Error("The image could not be prepared.")),
+    "image/webp", .86
+  ));
+}
+
+async function uploadEventImage() {
+  const selected = imageFile.files?.[0];
+  if (!selected) return;
+  imageUpload.disabled = true;
+  imageUploadStatus.textContent = "Preparing image…";
+  try {
+    const file = await optimisedUpload(selected);
+    const body = new FormData();
+    body.append("image", file);
+    imageUploadStatus.textContent = "Uploading image…";
+    const response = await fetch("../api/admin/event-images", { method: "POST", body, headers: { accept: "application/json" } });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || "The image could not be uploaded.");
+    form.elements.imageUrl.value = result.url;
+    imageUploadStatus.textContent = "Image uploaded. Save the event to use it.";
+    updateImagePreview();
+  } catch (error) {
+    imageUploadStatus.textContent = error.message;
+  } finally {
+    imageUpload.disabled = false;
+  }
+}
+
+function setFocalFromPointer(event) {
+  if (form.elements.imageFit.value !== "cover") return;
+  const rect = event.currentTarget.getBoundingClientRect();
+  form.elements.imageFocalX.value = String(Math.round(Math.max(0, Math.min(100, (event.clientX - rect.left) / rect.width * 100))));
+  form.elements.imageFocalY.value = String(Math.round(Math.max(0, Math.min(100, (event.clientY - rect.top) / rect.height * 100))));
+  updateImagePreview();
 }
 
 locationSelect.addEventListener("change", () => setLocationMode(locationSelect.value));
@@ -587,6 +657,28 @@ form.elements.dateStatus.addEventListener("change", updateDateFields);
 form.elements.availabilityStatus.addEventListener("change", updateBookingFields);
 form.elements.imageUrl.addEventListener("input", updateImagePreview);
 form.elements.title.addEventListener("input", updateImagePreview);
+form.elements.imageFit.addEventListener("change", updateImagePreview);
+form.elements.imageFocalX.addEventListener("input", updateImagePreview);
+form.elements.imageFocalY.addEventListener("input", updateImagePreview);
+imageFile.addEventListener("change", () => {
+  imageUpload.disabled = !imageFile.files?.length;
+  imageUploadStatus.textContent = imageFile.files?.length ? `${imageFile.files[0].name} selected.` : "";
+});
+imageUpload.addEventListener("click", uploadEventImage);
+form.querySelector("[data-reset-focal]").addEventListener("click", () => {
+  form.elements.imageFocalX.value = "50";
+  form.elements.imageFocalY.value = "50";
+  updateImagePreview();
+});
+form.querySelectorAll(".event-image-preview").forEach((preview) => {
+  preview.addEventListener("pointerdown", (event) => {
+    preview.setPointerCapture(event.pointerId);
+    setFocalFromPointer(event);
+  });
+  preview.addEventListener("pointermove", (event) => {
+    if (preview.hasPointerCapture(event.pointerId)) setFocalFromPointer(event);
+  });
+});
 form.querySelector("[data-event-image-preview]").addEventListener("error", () => {
   form.querySelector("[data-event-image-preview-wrap]").hidden = true;
 });

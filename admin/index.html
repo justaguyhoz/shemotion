@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="admin.css?v=20261001-2">
+    <link rel="stylesheet" href="admin.css?v=20261001-3">
   </head>
   <body>
     <header class="admin-header">
@@ -204,11 +204,24 @@
           </fieldset>
           <fieldset class="form-section field-wide">
             <legend>Media</legend>
-            <div class="form-section-grid media-fields">
-              <label>Event image URL <span class="optional-label">HTTPS or /assets/ path</span><input name="imageUrl" type="text" maxlength="500" placeholder="/assets/event-artwork.jpg" data-event-image-input></label>
-              <div class="event-image-preview" data-event-image-preview-wrap hidden>
-                <img data-event-image-preview alt="Event image preview">
-                <p>Event card preview</p>
+            <div class="media-fields">
+              <div class="media-upload-fields">
+                <label>Upload event artwork <span class="optional-label">JPG, PNG or WebP, up to 8 MB</span><input type="file" accept="image/jpeg,image/png,image/webp" data-event-image-file></label>
+                <p class="field-help">For best results use a 1600 × 1200 image (4:3). The original composition is preserved.</p>
+                <button class="text-button" type="button" data-event-image-upload disabled>Upload selected image</button>
+                <p class="field-help" data-event-image-upload-status role="status" aria-live="polite"></p>
+                <label>Stored image URL <span class="optional-label">Updated after upload</span><input name="imageUrl" type="text" maxlength="500" placeholder="/media/events/artwork.webp" data-event-image-input></label>
+                <label>Image fit
+                  <select name="imageFit"><option value="contain">Show full artwork</option><option value="cover">Fill frame using focal point</option></select>
+                </label>
+                <label>Horizontal focal point <output data-focal-x-output>50%</output><input name="imageFocalX" type="range" min="0" max="100" value="50"></label>
+                <label>Vertical focal point <output data-focal-y-output>50%</output><input name="imageFocalY" type="range" min="0" max="100" value="50"></label>
+                <button class="text-button" type="button" data-reset-focal>Reset focal point</button>
+              </div>
+              <div class="event-preview-set" data-event-image-preview-wrap hidden>
+                <section><p class="preview-label">Homepage preview</p><div class="event-image-preview preview-home event-media-frame"><img class="event-pill-media-backdrop" data-event-image-backdrop alt="" aria-hidden="true"><img class="event-pill-media-artwork" data-event-image-preview alt="Event image preview"></div></section>
+                <section><p class="preview-label">All events preview</p><div class="event-image-preview preview-archive event-media-frame"><img class="event-pill-media-backdrop" data-event-image-backdrop alt="" aria-hidden="true"><img class="event-pill-media-artwork" data-event-image-preview alt="Event image preview"></div></section>
+                <p class="field-help">Use the sliders, or click and drag either preview when “Fill frame” is selected.</p>
               </div>
             </div>
           </fieldset>
@@ -227,6 +240,6 @@
       </form>
     </dialog>
 
-    <script type="module" src="admin.js?v=20261001-2"></script>
+    <script type="module" src="admin.js?v=20261001-3"></script>
   </body>
 </html>

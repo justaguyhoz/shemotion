@@ -350,50 +350,13 @@ function eventDetailsCardStub() {
   return { card, details, toggle };
 }
 
-test("event-card controls remain mutually exclusive and cards toggle independently", async () => {
-  const first = eventDetailsCardStub();
-  const second = eventDetailsCardStub();
-  const eventRoot = new EventTarget();
-  setupEventDetails([first.card, second.card], eventRoot);
-
-  const quickDetailsClick = new Event("click", { cancelable: true });
-  first.toggle.dispatchEvent(quickDetailsClick);
-  assert.equal(quickDetailsClick.defaultPrevented, false);
-  assert.equal(first.toggle.getAttribute("aria-expanded"), "true");
-  assert.equal(first.toggle.textContent, "Close details");
-  assert.equal(first.details.hidden, false);
-  assert.equal(second.toggle.getAttribute("aria-expanded"), "false");
-  assert.equal(second.details.hidden, true);
-
-  second.toggle.dispatchEvent(new Event("click", { cancelable: true }));
-  assert.equal(first.toggle.getAttribute("aria-expanded"), "true");
-  assert.equal(first.details.hidden, false);
-  assert.equal(second.toggle.getAttribute("aria-expanded"), "true");
-  assert.equal(second.details.hidden, false);
-
-  second.toggle.dispatchEvent(new Event("click", { cancelable: true }));
-  assert.equal(second.toggle.getAttribute("aria-expanded"), "false");
-  assert.equal(second.details.hidden, true);
-
-  first.toggle.dispatchEvent(new Event("click", { cancelable: true }));
-  assert.equal(first.toggle.getAttribute("aria-expanded"), "false");
-  assert.equal(first.toggle.textContent, "Quick details");
-  assert.equal(first.details.hidden, true);
-
+test("homepage event cards use one detail link and a separate booking action", async () => {
   const source = await readFile(new URL("../script.js", import.meta.url), "utf8");
-  assert.match(source, /className: "event-page-link", text: "Event page"/);
-  assert.match(source, /toggle\.dataset\.eventDetailsToggle = ""/);
-  assert.doesNotMatch(source, /card\.querySelector\("\.event-details-toggle"\)/);
-
-  const eventPageClick = new Event("click", { cancelable: true });
-  new EventTarget().dispatchEvent(eventPageClick);
-  assert.equal(eventPageClick.defaultPrevented, false);
-  assert.equal(first.details.hidden, true);
-
-  const bookingClick = new Event("click", { cancelable: true });
-  new EventTarget().dispatchEvent(bookingClick);
-  assert.equal(bookingClick.defaultPrevented, false);
-  assert.equal(first.details.hidden, true);
+  assert.match(source, /className: "event-card-main-link"/);
+  assert.match(source, /mainLink\.href = `\/events\//);
+  assert.match(source, /className: "event-pill-action button booking-button"/);
+  assert.doesNotMatch(source, /text: "Quick details"/);
+  assert.doesNotMatch(source, /className: "event-page-link"/);
 });
 
 test("event map links prefer saved URLs and otherwise include venue and address", () => {

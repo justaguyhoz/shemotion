@@ -9,7 +9,8 @@ const PUBLIC_EVENT_COLUMNS = `
   COALESCE(locations.address, events.address) AS address,
   events.date_status, events.start_at, events.end_at, events.timezone,
   events.audience, events.short_description, events.booking_label, events.booking_url,
-  events.availability_status, events.image_url, events.recurrence_frequency, events.recurrence_until,
+  events.availability_status, events.image_url, events.image_focal_x, events.image_focal_y, events.image_fit,
+  events.recurrence_frequency, events.recurrence_until,
   events.display_order, events.location_id, locations.latitude, locations.longitude,
   locations.google_maps_url`;
 

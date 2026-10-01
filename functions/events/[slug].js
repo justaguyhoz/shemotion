@@ -46,7 +46,9 @@ export async function onRequestGet({ env, params }) {
     : "";
   const availability = isCancelled ? "Cancelled" : isPast ? "Ended" : presentation.statusLabel || "Booking Open";
   const imageUrl = eventImageUrl(occurrence);
-  const media = imageUrl ? `<div class="event-detail-media"><img class="event-detail-media-backdrop" src="${escapeHtml(imageUrl)}" alt="" aria-hidden="true"><img class="event-detail-media-artwork" src="${escapeHtml(imageUrl)}" alt="${escapeHtml(`${event.title} event artwork`)}"></div>` : "";
+  const focal = `--event-focal-x:${Number(event.imageFocalX ?? 50)}%;--event-focal-y:${Number(event.imageFocalY ?? 50)}%`;
+  const fit = event.imageFit === "cover" ? "cover" : "contain";
+  const media = imageUrl ? `<div class="event-detail-media event-media-frame fit-${fit}" style="${focal}"><img class="event-detail-media-backdrop" src="${escapeHtml(imageUrl)}" alt="" aria-hidden="true"><img class="event-detail-media-artwork" src="${escapeHtml(imageUrl)}" alt="${escapeHtml(`${event.title} event artwork`)}"></div>` : "";
   const body = `<main id="top" data-event-detail data-event-id="${escapeHtml(event.id)}" data-event-name="${escapeHtml(event.title)}" data-event-type="${escapeHtml(event.eventType)}" data-venue-name="${escapeHtml(event.venueName)}" data-suburb="${escapeHtml(event.suburb || "")}">
     <article class="event-detail-page section-pad"><p class="eyebrow">${escapeHtml(event.eventType)} &middot; ${escapeHtml(event.audience)}</p><h1>${escapeHtml(event.title)}</h1><p class="event-detail-intro">${escapeHtml(description)}</p>
     ${media}${lifecycleNotice}<dl class="event-facts"><div><dt>Date</dt><dd>${escapeHtml(formatEventDate(occurrence))}</dd></div><div><dt>Time</dt><dd>${escapeHtml(formatEventTime(occurrence))}</dd></div><div><dt>Venue</dt><dd>${escapeHtml(location)}</dd></div>${occurrence.address ? `<div><dt>Address</dt><dd>${escapeHtml(occurrence.address)}</dd></div>` : ""}<div><dt>Booking</dt><dd>${escapeHtml(availability)}</dd></div><div><dt>Audience</dt><dd>${escapeHtml(occurrence.audience)}</dd></div></dl>

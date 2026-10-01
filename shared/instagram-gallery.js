@@ -48,7 +48,7 @@ function escapeHtml(value) {
 }
 
 export function renderInstagramGalleryCards(posts = FEATURED_INSTAGRAM_POSTS) {
-  return posts.map((post) => `
+  const cards = (duplicate = false) => posts.map((post) => `
           <a class="instagram-card" href="${escapeHtml(post.url)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(post.title)} - opens Instagram in a new tab">
             <span class="instagram-card-media" style="--instagram-position: ${escapeHtml(post.position)}">
               <img src="${escapeHtml(post.image)}" alt="${escapeHtml(post.alt)}" width="${post.width}" height="${post.height}" loading="lazy" decoding="async">
@@ -61,6 +61,8 @@ export function renderInstagramGalleryCards(posts = FEATURED_INSTAGRAM_POSTS) {
               <span class="instagram-card-link">View on Instagram <span aria-hidden="true">↗</span></span>
             </span>
           </a>`).join("");
+  const duplicates = cards(true).replaceAll('<a class="instagram-card"', '<a class="instagram-card" aria-hidden="true" tabindex="-1"');
+  return `<div class="instagram-track"><div class="instagram-card-group">${cards()}</div><div class="instagram-card-group" aria-hidden="true">${duplicates}</div></div>`;
 }
 
 export function injectInstagramGallery(html, posts = FEATURED_INSTAGRAM_POSTS) {

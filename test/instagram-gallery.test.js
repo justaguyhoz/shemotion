@@ -33,8 +33,10 @@ test("homepage build injects accessible static Instagram cards between Contact a
   const faqIndex = rendered.indexOf('<section class="faq');
 
   assert.ok(contactIndex >= 0 && contactIndex < instagramIndex && instagramIndex < faqIndex);
-  assert.equal((rendered.match(/class="instagram-card"/g) || []).length, 3);
-  assert.equal((rendered.match(/loading="lazy"/g) || []).length >= 3, true);
+  assert.equal((rendered.match(/class="instagram-card"/g) || []).length, 6);
+  assert.equal((rendered.match(/loading="lazy"/g) || []).length >= 6, true);
+  assert.match(rendered, /class="instagram-track"/);
+  assert.match(rendered, /aria-hidden="true" tabindex="-1"/);
   assert.equal((rendered.match(/target="_blank" rel="noopener noreferrer"/g) || []).length >= 4, true);
   assert.doesNotMatch(rendered, /INSTAGRAM_GALLERY_CARDS/);
   assert.match(rendered, /Follow Shemotion/);
@@ -53,6 +55,10 @@ test("Instagram gallery reserves media dimensions and has responsive accessible 
   assert.match(css, /@media \(hover: hover\) and \(pointer: fine\) and \(prefers-reduced-motion: no-preference\)[\s\S]*\.instagram-card:hover/);
   assert.match(script, /\.instagram \[data-reveal\]/);
   assert.match(script, /export function setupInstagramGallery/);
-  assert.match(script, /grid\.scrollTo\(\{ left: cardOffset\(cards\[target\]\), behavior:/);
+  assert.match(css, /@keyframes instagram-stream/);
+  assert.match(css, /animation:\s*instagram-stream 44s linear infinite/);
+  assert.match(css, /\.instagram-grid:hover \.instagram-track,[\s\S]*animation-play-state:\s*paused/);
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.instagram-track[\s\S]*animation:\s*none/);
+  assert.match(script, /grid\.setAttribute\("aria-label", "Featured Instagram posts"\)/);
   assert.match(script, /setupInstagramGallery\(\)/);
 });

@@ -11,13 +11,14 @@ function eventCard(event) {
     ? `<a class="event-pill-action button booking-button" href="${escapeHtml(presentation.action.href)}" target="_blank" rel="noopener noreferrer" data-event-booking data-event-id="${escapeHtml(event.id)}" data-event-name="${escapeHtml(event.title)}" data-event-type="${escapeHtml(event.eventType)}" data-venue-name="${escapeHtml(event.venueName)}" data-suburb="${escapeHtml(event.suburb || "")}">${escapeHtml(presentation.action.label)}</a>`
     : "";
   const imageUrl = eventImageUrl(event);
-  const media = imageUrl ? `<div class="event-pill-media"><img class="event-pill-media-backdrop" src="${escapeHtml(imageUrl)}" alt="" aria-hidden="true" loading="lazy" decoding="async"><img class="event-pill-media-artwork" src="${escapeHtml(imageUrl)}" alt="${escapeHtml(`${event.title} event artwork`)}" loading="lazy" decoding="async"></div>` : "";
-  const heading = detailUrl ? `<a href="${detailUrl}">${escapeHtml(event.title)}</a>` : escapeHtml(event.title);
-  return `<article class="event-pill event-listing-card${imageUrl ? " has-image" : ""}">${media}
-    <div class="event-pill-content"><p class="event-pill-venue">${escapeHtml(event.eventType)} &middot; ${escapeHtml(event.venueName)}</p><h2 class="event-pill-title">${heading}</h2>
+  const focal = `--event-focal-x:${Number(event.imageFocalX ?? 50)}%;--event-focal-y:${Number(event.imageFocalY ?? 50)}%`;
+  const fit = event.imageFit === "cover" ? "cover" : "contain";
+  const media = imageUrl ? `<div class="event-pill-media event-media-frame fit-${fit}" style="${focal}"><img class="event-pill-media-backdrop" src="${escapeHtml(imageUrl)}" alt="" aria-hidden="true" loading="lazy" decoding="async"><img class="event-pill-media-artwork" src="${escapeHtml(imageUrl)}" alt="${escapeHtml(`${event.title} event artwork`)}" loading="lazy" decoding="async"></div>` : "";
+  const content = `<div class="event-pill-content"><p class="event-pill-venue">${escapeHtml(event.eventType)} &middot; ${escapeHtml(event.venueName)}</p><h2 class="event-pill-title">${escapeHtml(event.title)}</h2>
     <div class="event-pill-meta"><span>${escapeHtml(formatEventDate(event))}</span><span>${escapeHtml(formatEventTime(event))}</span>${event.suburb ? `<span>${escapeHtml(event.suburb)}</span>` : ""}</div>${status}
-    <p class="event-pill-description">${escapeHtml(eventDescription(event))}</p></div>
-    <div class="event-pill-actions">${detailUrl ? `<a class="event-page-link" href="${detailUrl}">Event details</a>` : ""}${booking}</div></article>`;
+    <p class="event-pill-description">${escapeHtml(eventDescription(event))}</p></div>`;
+  const main = detailUrl ? `<a class="event-card-main-link" href="${detailUrl}" aria-label="View ${escapeHtml(event.title)} event details">${media}${content}</a>` : `${media}${content}`;
+  return `<article class="event-pill event-listing-card${imageUrl ? " has-image" : ""}">${main}<div class="event-pill-actions">${booking}</div></article>`;
 }
 
 export async function onRequestGet({ env }) {

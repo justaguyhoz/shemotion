@@ -520,20 +520,21 @@ p:last-child {
 }
 
 .event-carousel {
-  max-width: 640px;
-  margin: clamp(13px, 1.8vw, 20px) auto 0;
+  position: relative;
+  max-width: 760px;
+  margin: clamp(13px, 1.8vw, 20px) auto 32px;
 }
 
 .event-grid {
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 500px);
+  align-items: stretch;
   width: 100%;
+  min-height: 560px;
   margin: 0;
-  padding: 6px 2px 12px;
-  overflow: hidden;
-  scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
+  padding: 6px 92px 12px 38px;
+  overflow: visible;
 }
 
 .event-grid::-webkit-scrollbar {
@@ -547,6 +548,7 @@ p:last-child {
   align-content: start;
   gap: 12px;
   min-height: 0;
+  min-width: 0;
   padding: 18px 20px 16px 24px;
   overflow: hidden;
   background: rgba(255, 250, 244, 0.9);
@@ -557,6 +559,50 @@ p:last-child {
   scroll-snap-align: start;
   scroll-snap-stop: always;
   flex: 0 0 calc(100% - 4px);
+}
+
+.event-carousel .event-pill {
+  grid-area: 1 / 1;
+  width: 100%;
+  z-index: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(38%) scale(.91);
+  transform-origin: center right;
+}
+
+.event-carousel .event-pill.is-current {
+  z-index: 3;
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+  background: var(--white-soft);
+}
+
+.event-carousel .event-pill.is-next {
+  z-index: 2;
+  opacity: .78;
+  transform: translateX(35%) scale(.94);
+}
+
+.event-carousel .event-pill.is-third {
+  z-index: 1;
+  opacity: .48;
+  filter: saturate(.72) blur(.35px);
+  transform: translateX(55%) scale(.89);
+}
+
+.event-card-main-link {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.event-card-main-link:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 4px;
 }
 
 .event-pill::before {
@@ -598,7 +644,13 @@ p:last-child {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  object-position: var(--event-focal-x, 50%) var(--event-focal-y, 50%);
   transition: transform 280ms ease;
+}
+
+.event-media-frame.fit-cover .event-pill-media-artwork,
+.event-media-frame.fit-cover .event-detail-media-artwork {
+  object-fit: cover;
 }
 
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
@@ -748,6 +800,7 @@ p:last-child {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  object-position: var(--event-focal-x, 50%) var(--event-focal-y, 50%);
 }
 
 .event-facts {
@@ -1484,12 +1537,16 @@ p:last-child {
 }
 
 .event-carousel-controls {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
   display: grid;
-  grid-template-columns: 42px auto 42px;
+  grid-template-columns: 48px 1fr 48px;
   align-items: center;
-  justify-content: center;
-  gap: 18px;
-  margin-top: 0;
+  pointer-events: none;
 }
 
 .event-carousel-controls[hidden] {
@@ -1498,15 +1555,19 @@ p:last-child {
 
 .event-arrow {
   display: grid;
-  width: 42px;
-  height: 42px;
+  width: 48px;
+  height: 48px;
   padding: 0;
   place-items: center;
   color: var(--green);
   font: 1.2rem/1 var(--sans);
-  background: transparent;
+  background: rgba(255, 250, 244, .94);
   border: 1px solid rgba(47, 74, 61, 0.35);
   border-radius: 50%;
+  box-shadow: 0 8px 24px rgba(47, 74, 61, .14);
+  pointer-events: auto;
+  align-self: start;
+  margin-top: 205px;
   transition: color 180ms ease, background-color 180ms ease, transform 180ms ease;
 }
 
@@ -1522,12 +1583,24 @@ p:last-child {
 }
 
 .event-counter {
+  position: absolute;
+  top: auto;
+  bottom: -27px;
+  left: 50%;
   min-width: 58px;
+  padding: 5px 10px;
+  transform: translateX(-50%);
   color: var(--muted);
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-align: center;
+  background: rgba(255, 250, 244, .9);
+  border-radius: 999px;
+}
+
+.event-arrow-next {
+  grid-column: 3;
 }
 
 .instagram {
@@ -1544,16 +1617,41 @@ p:last-child {
 }
 
 .instagram-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(16px, 2.4vw, 28px);
-  max-width: 1080px;
+  width: 100%;
+  max-width: 1180px;
   margin: clamp(30px, 4vw, 44px) auto 0;
+  padding-block: 6px 16px;
+  overflow: hidden;
+}
+
+.instagram-track,
+.instagram-card-group {
+  display: flex;
+  gap: clamp(12px, 1.6vw, 20px);
+}
+
+.instagram-track {
+  width: max-content;
+  animation: instagram-stream 44s linear infinite;
+}
+
+.instagram-card-group {
+  padding-right: clamp(12px, 1.6vw, 20px);
+}
+
+.instagram-grid:hover .instagram-track,
+.instagram-grid:focus-within .instagram-track {
+  animation-play-state: paused;
+}
+
+@keyframes instagram-stream {
+  to { transform: translateX(-50%); }
 }
 
 .instagram-card {
   display: flex;
-  min-width: 0;
+  width: clamp(176px, 19vw, 224px);
+  min-width: clamp(176px, 19vw, 224px);
   overflow: hidden;
   flex-direction: column;
   background: var(--white-soft);
@@ -1607,7 +1705,7 @@ p:last-child {
   display: grid;
   flex: 1;
   gap: var(--space-sm);
-  padding: clamp(20px, 2.5vw, 28px);
+  padding: clamp(14px, 1.6vw, 18px);
   color: var(--muted);
   font-size: 0.92rem;
   line-height: 1.6;
@@ -1625,7 +1723,7 @@ p:last-child {
 .instagram-card-copy strong {
   color: var(--charcoal);
   font-family: var(--serif);
-  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+  font-size: clamp(1.08rem, 1.5vw, 1.28rem);
   font-weight: 400;
   line-height: 1.2;
   text-wrap: balance;
@@ -2708,8 +2806,6 @@ blockquote:hover {
 
 @media (max-width: 700px) {
   .instagram-grid {
-    display: flex;
-    gap: var(--space-md);
     max-width: none;
     margin-inline: calc(-1 * clamp(20px, 5vw, 76px));
     padding: 4px clamp(20px, 5vw, 76px) 14px;
@@ -2720,21 +2816,23 @@ blockquote:hover {
     -webkit-overflow-scrolling: touch;
   }
 
+  .instagram-track {
+    animation: none;
+  }
+
+  .instagram-card-group[aria-hidden="true"] {
+    display: none;
+  }
+
   .instagram-grid::-webkit-scrollbar {
     display: none;
   }
 
   .instagram-card {
-    flex: 0 0 min(78vw, 310px);
+    flex: 0 0 min(52vw, 210px);
+    width: min(52vw, 210px);
+    min-width: min(52vw, 210px);
     scroll-snap-align: start;
-  }
-
-  .instagram-controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-sm);
-    margin-top: var(--space-sm);
   }
 
   .instagram-action {
@@ -3063,12 +3161,28 @@ blockquote:hover {
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
     touch-action: pan-x pan-y;
+    min-height: 0;
+    padding-inline: 2px;
   }
 
-  .event-pill {
-    flex: 0 0 100%;
-    flex-basis: 100%;
+  .event-carousel .event-pill {
+    flex: 0 0 76%;
+    width: 76%;
+    opacity: 1;
+    filter: none;
+    pointer-events: auto;
+    transform: none;
     scroll-snap-align: center;
+  }
+
+  .event-carousel .event-pill.is-current,
+  .event-carousel .event-pill.is-next,
+  .event-carousel .event-pill.is-third,
+  .event-carousel .event-pill.is-before,
+  .event-carousel .event-pill.is-after {
+    opacity: 1;
+    filter: none;
+    transform: none;
   }
 
   .event-pill:hover {
@@ -3079,13 +3193,19 @@ blockquote:hover {
 
   .event-carousel-controls {
     display: grid;
-    grid-template-columns: auto;
-    margin-top: 4px;
+    top: 0;
+    bottom: 0;
+    grid-template-columns: 44px 1fr 44px;
+    margin: 0;
   }
 
   .event-arrow {
-    display: none;
+    width: 44px;
+    height: 44px;
+    margin-top: clamp(112px, 37vw, 176px);
   }
+
+  .event-counter { top: auto; bottom: -27px; }
 
 
 }
@@ -3094,6 +3214,18 @@ blockquote:hover {
   html,
   .event-grid {
     scroll-behavior: auto;
+  }
+
+  .instagram-track {
+    animation: none;
+  }
+
+  .instagram-grid {
+    overflow-x: auto;
+  }
+
+  .instagram-card-group[aria-hidden="true"] {
+    display: none;
   }
 
   .faq-answer {

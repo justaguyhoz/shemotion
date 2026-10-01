@@ -59,7 +59,9 @@ export function createEventCard(event, idPrefix = "event") {
   let media;
   if (imageUrl) {
     card.classList.add("has-image");
-    media = element("div", { className: "event-pill-media" });
+    media = element("div", { className: `event-pill-media event-media-frame fit-${event.imageFit === "cover" ? "cover" : "contain"}` });
+    media.style.setProperty("--event-focal-x", `${event.imageFocalX ?? 50}%`);
+    media.style.setProperty("--event-focal-y", `${event.imageFocalY ?? 50}%`);
     const backdrop = element("img", { className: "event-pill-media-backdrop" });
     backdrop.src = imageUrl;
     backdrop.alt = "";
@@ -106,40 +108,8 @@ export function createEventCard(event, idPrefix = "event") {
   }
 
   const description = event.shortDescription?.trim() === "-" ? "" : event.shortDescription?.trim();
-  const hasDetails = Boolean(event.address || description);
+  if (description) content.append(element("p", { className: "event-pill-description", text: description }));
   const actions = element("div", { className: "event-pill-actions" });
-  let details;
-  if (event.slug) {
-    const pageLink = element("a", { className: "event-page-link", text: "Event page" });
-    pageLink.href = `/events/${encodeURIComponent(event.slug)}/`;
-    actions.append(pageLink);
-  }
-  if (hasDetails) {
-    const occurrenceKey = event.occurrenceIndex ?? event.startAt ?? "tbc";
-    const detailsId = `${idPrefix}-details-${event.id}-${String(occurrenceKey).replace(/[^a-z0-9]/gi, "")}`;
-    const toggle = element("button", { className: "event-details-toggle", text: "Quick details" });
-    toggle.type = "button";
-    toggle.dataset.eventDetailsToggle = "";
-    toggle.setAttribute("aria-expanded", "false");
-    toggle.setAttribute("aria-controls", detailsId);
-    actions.append(toggle);
-
-    details = element("div", { className: "event-pill-details" });
-    details.id = detailsId;
-    details.hidden = true;
-    if (event.address) {
-      details.append(element("p", { className: "event-pill-address", text: event.address }));
-      const googleMapsUrl = eventGoogleMapsUrl(event);
-      if (googleMapsUrl) {
-        const mapLink = element("a", { className: "event-map-link", text: "Open in Google Maps" });
-        mapLink.href = googleMapsUrl;
-        mapLink.target = "_blank";
-        mapLink.rel = "noopener noreferrer";
-        details.append(mapLink);
-      }
-    }
-    if (description) details.append(element("p", { className: "event-pill-description", text: description }));
-  }
 
   if (destination) {
     const action = element("a", {
@@ -153,9 +123,18 @@ export function createEventCard(event, idPrefix = "event") {
     actions.append(action);
   }
 
-  if (media) card.append(media);
-  card.append(content, actions);
-  if (details) card.append(details);
+  if (event.slug) {
+    const mainLink = element("a", { className: "event-card-main-link" });
+    mainLink.href = `/events/${encodeURIComponent(event.slug)}/`;
+    mainLink.setAttribute("aria-label", `View ${event.title} event details`);
+    if (media) mainLink.append(media);
+    mainLink.append(content);
+    card.append(mainLink);
+  } else {
+    if (media) card.append(media);
+    card.append(content);
+  }
+  card.append(actions);
   return card;
 }
 
@@ -335,6 +314,7 @@ export function setupFaq(root = document, view = window) {
 
 function setupEventCarousel(list, cards) {
   const controls = document.querySelector("[data-event-controls]");
+  cards[0]?.classList.add("is-current");
   if (!controls || cards.length < 2) {
     controls?.setAttribute("hidden", "");
     return;
@@ -347,10 +327,23 @@ function setupEventCarousel(list, cards) {
   let scrollTimer;
 
   const formatNumber = (value) => String(value).padStart(2, "0");
+  const updateCardStates = () => {
+    cards.forEach((card, index) => {
+      const state = eventStackState(index, activeIndex);
+      card.classList.toggle("is-current", state === "current");
+      card.classList.toggle("is-next", state === "next");
+      card.classList.toggle("is-third", state === "third");
+      card.classList.toggle("is-before", state === "before");
+      card.classList.toggle("is-after", state === "after");
+      card.setAttribute("aria-hidden", String(index !== activeIndex));
+      if ("inert" in card) card.inert = index !== activeIndex;
+    });
+  };
   const updateControls = () => {
     counter.textContent = `${formatNumber(activeIndex + 1)} / ${formatNumber(cards.length)}`;
     previous.disabled = activeIndex === 0;
     next.disabled = activeIndex === cards.length - 1;
+    updateCardStates();
   };
   const goTo = (index) => {
     activeIndex = Math.max(0, Math.min(cards.length - 1, index));
@@ -360,6 +353,12 @@ function setupEventCarousel(list, cards) {
 
   previous.addEventListener("click", () => goTo(activeIndex - 1));
   next.addEventListener("click", () => goTo(activeIndex + 1));
+  list.tabIndex = 0;
+  list.setAttribute("aria-label", "Upcoming events carousel");
+  list.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") { event.preventDefault(); goTo(activeIndex - 1); }
+    if (event.key === "ArrowRight") { event.preventDefault(); goTo(activeIndex + 1); }
+  });
   list.addEventListener("scroll", () => {
     window.clearTimeout(scrollTimer);
     scrollTimer = window.setTimeout(() => {
@@ -382,6 +381,14 @@ function setupEventCarousel(list, cards) {
 export function setUpcomingEventsVisibility(section, primaryAction, hasEvents) {
   if (section) section.hidden = !hasEvents;
   if (primaryAction) primaryAction.hidden = !hasEvents;
+}
+
+export function eventStackState(index, activeIndex = 0) {
+  if (index < activeIndex) return "before";
+  if (index === activeIndex) return "current";
+  if (index === activeIndex + 1) return "next";
+  if (index === activeIndex + 2) return "third";
+  return "after";
 }
 
 async function loadPublicEvents() {
@@ -518,42 +525,9 @@ export function setupContactForm(root = document, fetchImpl = fetch, attribution
 
 export function setupInstagramGallery(root = document, view = window) {
   const grid = root.querySelector(".instagram-grid");
-  const previous = root.querySelector("[data-instagram-previous]");
-  const next = root.querySelector("[data-instagram-next]");
-  const counter = root.querySelector("[data-instagram-counter]");
-  const cards = grid ? [...grid.querySelectorAll(".instagram-card")] : [];
-  if (!grid || !previous || !next || !counter || cards.length < 2) return;
-
-  let activeIndex = 0;
-  let updateFrame;
-  const reducedMotion = view.matchMedia("(prefers-reduced-motion: reduce)");
-  const cardOffset = (card) => card.offsetLeft - grid.offsetLeft;
-  const update = () => {
-    activeIndex = cards.reduce((closest, card, index) => (
-      Math.abs(cardOffset(card) - grid.scrollLeft) < Math.abs(cardOffset(cards[closest]) - grid.scrollLeft) ? index : closest
-    ), 0);
-    counter.textContent = `${activeIndex + 1} / ${cards.length}`;
-    previous.disabled = activeIndex === 0;
-    next.disabled = activeIndex === cards.length - 1;
-  };
-  const requestUpdate = () => {
-    view.cancelAnimationFrame(updateFrame);
-    updateFrame = view.requestAnimationFrame(update);
-  };
-  const moveTo = (index) => {
-    const target = Math.max(0, Math.min(cards.length - 1, index));
-    grid.scrollTo({ left: cardOffset(cards[target]), behavior: reducedMotion.matches ? "auto" : "smooth" });
-    activeIndex = target;
-    counter.textContent = `${target + 1} / ${cards.length}`;
-    previous.disabled = target === 0;
-    next.disabled = target === cards.length - 1;
-  };
-
-  previous.addEventListener("click", () => moveTo(activeIndex - 1));
-  next.addEventListener("click", () => moveTo(activeIndex + 1));
-  grid.addEventListener("scroll", requestUpdate, { passive: true });
-  view.addEventListener("resize", requestUpdate);
-  update();
+  if (!grid) return;
+  grid.setAttribute("aria-label", "Featured Instagram posts");
+  grid.tabIndex = 0;
 }
 
 function initialisePage() {

@@ -31,7 +31,8 @@ export async function onRequestPut({ request, env, params }) {
       UPDATE events SET
         title = ?, slug = ?, event_type = ?, venue_name = ?, suburb = ?, address = ?, date_status = ?,
         start_at = ?, end_at = ?, timezone = ?, audience = ?, short_description = ?,
-        booking_label = ?, booking_url = ?, availability_status = ?, image_url = ?, is_published = ?,
+        booking_label = ?, booking_url = ?, availability_status = ?, image_url = ?,
+        image_focal_x = ?, image_focal_y = ?, image_fit = ?, is_published = ?,
         display_order = ?, recurrence_frequency = ?, recurrence_until = ?, location_id = ?
       WHERE id = ?
       RETURNING *

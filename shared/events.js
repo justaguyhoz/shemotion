@@ -27,6 +27,9 @@ export const EVENT_FIELDS = [
   "bookingUrl",
   "availabilityStatus",
   "imageUrl",
+  "imageFocalX",
+  "imageFocalY",
+  "imageFit",
   "isPublished",
   "displayOrder",
   "recurrenceFrequency",
@@ -48,6 +51,7 @@ const LIMITS = {
   bookingLabel: 60,
   bookingUrl: 500,
   imageUrl: 500,
+  imageFit: 10,
   recurrenceFrequency: 20,
 };
 
@@ -106,6 +110,9 @@ export function validateEventInput(input) {
   event.bookingLabel = cleanText(event.bookingLabel);
   event.bookingUrl = cleanText(event.bookingUrl) || null;
   event.imageUrl = cleanText(event.imageUrl) || null;
+  event.imageFocalX = Number.isFinite(Number(event.imageFocalX)) ? Number(event.imageFocalX) : 50;
+  event.imageFocalY = Number.isFinite(Number(event.imageFocalY)) ? Number(event.imageFocalY) : 50;
+  event.imageFit = cleanText(event.imageFit) || "contain";
   event.isPublished = event.isPublished === true || event.isPublished === 1;
   event.displayOrder = Number.isInteger(Number(event.displayOrder)) ? Number(event.displayOrder) : 0;
   event.recurrenceFrequency = cleanText(event.recurrenceFrequency) || "none";
@@ -156,6 +163,9 @@ export function validateEventInput(input) {
     }
     if (event.imageUrl.length > LIMITS.imageUrl) errors.push("imageUrl is too long.");
   }
+  if (event.imageFocalX < 0 || event.imageFocalX > 100) errors.push("imageFocalX must be between 0 and 100.");
+  if (event.imageFocalY < 0 || event.imageFocalY > 100) errors.push("imageFocalY must be between 0 and 100.");
+  if (!["contain", "cover"].includes(event.imageFit)) errors.push("imageFit must be contain or cover.");
   const bookingState = eventBookingState(event);
   if (bookingState === "open" && !event.bookingUrl) errors.push("bookingUrl is required when booking is open.");
   if (bookingState === "open" && !event.bookingLabel) event.bookingLabel = "Book now";
@@ -186,6 +196,9 @@ export function rowToPublicEvent(row) {
     bookingUrl: row.booking_url,
     availabilityStatus: row.availability_status,
     imageUrl: row.image_url || null,
+    imageFocalX: Number.isFinite(Number(row.image_focal_x)) ? Number(row.image_focal_x) : 50,
+    imageFocalY: Number.isFinite(Number(row.image_focal_y)) ? Number(row.image_focal_y) : 50,
+    imageFit: row.image_fit === "cover" ? "cover" : "contain",
     recurrenceFrequency: row.recurrence_frequency || "none",
     recurrenceUntil: row.recurrence_until,
     displayOrder: row.display_order || 0,
@@ -223,6 +236,9 @@ export function eventValues(event) {
     event.bookingUrl,
     event.availabilityStatus,
     event.imageUrl,
+    event.imageFocalX,
+    event.imageFocalY,
+    event.imageFit,
     event.isPublished ? 1 : 0,
     event.displayOrder,
     event.recurrenceFrequency,

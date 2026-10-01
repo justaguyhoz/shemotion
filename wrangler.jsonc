@@ -11,6 +11,13 @@
       "migrations_dir": "migrations"
     }
   ],
+  "r2_buckets": [
+    {
+      "binding": "EVENT_MEDIA",
+      "bucket_name": "shemotion-event-media",
+      "preview_bucket_name": "shemotion-event-media-preview"
+    }
+  ],
   "vars": {
     "ADMIN_EMAILS": "Justaguyh@gmail.com,shemotion.au@gmail.com",
     "ACCESS_TEAM_DOMAIN": "https://sweet-meadow-beb2.cloudflareaccess.com",
