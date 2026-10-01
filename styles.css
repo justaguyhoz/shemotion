@@ -1633,7 +1633,7 @@ p:last-child {
 .instagram-track {
   width: max-content;
   gap: 0;
-  animation: instagram-stream 36s linear infinite;
+  animation: instagram-stream 40s linear infinite;
 }
 
 .instagram-card-group {
@@ -1646,8 +1646,8 @@ p:last-child {
 
 .instagram-card {
   display: block;
-  width: clamp(148px, 16vw, 210px);
-  min-width: clamp(148px, 16vw, 210px);
+  width: clamp(104px, 9vw, 144px);
+  min-width: clamp(104px, 9vw, 144px);
   overflow: hidden;
   background: var(--stone);
   border-radius: 4px;
@@ -1670,6 +1670,17 @@ p:last-child {
   object-position: var(--instagram-position, 50% 50%);
   filter: none;
   transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.instagram-card-media .instagram-cover-sprite {
+  position: absolute;
+  top: var(--instagram-sprite-top);
+  left: var(--instagram-sprite-left);
+  width: 300%;
+  max-width: none;
+  height: auto;
+  object-fit: initial;
+  object-position: initial;
 }
 
 .instagram-reel-mark {
@@ -2776,7 +2787,7 @@ blockquote:hover {
   }
 
   .instagram-track {
-    animation: instagram-stream 22s linear infinite;
+    animation: instagram-stream 32s linear infinite;
   }
 
   .instagram-card-group {
@@ -2789,9 +2800,9 @@ blockquote:hover {
   }
 
   .instagram-card {
-    flex: 0 0 clamp(88px, 27vw, 116px);
-    width: clamp(88px, 27vw, 116px);
-    min-width: clamp(88px, 27vw, 116px);
+    flex: 0 0 clamp(72px, 23vw, 100px);
+    width: clamp(72px, 23vw, 100px);
+    min-width: clamp(72px, 23vw, 100px);
   }
 
   .instagram-action {
