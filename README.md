@@ -17,7 +17,7 @@ Public routes include static pages and Pages Functions backed by the same D1 eve
 - `/events/:slug/` renders one published event with canonical metadata and eligible Event JSON-LD.
 - `/sitemap.xml` contains the public static routes and published event slugs.
 - `/private-groups-retreats/` is a static service-area page.
-- `/what-is-feminine-movement-meditation/` is the static educational guide.
+- `/what-is-shemotion/` is the static positioning and educational guide.
 
 The three featured homepage Instagram posts are configured in `shared/instagram-gallery.js` and rendered as static cards during the production build.
 
