@@ -95,6 +95,33 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.doesNotMatch(adminHtml, /4344672809106563|connect\.facebook\.net|facebook\.com\/tr/);
 });
 
+test("public pages use the Shemotion logo and current description for social sharing", async () => {
+  const staticPaths = [
+    "../index.html",
+    "../private-groups-retreats/index.html",
+    "../what-is-shemotion/index.html",
+    "../privacy/index.html",
+    "../terms/index.html",
+    "../cancellations-refunds/index.html",
+  ];
+  const staticPages = await Promise.all(staticPaths.map((path) => readFile(new URL(path, import.meta.url), "utf8")));
+  const dynamicPage = pageDocument({
+    title: "Test event",
+    description: "Event-specific search description",
+    canonical: "https://shemotion.com.au/events/test/",
+    body: "<main>Test</main>",
+  });
+
+  for (const html of [...staticPages, dynamicPage]) {
+    assert.match(html, /<meta property="og:description" content="WOMEN-ONLY MOVEMENT, RELEASE &amp; JOY ON THE GOLD COAST">/);
+    assert.match(html, /<meta property="og:image" content="https:\/\/shemotion\.com\.au\/assets\/shemotion-logo\.png\?v=20261007-2">/);
+    assert.doesNotMatch(html, /<meta property="og:image" content="[^\"]*meditation\.jpg/);
+  }
+
+  assert.match(staticPages[0], /src="assets\/about-katty\.jpg\?v=20261007-2"/);
+  assert.match(dynamicPage, /<meta name="description" content="Event-specific search description">/);
+});
+
 test("the shared Google Ads tag renders once per public page without a purchase conversion event", async () => {
   const staticPaths = [
     "../index.html",
@@ -143,7 +170,7 @@ test("What Is Shemotion guide has complete metadata, positioning and internal pa
   assert.match(privateGroupsHtml, /href="\/what-is-shemotion\/">What Is Shemotion\?<\/a>/);
   assert.match(sharedPagesSource, /href="\/what-is-shemotion\/">What Is Shemotion\?<\/a>/);
   assert.match(redirects, /\/what-is-feminine-movement-meditation\/ \/what-is-shemotion\/ 301/);
-  assert.match(html, /<img src="\/assets\/studio-1\.jpg" alt="Katty seated in front of a women-only movement group in a bright studio">/);
+  assert.match(html, /<img src="\/assets\/studio-1\.jpg\?v=20261007-2" alt="Katty seated in front of a women-only movement group in a bright studio">/);
   assert.doesNotMatch(html, /FAQPage|"@type":"FAQPage"/);
 });
 
@@ -177,7 +204,7 @@ test("homepage and organisation route reflect the broader commercial positioning
   assert.match(organisations, /Studios and Wellbeing Spaces/);
   assert.match(organisations, /Gold Coast and Brisbane/);
   assert.match(organisations, /positive coaching prompts to help women step away from mental pressure/);
-  assert.match(organisations, /src="\/assets\/embodiment\.jpg"/);
+  assert.match(organisations, /src="\/assets\/step-1\.jpg"/);
   assert.match(organisations, /data-organisation-enquiry/);
   assert.doesNotMatch(organisations, /data-private-enquiry/);
   assert.match(publicPageScript, /OrganisationEnquiryClick/);

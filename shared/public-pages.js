@@ -3,6 +3,8 @@ import { eventBookingPresentation, eventBookingState, eventImageUrl } from "../e
 import { googleTag } from "./google-tag.js";
 
 const SITE_URL = "https://shemotion.com.au";
+const SOCIAL_DESCRIPTION = "WOMEN-ONLY MOVEMENT, RELEASE & JOY ON THE GOLD COAST";
+const SOCIAL_IMAGE = `${SITE_URL}/assets/shemotion-logo.png?v=20261007-2`;
 
 export function escapeHtml(value = "") {
   return String(value)
@@ -49,7 +51,6 @@ export function siteFooter() {
 }
 
 export function pageDocument({ title, description, canonical, body, bodyAttributes = "", structuredData = null, status = 200 }) {
-  const image = `${SITE_URL}/assets/meditation.jpg`;
   const robots = status === 404 ? '<meta name="robots" content="noindex">' : "";
   const jsonLd = structuredData
     ? `<script type="application/ld+json">${JSON.stringify(structuredData).replaceAll("<", "\\u003c")}</script>`
@@ -58,7 +59,7 @@ export function pageDocument({ title, description, canonical, body, bodyAttribut
     <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
     <title>${escapeHtml(title)}</title><meta name="description" content="${escapeHtml(description)}">${robots}
     <link rel="canonical" href="${escapeHtml(canonical)}">
-    <meta property="og:type" content="website"><meta property="og:site_name" content="Shemotion"><meta property="og:title" content="${escapeHtml(title)}"><meta property="og:description" content="${escapeHtml(description)}"><meta property="og:url" content="${escapeHtml(canonical)}"><meta property="og:image" content="${image}">
+    <meta property="og:type" content="website"><meta property="og:site_name" content="Shemotion"><meta property="og:title" content="${escapeHtml(title)}"><meta property="og:description" content="${escapeHtml(SOCIAL_DESCRIPTION)}"><meta property="og:url" content="${escapeHtml(canonical)}"><meta property="og:image" content="${SOCIAL_IMAGE}"><meta property="og:image:alt" content="Shemotion"><meta property="og:image:width" content="1042"><meta property="og:image:height" content="150">
     <link rel="icon" href="/assets/favicon_shemotion.png" type="image/png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet"><script>document.documentElement.classList.add("reveal-ready")</script><link rel="stylesheet" href="/styles.css?v=20261005-1">
     ${jsonLd}${googleTag()}${metaPixel()}</head><body ${bodyAttributes}>
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=4344672809106563&amp;ev=PageView&amp;noscript=1" alt=""></noscript>
