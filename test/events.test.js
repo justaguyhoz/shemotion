@@ -143,7 +143,7 @@ test("What Is Shemotion guide has complete metadata, positioning and internal pa
   assert.match(privateGroupsHtml, /href="\/what-is-shemotion\/">What Is Shemotion\?<\/a>/);
   assert.match(sharedPagesSource, /href="\/what-is-shemotion\/">What Is Shemotion\?<\/a>/);
   assert.match(redirects, /\/what-is-feminine-movement-meditation\/ \/what-is-shemotion\/ 301/);
-  assert.match(html, /<img src="\/assets\/studio-1\.jpg" alt="Katty seated in a studio with a group of women behind her">/);
+  assert.match(html, /<img src="\/assets\/studio-1\.jpg" alt="Katty seated in front of a women-only movement group in a bright studio">/);
   assert.doesNotMatch(html, /FAQPage|"@type":"FAQPage"/);
 });
 
