@@ -2,6 +2,7 @@ import { setupNavigation } from "./navigation.js";
 import { addCustomEventClickTracking, eventBookingMetadata } from "./tracking.js";
 import { captureContactAttribution } from "./attribution.js";
 import { eventBookingPresentation, eventBookingState, eventImageUrl } from "./event-booking.js";
+import { setupHeroShader } from "./hero-shader.js";
 
 const BRISBANE_TIMEZONE = "Australia/Brisbane";
 
@@ -536,6 +537,7 @@ function initialisePage() {
   addCustomEventClickTracking(primaryBookNow, "BookNowClick");
 
   setupNavigation();
+  setupHeroShader();
 
   setupReveal([...document.querySelectorAll(
     ".events .section-heading, .experience .section-heading, .stage, .experience-followup, .for-you .narrow, .feedback .section-heading, .coach-grid, .organisations .section-heading, .organisations .service-card-grid, .contact-shell, .instagram [data-reveal]"

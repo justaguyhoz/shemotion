@@ -5,6 +5,7 @@ import { copyEmail, eventActionLabel, eventDestination, eventGoogleMapsUrl, setU
 import { addCustomEventClickTracking, eventBookingMetadata, trackCustomEvent } from "../tracking.js";
 import { generateEventSlug, validateEventInput } from "../shared/events.js";
 import { eventJsonLd, formatEventTime, pageDocument } from "../shared/public-pages.js";
+import { setupHeroShader } from "../hero-shader.js";
 import { GOOGLE_ADS_TAG_ID, injectGoogleTag } from "../shared/google-tag.js";
 import { verifyAccessRequest } from "../shared/access.js";
 import { onRequestGet as getPublicEvents } from "../functions/api/events.js";
@@ -93,6 +94,39 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.doesNotMatch(css, /html\.reveal-ready \.events \.section-heading/);
   assert.doesNotMatch(css, /guide-content-reveal|service-card-reveal/);
   assert.doesNotMatch(adminHtml, /4344672809106563|connect\.facebook\.net|facebook\.com\/tr/);
+});
+
+test("homepage hero shader is isolated, pausable and retains an accessible static fallback", async () => {
+  const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
+  const css = await readFile(new URL("../styles.css", import.meta.url), "utf8");
+  const script = await readFile(new URL("../script.js", import.meta.url), "utf8");
+  const shader = await readFile(new URL("../hero-shader.js", import.meta.url), "utf8");
+  const build = await readFile(new URL("../scripts/build.mjs", import.meta.url), "utf8");
+
+  assert.match(html, /<canvas class="hero-shader" data-hero-shader aria-hidden="true"><\/canvas>/);
+  assert.match(script, /import \{ setupHeroShader \} from "\.\/hero-shader\.js"/);
+  assert.match(script, /setupHeroShader\(\)/);
+  assert.match(build, /"hero-shader\.js"/);
+  assert.match(shader, /maxFramesPerSecond: 30/);
+  assert.match(shader, /maxDevicePixelRatio: 1\.25/);
+  assert.match(shader, /prefers-reduced-motion: reduce/);
+  assert.match(shader, /IntersectionObserver/);
+  assert.match(shader, /visibilitychange/);
+  assert.match(shader, /powerPreference: "low-power"/);
+  assert.match(css, /\.hero::before[\s\S]*radial-gradient/);
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.hero-shader[\s\S]*display: none/);
+
+  const reducedMotionRoot = {
+    defaultView: { matchMedia: () => ({ matches: true }) },
+    querySelector: () => null,
+  };
+  assert.equal(setupHeroShader(reducedMotionRoot).status, "reduced-motion");
+
+  const unavailableRoot = {
+    defaultView: { matchMedia: () => ({ matches: false }) },
+    querySelector: () => ({ closest: () => ({}), getContext: () => null }),
+  };
+  assert.equal(setupHeroShader(unavailableRoot).status, "unavailable");
 });
 
 test("public pages use the Shemotion logo and current description for social sharing", async () => {

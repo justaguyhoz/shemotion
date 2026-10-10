@@ -7,7 +7,7 @@ const output = new URL("../dist/", import.meta.url);
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 
-for (const file of ["index.html", "styles.css", "script.js", "tracking.js", "public-page.js", "navigation.js", "attribution.js", "calendar.js", "recurrence.js", "event-lifecycle.js", "event-booking.js", "robots.txt", "_redirects"]) {
+for (const file of ["index.html", "styles.css", "script.js", "hero-shader.js", "tracking.js", "public-page.js", "navigation.js", "attribution.js", "calendar.js", "recurrence.js", "event-lifecycle.js", "event-booking.js", "robots.txt", "_redirects"]) {
   await cp(new URL(`../${file}`, import.meta.url), new URL(file, output));
 }
 
