@@ -3374,6 +3374,9 @@ main > section.legal-hero {
 }
 
 .event-pill,
+.event-carousel .event-pill.is-current,
+.event-carousel .event-pill.is-next,
+.event-carousel .event-pill.is-third,
 .service-card-grid article,
 .guide-mode-cards article,
 .guide-card-grid li,

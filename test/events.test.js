@@ -125,6 +125,7 @@ test("homepage hero shader is isolated, pausable and retains an accessible stati
   assert.match(css, /--satin-section-right:[\s\S]*radial-gradient/);
   assert.match(css, /main > section:not\(\.hero\)[\s\S]*background-image: var\(--satin-section-right\)/);
   assert.match(css, /section\.events\.page-hero,[\s\S]*section\.legal-hero[\s\S]*background-image: var\(--satin-page-hero\)/);
+  assert.match(css, /\.event-carousel \.event-pill\.is-current,[\s\S]*background-image: linear-gradient/);
   assert.match(css, /Site-wide satin surfaces echo the animated homepage hero without adding[\s\S]*more canvases/);
 
   const reducedMotionRoot = {
