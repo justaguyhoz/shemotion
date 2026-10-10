@@ -296,6 +296,8 @@ summary:focus-visible {
   inset: 0;
   z-index: 0;
   background:
+    radial-gradient(ellipse 66% 118% at 112% 55%, transparent 44%, rgba(255, 250, 244, 0.76) 48%, rgba(169, 117, 100, 0.22) 53%, rgba(220, 162, 151, 0.28) 58%, transparent 66%),
+    radial-gradient(ellipse 100% 64% at 55% 112%, transparent 43%, rgba(255, 250, 244, 0.72) 48%, rgba(169, 117, 100, 0.18) 54%, transparent 64%),
     radial-gradient(ellipse at 96% 32%, rgba(184, 141, 124, 0.42), transparent 48%),
     radial-gradient(ellipse at 8% 88%, rgba(229, 184, 173, 0.48), transparent 50%),
     radial-gradient(ellipse at 72% 82%, rgba(234, 210, 181, 0.52), transparent 48%),
