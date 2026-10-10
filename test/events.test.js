@@ -136,6 +136,27 @@ test("homepage hero shader is isolated, pausable and retains an accessible stati
   assert.equal(setupHeroShader(unavailableRoot).status, "unavailable");
 });
 
+test("public section backgrounds keep the hero shader isolated and preserve visual hierarchy", async () => {
+  const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
+  const guideHtml = await readFile(new URL("../what-is-shemotion/index.html", import.meta.url), "utf8");
+  const organisationsHtml = await readFile(new URL("../private-groups-retreats/index.html", import.meta.url), "utf8");
+  const css = await readFile(new URL("../styles.css", import.meta.url), "utf8");
+
+  assert.equal((html.match(/<canvas\b/g) || []).length, 1);
+  assert.equal((guideHtml.match(/<canvas\b/g) || []).length, 0);
+  assert.equal((organisationsHtml.match(/<canvas\b/g) || []).length, 0);
+  assert.match(css, /\.events,\s*\.for-you\s*\{\s*background:\s*var\(--white-soft\)/);
+  assert.match(css, /\.experience\s*\{[\s\S]*?background:\s*linear-gradient\(180deg, var\(--white-soft\)/);
+  assert.match(css, /\.feedback\s*\{\s*background:\s*linear-gradient\(135deg, var\(--blush-soft\)/);
+  assert.match(css, /\.coach\s*\{\s*background:\s*var\(--warm-ivory\)/);
+  assert.match(css, /\.contact\s*\{\s*background:\s*linear-gradient\(135deg, var\(--white-soft\)/);
+  assert.doesNotMatch(css, /main\s*>\s*section[\s\S]{0,220}radial-gradient/);
+  assert.doesNotMatch(css, /\.event-pill\s*\{[\s\S]{0,500}radial-gradient/);
+  assert.match(html, /styles\.css\?v=20261010-2/);
+  assert.match(guideHtml, /styles\.css\?v=20261010-2/);
+  assert.match(organisationsHtml, /styles\.css\?v=20261010-2/);
+});
+
 test("public pages use the Shemotion logo and current description for social sharing", async () => {
   const staticPaths = [
     "../index.html",

@@ -10,6 +10,9 @@
   --green-soft: #dbe3dc;
   --sand: #e7ded5;
   --white-soft: #fffaf4;
+  --warm-ivory: #faf5ef;
+  --champagne-soft: #f2e7db;
+  --blush-soft: #f4e6e3;
   --shadow: 0 28px 80px rgba(79, 74, 69, 0.12);
   --serif: "Marcellus", Georgia, serif;
   --sans: "Inter", Arial, sans-serif;
@@ -548,6 +551,7 @@ p:last-child {
 
 .experience {
   padding-top: clamp(30px, 4vw, 50px);
+  background: linear-gradient(180deg, var(--white-soft) 0%, var(--warm-ivory) 48%, var(--white-soft) 100%);
 }
 
 .event-carousel {
@@ -1901,9 +1905,12 @@ p:last-child {
   font-size: 0.9rem;
 }
 
-.feedback,
+.feedback {
+  background: linear-gradient(135deg, var(--blush-soft) 0%, #f8efea 52%, var(--blush-soft) 100%);
+}
+
 .coach {
-  background: var(--ivory);
+  background: var(--warm-ivory);
 }
 
 .split {
@@ -1919,9 +1926,8 @@ p:last-child {
   max-width: 690px;
 }
 
-.experience,
 .contact {
-  background: var(--white-soft);
+  background: linear-gradient(135deg, var(--white-soft) 0%, var(--champagne-soft) 100%);
 }
 
 .stage-list {
