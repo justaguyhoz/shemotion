@@ -1,5 +1,5 @@
 export const HERO_SHADER_CONFIG = Object.freeze({
-  speed: 0.13,
+  speed: 0.2,
   intensity: 0.82,
   maxFramesPerSecond: 30,
   maxDevicePixelRatio: 1.25,
@@ -37,56 +37,90 @@ const FRAGMENT_SHADER = `
     return exp(-dot(offset, offset) * 1.8);
   }
 
+  float softBand(float distanceFromCurve, float width) {
+    float scaled = distanceFromCurve / width;
+    return exp(-scaled * scaled);
+  }
+
   void main() {
     vec2 uv = gl_FragCoord.xy / u_resolution;
-    vec2 point = uv - 0.5;
-
     float time = u_time;
     float portraitLayout = step(u_resolution.x, u_resolution.y);
-    vec2 blushCentre = vec2(
-      mix(0.84, 0.78, portraitLayout) + 0.05 * sin(time * 0.54),
-      mix(0.58, 0.24, portraitLayout) + 0.05 * cos(time * 0.43)
+
+    float photographGlow = softEllipse(
+      uv,
+      mix(vec2(0.86, 0.52), vec2(0.70, 0.22), portraitLayout),
+      mix(vec2(0.44, 0.72), vec2(0.56, 0.36), portraitLayout)
     );
-    vec2 champagneCentre = vec2(
-      0.08 + 0.04 * cos(time * 0.38),
-      0.16 + 0.05 * sin(time * 0.49)
+    float champagneGlow = softEllipse(uv, vec2(0.04, 0.12), vec2(0.56, 0.46));
+    float edgeGlow = smoothstep(0.12, 0.50, abs(uv.x - 0.5));
+
+    float desktopCurveA = uv.x - (
+      0.69 + 0.105 * sin(uv.y * 3.45 + time * 0.72)
+      + 0.026 * sin(uv.y * 7.8 - time * 0.38)
     );
-    vec2 clayCentre = vec2(
-      mix(0.94, 0.08, portraitLayout) + 0.03 * sin(time * 0.31),
-      mix(0.20, 0.72, portraitLayout) + 0.04 * cos(time * 0.35)
+    float desktopCurveB = uv.x - (
+      0.88 + 0.070 * sin(uv.y * 4.35 - time * 0.58)
+      + 0.020 * sin(uv.y * 8.6 + time * 0.31)
+    );
+    float desktopCurveC = uv.y - (
+      0.13 + 0.052 * sin(uv.x * 5.1 + time * 0.46)
+      + 0.018 * sin(uv.x * 10.2 - time * 0.27)
     );
 
-    float blushField = softEllipse(uv, blushCentre, mix(vec2(0.42, 0.50), vec2(0.42, 0.30), portraitLayout));
-    float champagneField = softEllipse(uv, champagneCentre, mix(vec2(0.44, 0.42), vec2(0.46, 0.30), portraitLayout));
-    float clayField = softEllipse(uv, clayCentre, mix(vec2(0.24, 0.38), vec2(0.26, 0.32), portraitLayout));
-
-    float foldA = 0.5 + 0.5 * sin(
-      point.x * 5.2 - point.y * 2.4 + time * 0.62 + sin(point.y * 3.1 - time * 0.23) * 0.72
+    float portraitCurveA = uv.y - (
+      0.39 + 0.078 * sin(uv.x * 4.15 + time * 0.72)
+      + 0.024 * sin(uv.x * 8.9 - time * 0.36)
     );
-    float foldB = 0.5 + 0.5 * sin(
-      point.x * 3.0 + point.y * 4.3 - time * 0.47 + sin(point.x * 2.2 + time * 0.18) * 0.58
+    float portraitCurveB = uv.y - (
+      0.20 + 0.062 * sin(uv.x * 5.05 - time * 0.58)
+      + 0.018 * sin(uv.x * 10.4 + time * 0.29)
     );
-    float silk = smoothstep(0.25, 0.88, foldA * 0.58 + foldB * 0.42);
-    float lowerRibbon = exp(-pow(uv.y - (0.20 + 0.07 * sin(uv.x * 4.0 + time * 0.36)), 2.0) * 54.0);
-    float sideRibbon = exp(-pow(uv.x - (0.84 + 0.05 * sin(uv.y * 4.4 - time * 0.31)), 2.0) * 66.0);
+    float portraitCurveC = uv.x - (
+      0.91 + 0.042 * sin(uv.y * 5.0 + time * 0.46)
+      + 0.014 * sin(uv.y * 10.0 - time * 0.24)
+    );
 
-    float sideColour = smoothstep(0.08, 0.58, abs(uv.x - 0.5));
-    float lowerColour = smoothstep(0.36, 0.94, 1.0 - uv.y);
-    float edgeAtmosphere = clamp(sideColour * 0.52 + lowerColour * portraitLayout * 0.34, 0.0, 0.72);
+    float curveA = mix(desktopCurveA, portraitCurveA, portraitLayout);
+    float curveB = mix(desktopCurveB, portraitCurveB, portraitLayout);
+    float curveC = mix(desktopCurveC, portraitCurveC, portraitLayout);
+
+    float bodyA = softBand(curveA, mix(0.115, 0.105, portraitLayout));
+    float bodyB = softBand(curveB, mix(0.090, 0.078, portraitLayout));
+    float bodyC = softBand(curveC, 0.068);
+    float crestA = softBand(curveA + 0.026, 0.020);
+    float crestB = softBand(curveB + 0.019, 0.014);
+    float crestC = softBand(curveC + 0.015, 0.012);
+    float shadowA = softBand(curveA - 0.052, 0.034);
+    float shadowB = softBand(curveB - 0.038, 0.026);
+    float shadowC = softBand(curveC - 0.030, 0.021);
+
+    float desktopFocus = smoothstep(0.45, 0.69, uv.x);
+    float portraitFocus = clamp(
+      (1.0 - smoothstep(0.38, 0.66, uv.y))
+      + smoothstep(0.30, 0.48, abs(uv.x - 0.5)) * 0.36,
+      0.0,
+      1.0
+    );
+    float foldFocus = mix(desktopFocus, portraitFocus, portraitLayout);
+    float foldBody = clamp((bodyA * 0.78 + bodyB * 0.64 + bodyC * 0.42) * (0.32 + foldFocus * 0.68), 0.0, 1.0);
+    float foldCrest = clamp((crestA * 0.82 + crestB * 0.68 + crestC * 0.46) * (0.30 + foldFocus * 0.70), 0.0, 1.0);
+    float foldShadow = clamp((shadowA * 0.72 + shadowB * 0.62 + shadowC * 0.42) * (0.28 + foldFocus * 0.72), 0.0, 1.0);
 
     vec2 textCentre = mix(vec2(0.30, 0.53), vec2(0.50, 0.70), portraitLayout);
     vec2 textScale = mix(vec2(0.46, 0.62), vec2(0.42, 0.38), portraitLayout);
     vec2 textOffset = (uv - textCentre) / textScale;
     float textQuiet = exp(-dot(textOffset, textOffset) * 1.35);
 
-    vec3 colour = mix(u_light, u_champagne, 0.10 + champagneField * 0.42 * u_intensity);
-    colour = mix(colour, u_blush, blushField * (0.46 + silk * 0.20) * u_intensity);
-    colour = mix(colour, u_sand, (edgeAtmosphere * 0.42 + silk * 0.10 + lowerRibbon * 0.14) * u_intensity);
-    colour = mix(colour, u_clay, clayField * (0.25 + silk * 0.14) * u_intensity);
-    colour = mix(colour, u_blush, sideRibbon * 0.14 * u_intensity);
+    vec3 colour = mix(u_light, u_champagne, 0.10 + champagneGlow * 0.22 * u_intensity);
+    colour = mix(colour, u_blush, photographGlow * 0.34 * u_intensity);
+    colour = mix(colour, u_sand, edgeGlow * 0.16 * u_intensity);
 
-    float silkHighlight = smoothstep(0.58, 0.94, silk) * 0.13 + lowerRibbon * 0.06 + sideRibbon * 0.05;
-    colour = mix(colour, u_light, silkHighlight + textQuiet * 0.58);
+    colour = mix(colour, u_blush, foldBody * 0.44 * u_intensity);
+    colour = mix(colour, u_champagne, bodyB * foldFocus * 0.16 * u_intensity);
+    colour = mix(colour, u_clay, foldShadow * 0.30 * u_intensity);
+    colour = mix(colour, u_light, foldCrest * 0.58);
+    colour = mix(colour, u_light, textQuiet * 0.58);
 
     gl_FragColor = vec4(colour, 1.0);
   }

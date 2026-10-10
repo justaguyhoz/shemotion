@@ -111,6 +111,9 @@ test("homepage hero shader is isolated, pausable and retains an accessible stati
   assert.match(shader, /maxDevicePixelRatio: 1\.25/);
   assert.match(shader, /alpha: false/);
   assert.match(shader, /gl_FragColor = vec4\(colour, 1\.0\)/);
+  assert.match(shader, /float softBand\(/);
+  assert.match(shader, /float foldCrest/);
+  assert.match(shader, /float foldShadow/);
   assert.match(shader, /prefers-reduced-motion: reduce/);
   assert.match(shader, /IntersectionObserver/);
   assert.match(shader, /visibilitychange/);
