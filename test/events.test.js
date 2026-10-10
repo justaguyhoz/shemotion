@@ -109,10 +109,14 @@ test("homepage hero shader is isolated, pausable and retains an accessible stati
   assert.match(build, /"hero-shader\.js"/);
   assert.match(shader, /maxFramesPerSecond: 30/);
   assert.match(shader, /maxDevicePixelRatio: 1\.25/);
+  assert.match(shader, /alpha: false/);
+  assert.match(shader, /gl_FragColor = vec4\(colour, 1\.0\)/);
   assert.match(shader, /prefers-reduced-motion: reduce/);
   assert.match(shader, /IntersectionObserver/);
   assert.match(shader, /visibilitychange/);
   assert.match(shader, /powerPreference: "low-power"/);
+  assert.match(shader, /dataset\.shaderState = "webgl"/);
+  assert.match(shader, /dataset\.shaderState = "fallback"/);
   assert.match(css, /\.hero::before[\s\S]*radial-gradient/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.hero-shader[\s\S]*display: none/);
 
@@ -124,7 +128,7 @@ test("homepage hero shader is isolated, pausable and retains an accessible stati
 
   const unavailableRoot = {
     defaultView: { matchMedia: () => ({ matches: false }) },
-    querySelector: () => ({ closest: () => ({}), getContext: () => null }),
+    querySelector: () => ({ closest: () => ({}), dataset: {}, getContext: () => null }),
   };
   assert.equal(setupHeroShader(unavailableRoot).status, "unavailable");
 });
