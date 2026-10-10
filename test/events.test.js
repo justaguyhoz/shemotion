@@ -122,6 +122,10 @@ test("homepage hero shader is isolated, pausable and retains an accessible stati
   assert.match(shader, /dataset\.shaderState = "fallback"/);
   assert.match(css, /\.hero::before[\s\S]*radial-gradient/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.hero-shader[\s\S]*display: none/);
+  assert.match(css, /--satin-section-right:[\s\S]*radial-gradient/);
+  assert.match(css, /main > section:not\(\.hero\)[\s\S]*background-image: var\(--satin-section-right\)/);
+  assert.match(css, /section\.events\.page-hero,[\s\S]*section\.legal-hero[\s\S]*background-image: var\(--satin-page-hero\)/);
+  assert.match(css, /Site-wide satin surfaces echo the animated homepage hero without adding[\s\S]*more canvases/);
 
   const reducedMotionRoot = {
     defaultView: { matchMedia: () => ({ matches: true }) },
@@ -156,6 +160,7 @@ test("public pages use the Shemotion logo and current description for social sha
   for (const html of [...staticPages, dynamicPage]) {
     assert.match(html, /<meta property="og:description" content="WOMEN-ONLY MOVEMENT, RELEASE &amp; JOY ON THE GOLD COAST">/);
     assert.match(html, /<meta property="og:image" content="https:\/\/shemotion\.com\.au\/assets\/shemotion-logo\.png\?v=20261007-2">/);
+    assert.match(html, /styles\.css\?v=20261010-1/);
     assert.doesNotMatch(html, /<meta property="og:image" content="[^\"]*meditation\.jpg/);
   }
 
