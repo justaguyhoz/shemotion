@@ -296,9 +296,10 @@ summary:focus-visible {
   inset: 0;
   z-index: 0;
   background:
-    radial-gradient(circle at 18% 24%, rgba(219, 227, 220, 0.72), transparent 46%),
-    radial-gradient(circle at 76% 68%, rgba(201, 184, 166, 0.28), transparent 44%),
-    linear-gradient(135deg, rgba(255, 250, 244, 0.72), rgba(231, 222, 213, 0.3));
+    radial-gradient(ellipse at 96% 32%, rgba(184, 141, 124, 0.42), transparent 48%),
+    radial-gradient(ellipse at 8% 88%, rgba(229, 184, 173, 0.48), transparent 50%),
+    radial-gradient(ellipse at 72% 82%, rgba(234, 210, 181, 0.52), transparent 48%),
+    linear-gradient(135deg, #f7e9df 0%, #fffaf4 46%, #ead8c8 100%);
   border-radius: 18px;
   content: "";
   pointer-events: none;
@@ -316,7 +317,7 @@ summary:focus-visible {
 }
 
 .hero.is-shader-ready .hero-shader {
-  opacity: 0.82;
+  opacity: 1;
 }
 
 .hero.section-pad {
