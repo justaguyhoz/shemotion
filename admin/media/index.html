@@ -10,17 +10,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../admin.css?v=20261013-1">
+    <link rel="stylesheet" href="../admin-navigation.css?v=20261013-1">
     <link rel="stylesheet" href="media.css?v=20261013-1">
   </head>
   <body>
     <header class="admin-header">
       <a href="../../" aria-label="View Shemotion website"><img src="../../assets/shemotion-logo.png" alt="Shemotion"></a>
-      <nav aria-label="Admin navigation">
-        <a class="header-link" href="../">Events</a>
-        <a class="header-link" href="../contacts/">Contacts</a>
-        <a class="header-link" href="../outreach/">Outreach</a>
-        <a class="header-link" href="../../">View website</a>
-      </nav>
+      <nav class="admin-navigation" aria-label="Admin navigation" data-admin-navigation data-current-page="media"></nav>
     </header>
 
     <main>
@@ -94,6 +90,7 @@
       </form>
     </dialog>
 
+    <script type="module" src="../admin-navigation.js?v=20261013-1"></script>
     <script type="module" src="media.js?v=20261013-1"></script>
   </body>
 </html>
