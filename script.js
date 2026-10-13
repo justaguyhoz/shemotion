@@ -1,5 +1,5 @@
 import { setupNavigation } from "./navigation.js";
-import { addCustomEventClickTracking, eventBookingMetadata } from "./tracking.js";
+import { addCustomEventClickTracking, eventBookingMetadata, setupMediaOutboundTracking } from "./tracking.js";
 import { captureContactAttribution } from "./attribution.js";
 import { eventBookingPresentation, eventBookingState, eventImageUrl } from "./event-booking.js";
 
@@ -538,7 +538,7 @@ function initialisePage() {
   setupNavigation();
 
   setupReveal([...document.querySelectorAll(
-    ".events .section-heading, .experience .section-heading, .stage, .experience-followup, .for-you .narrow, .feedback .section-heading, .coach-grid, .organisations .section-heading, .organisations .service-card-grid, .contact-shell, .instagram [data-reveal]"
+    ".events .section-heading, .experience .section-heading, .stage, .experience-followup, .for-you .narrow, .feedback .section-heading, .coach-grid, .media-features .section-heading, .media-feature-grid, .organisations .section-heading, .organisations .service-card-grid, .contact-shell, .instagram [data-reveal]"
   )]);
   document.querySelectorAll("[data-pill-rotator]").forEach((container) => setupTextRotator(container));
   document.querySelectorAll("[data-quote-rotator]").forEach((container) => setupTextRotator(container, { mobileOnly: true, duration: 3700, gap: 700 }));
@@ -546,6 +546,7 @@ function initialisePage() {
   setupEmailCopy();
   setupContactForm(document, fetch, contactAttribution);
   setupInstagramGallery();
+  setupMediaOutboundTracking();
   loadPublicEvents();
 }
 

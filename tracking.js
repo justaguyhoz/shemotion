@@ -12,6 +12,16 @@ export function trackCustomEvent(eventName, parameters = {}, target = browserWin
   }
 }
 
+export function trackGoogleEvent(eventName, parameters = {}, target = browserWindow()) {
+  try {
+    if (typeof target?.gtag !== "function") return false;
+    target.gtag("event", eventName, parameters);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function eventBookingMetadata(event) {
   const metadata = {
     event_id: event.id == null ? undefined : String(event.id),
@@ -28,5 +38,18 @@ export function addCustomEventClickTracking(element, eventName, parameters = {},
   element.addEventListener("click", () => {
     const eventParameters = typeof parameters === "function" ? parameters() : parameters;
     trackCustomEvent(eventName, eventParameters, target);
+  });
+}
+
+export function setupMediaOutboundTracking(root = document, target = browserWindow()) {
+  root.querySelectorAll?.("[data-media-outbound]").forEach((link) => {
+    if (link.dataset.mediaTrackingBound === "true") return;
+    link.dataset.mediaTrackingBound = "true";
+    link.addEventListener("click", () => trackGoogleEvent("media_outbound_click", {
+      media_id: link.dataset.mediaId,
+      media_type: link.dataset.mediaType,
+      publisher: link.dataset.mediaPublisher,
+      media_title: link.dataset.mediaTitle,
+    }, target));
   });
 }

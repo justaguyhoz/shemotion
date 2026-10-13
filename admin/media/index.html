@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Shemotion Media &amp; Features</title>
+    <link rel="icon" href="../../assets/favicon_shemotion.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../admin.css?v=20261013-1">
+    <link rel="stylesheet" href="media.css?v=20261013-1">
+  </head>
+  <body>
+    <header class="admin-header">
+      <a href="../../" aria-label="View Shemotion website"><img src="../../assets/shemotion-logo.png" alt="Shemotion"></a>
+      <nav aria-label="Admin navigation">
+        <a class="header-link" href="../">Events</a>
+        <a class="header-link" href="../contacts/">Contacts</a>
+        <a class="header-link" href="../outreach/">Outreach</a>
+        <a class="header-link" href="../../">View website</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="dashboard-heading">
+        <div class="page-heading">
+          <p class="eyebrow">Media library</p>
+          <h1>Media &amp; Features</h1>
+          <p>Manage articles, podcasts, interviews and external coverage shown on the homepage.</p>
+        </div>
+        <div class="dashboard-actions"><button class="primary-button" type="button" data-new-media>+ Add Media Item</button></div>
+      </div>
+      <p class="notice" data-notice role="status" aria-live="polite">Loading media items...</p>
+      <div class="media-admin-list" data-media-list aria-live="polite"></div>
+    </main>
+
+    <dialog data-media-dialog>
+      <form method="dialog" class="dialog-shell" data-media-form novalidate>
+        <div class="dialog-heading">
+          <div><p class="eyebrow">Media details</p><h2 data-form-title>Add Media Item</h2></div>
+          <button class="icon-button" type="button" data-close aria-label="Close">&#215;</button>
+        </div>
+        <input type="hidden" name="id">
+        <div class="form-grid">
+          <label class="field-wide">Title<input name="title" maxlength="180" required></label>
+          <label>Publisher / Platform<input name="publisher" maxlength="120" required></label>
+          <label>Media type
+            <select name="mediaType" required>
+              <option value="article">Article</option><option value="podcast">Podcast</option><option value="interview">Interview</option><option value="other">Other</option>
+            </select>
+          </label>
+          <label class="field-wide">External URL<input name="externalUrl" type="url" maxlength="1000" placeholder="https://" required></label>
+          <label class="field-wide">Short description <span class="optional-label">Optional, 1-2 lines</span><textarea name="shortDescription" rows="3" maxlength="400"></textarea></label>
+          <label>Publication date <span class="optional-label">Optional</span><input name="publicationDate" type="date"></label>
+          <label>Contribution type
+            <select name="contributionType" required>
+              <option value="written_by_katty">Written by Katty</option>
+              <option value="interview_with_katty">Interview with Katty</option>
+              <option value="independent_coverage">Independent coverage</option>
+              <option value="podcast_guest">Podcast guest appearance</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+          <fieldset class="form-section field-wide">
+            <legend>Thumbnail / publisher logo</legend>
+            <div class="media-thumbnail-fields">
+              <div class="media-upload-fields">
+                <label>Upload image <span class="optional-label">Square, ideally 400 × 400; JPG, PNG or WebP</span><input type="file" accept="image/jpeg,image/png,image/webp" data-image-file></label>
+                <button class="text-button" type="button" data-image-upload disabled>Upload selected image</button>
+                <p class="field-help" data-image-status role="status" aria-live="polite"></p>
+                <label>Stored image URL<input name="thumbnailUrl" type="text" maxlength="500" readonly></label>
+                <label>Image alt text<input name="imageAlt" maxlength="180" placeholder="The Times Australia logo"></label>
+                <button class="text-button danger-button" type="button" data-image-remove>Remove thumbnail</button>
+              </div>
+              <div class="media-thumbnail-preview" data-image-preview-wrap hidden>
+                <p class="preview-label">Homepage preview</p>
+                <div><img data-image-preview alt="Thumbnail preview"></div>
+              </div>
+            </div>
+          </fieldset>
+          <label>Status<select name="status"><option value="draft">Draft</option><option value="published">Published</option></select></label>
+          <label>Display order <span class="optional-label">Lower numbers appear first</span><input name="displayOrder" type="number" min="-1000" max="1000" value="0"></label>
+          <label class="checkbox-field field-wide"><input name="isFeatured" type="checkbox"> Featured on homepage</label>
+        </div>
+        <p class="form-error" data-form-error role="alert"></p>
+        <div class="form-actions">
+          <button class="text-button danger-button" type="button" data-delete hidden>Delete Item</button>
+          <span class="action-spacer"></span>
+          <button class="text-button" type="button" data-close>Cancel</button>
+          <button class="primary-button" type="submit">Save Item</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script type="module" src="media.js?v=20261013-1"></script>
+  </body>
+</html>
