@@ -139,3 +139,15 @@ test("migration seeds the verified Times article without an unapproved logo", as
   assert.match(sql, /'published'/);
   assert.match(sql, /NULL,\s*NULL,\s*'2026-10-13'/);
 });
+
+
+test("Times feature uses the official local wordmark without changing stored links or other uploads", () => {
+  const item = { ...baseItem, publisher: "The Times", externalUrl: "https://thetimes.com.au/lifestyle/health/53105-when-did-we-stop-moving-for-joy", thumbnailUrl: "/media/features/060abb3e-e2ee-4ce7-ae5f-492c8dc24958.webp" };
+  const original = { ...item };
+  const html = renderMediaFeaturesSection([item]);
+  assert.match(html, /src="\/assets\/the-times-logo\.png" alt="The Times" width="392" height="73"/);
+  assert.ok(html.includes(`href="${item.externalUrl}"`));
+  assert.deepEqual(item, original);
+  assert.match(renderMediaFeaturesSection([{ ...item, thumbnailUrl: "/media/features/approved.png", imageAlt: "Approved mark" }]), /src="\/media\/features\/approved\.png"/);
+  assert.doesNotMatch(renderMediaFeaturesSection([{ ...item, publisher: "Another publication", thumbnailUrl: null }]), /the-times-logo/);
+});

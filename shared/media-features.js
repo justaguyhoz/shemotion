@@ -149,12 +149,15 @@ function escapeHtml(value) {
 export function renderMediaFeatureCard(item, index = 0) {
   const title = escapeHtml(item.title);
   const publisher = escapeHtml(item.publisher);
-  // This existing fallback artwork is not an approved publication identity.
-  // Keep the stored asset intact; a future approved upload uses the normal image path.
+  // Use the official Times wordmark for the old fallback without changing its record.
   const fallbackArtwork = "/media/features/060abb3e-e2ee-4ce7-ae5f-492c8dc24958.webp";
-  const hasIdentity = item.thumbnailUrl && item.thumbnailUrl !== fallbackArtwork;
+  const useTimesLogo = (!item.thumbnailUrl || item.thumbnailUrl === fallbackArtwork)
+    && item.publisher === "The Times"
+    && /^https:\/\/(?:www\.)?thetimes\.com\.au\//i.test(item.externalUrl);
+  const thumbnailUrl = useTimesLogo ? "/assets/the-times-logo.png" : item.thumbnailUrl;
+  const hasIdentity = thumbnailUrl && thumbnailUrl !== fallbackArtwork;
   const image = hasIdentity
-    ? `<img src="${escapeHtml(item.thumbnailUrl)}" alt="${escapeHtml(item.imageAlt)}" width="400" height="400" loading="lazy" decoding="async">`
+    ? `<img src="${escapeHtml(thumbnailUrl)}" alt="${escapeHtml(useTimesLogo ? "The Times" : item.imageAlt)}" width="${useTimesLogo ? 392 : 400}" height="${useTimesLogo ? 73 : 400}" loading="lazy" decoding="async">`
     : `<span class="media-feature-fallback">${publisher}</span>`;
   const aria = `${mediaCtaLabel(item.mediaType)}: ${item.title} on ${item.publisher} (opens in a new tab)`;
   const tile = `tile-${(index % 4) + 1}`;

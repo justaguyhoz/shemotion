@@ -142,3 +142,18 @@ interactions are retained. Other public-page layouts retain V2.1 proportions.
 Cream section surfaces do not override component surfaces: publication tiles,
 form fields, event artwork, the video cover, buttons and icons retain their own
 existing treatment. The shared header and footer retain their existing branding.
+
+
+## V2.3 homepage component proportions
+
+Homepage event cards are 560px landscape previews, with a 200px left image and
+right text. Two cards fit on a wide desktop; narrow viewports keep a 96px image
+beside the copy. The archive retains 320px cards and event pages retain their
+existing layout. Scoped homepage rules avoid changing saved image fit/focal-point
+behaviour or introducing a new event data model.
+
+The homepage contact form is capped at 720px, uses 12px field gaps and an 80px
+resizable textarea; input text stays 16px and touch controls at least 44px tall.
+The authentic Times wordmark is a local, unchanged official PNG and retains its
+392:73 ratio at a restrained maximum width. No typography, shared surfaces or
+other section composition was reopened in this iteration.

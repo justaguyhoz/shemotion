@@ -4240,3 +4240,53 @@ body { font-size: var(--type-body); line-height: 1.65; }
   .home-page .events.section-pad { padding-block: var(--space-md); }
   .home-page .hero-actions { display: flex; }
 }
+
+/* V2.3: landscape homepage previews; archive and event-detail layouts stay intact. */
+.home-page .event-carousel { max-width: 1144px; }
+.home-page .event-grid {
+  grid-auto-columns: min(560px, 100%);
+  justify-content: start;
+}
+.home-page .event-grid.is-single { width: min(100%, 568px); }
+.home-page .event-grid.is-pair { width: min(100%, 1144px); }
+.home-page .event-carousel .event-pill {
+  padding: var(--space-md);
+  gap: var(--space-sm);
+  border: 0;
+  background: var(--white-soft);
+  box-shadow: none;
+}
+.home-page .event-carousel .event-card-main-link {
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: var(--space-md);
+  align-items: start;
+}
+.home-page .event-carousel .event-pill-media {
+  margin: 0;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 2px;
+}
+.home-page .event-carousel .event-pill-title { font-size: 1.25rem; }
+.home-page .event-carousel .event-pill-meta { display: grid; gap: 2px; }
+.home-page .event-carousel .event-pill-meta span + span::before { display: none; }
+.home-page .event-carousel .event-pill-actions { margin-left: 216px; }
+.home-page .event-carousel .event-pill:not(.has-image) .event-card-main-link {
+  grid-template-columns: minmax(0, 1fr);
+}
+.home-page .event-carousel .event-pill:not(.has-image) .event-pill-actions { margin-left: 0; }
+.home-page .contact.section-pad { padding-block: var(--space-xl); }
+.home-page .contact-shell { max-width: 720px; gap: var(--space-lg); }
+.home-page .contact-form, .home-page .contact-form-grid { gap: var(--space-sm); }
+.home-page .contact-form label { gap: 6px; }
+.home-page .contact-form textarea { min-height: 80px; height: 80px; }
+@media (max-width: 560px) {
+  .home-page .event-carousel .event-pill { padding: var(--space-sm); gap: var(--space-xs); }
+  .home-page .event-carousel .event-card-main-link {
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: var(--space-sm);
+  }
+  .home-page .event-carousel .event-pill-title { font-size: 1.125rem; }
+  .home-page .event-carousel .event-pill-description { -webkit-line-clamp: 2; }
+  .home-page .event-carousel .event-pill-actions { margin-left: 108px; }
+}
