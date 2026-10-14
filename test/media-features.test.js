@@ -78,8 +78,8 @@ test("homepage function injects published media and hides the section when none 
   const response = await renderHomepage({ request: new Request("https://example.test/"), env: { ASSETS: { fetch: asset }, DB: db([row]) } });
   assert.equal(response.headers.get("cache-control"), "public, max-age=0, must-revalidate");
   const withItem = await response.text();
-  assert.match(withItem, /Articles, podcasts and more about Shemotion/);
-  assert.ok(withItem.indexOf("Articles, podcasts and more about Shemotion") < withItem.indexOf('id="after"'));
+  assert.match(withItem, /Shemotion in the Media/);
+  assert.ok(withItem.indexOf("Shemotion in the Media") < withItem.indexOf('id="after"'));
 
   const empty = await (await renderHomepage({ request: new Request("https://example.test/"), env: { ASSETS: { fetch: asset }, DB: db([]) } })).text();
   assert.doesNotMatch(empty, /media-features/);

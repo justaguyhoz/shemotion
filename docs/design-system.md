@@ -120,3 +120,25 @@ Media uses 280px publication tiles for one to three entries and an even three-co
 grid for four or more, becoming two and then one column. The known unapproved Times
 fallback thumbnail is represented by its publication name. Stored media data and
 publication state are unchanged; future approved uploads use the image treatment.
+
+
+## V2.2 homepage surfaces and opening
+
+All major homepage sections share `--ivory` (`#f7f2ec`). Separators use the existing
+`--editorial-divider` colour at 1px height, centred on a common measure: at most
+1180px, inset by the shared responsive page gutter. Decorative pseudo-elements
+keep separators out of the accessibility tree and remove the first separator
+when the optional events section is hidden. The hero permits its divider to
+extend to the shared measure despite its narrower content layout.
+
+Homepage hero padding is 24–40px and its headline is 37.6–52px. The portrait is
+capped at 300px desktop and 240px on stacked layouts, with a 24px mobile gap.
+Hero actions wrap naturally on phones instead of requiring a separate grid row
+for each button. Homepage events padding is 24–40px above / 32px below on larger
+screens and 16px on phones; the card rail starts 24px below its heading group.
+The existing 320px card width, image fitting, single-card sizing and carousel
+interactions are retained. Other public-page layouts retain V2.1 proportions.
+
+Cream section surfaces do not override component surfaces: publication tiles,
+form fields, event artwork, the video cover, buttons and icons retain their own
+existing treatment. The shared header and footer retain their existing branding.

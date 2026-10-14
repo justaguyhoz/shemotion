@@ -172,7 +172,7 @@ export function renderMediaFeaturesSection(items) {
   const single = items.length === 1 ? " is-single" : items.length >= 4 ? " is-many" : "";
   return `<section class="media-features section-pad" aria-labelledby="media-features-title">
     <div class="section-heading">
-      <h2 id="media-features-title">Articles, podcasts and more about Shemotion</h2>
+      <h2 id="media-features-title">Shemotion in the Media</h2>
     </div>
     <div class="media-feature-grid${single}">
       ${items.map(renderMediaFeatureCard).join("\n      ")}

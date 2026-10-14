@@ -3453,8 +3453,27 @@ body {
   padding: clamp(44px, 4.5vw, 64px) clamp(20px, 5vw, 76px);
 }
 
-.home-page main > section + section {
-  border-top: 1px solid var(--editorial-divider);
+/* Homepage surfaces share one cream ground and viewport-aligned inset rules. */
+.home-page main > section {
+  position: relative;
+  background: var(--ivory);
+  border: 0;
+}
+
+.home-page main > section + section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(var(--content-wide), calc(100vw - 2 * clamp(20px, 5vw, 76px)));
+  height: 1px;
+  transform: translateX(-50%);
+  background: var(--editorial-divider);
+  pointer-events: none;
+}
+
+.home-page main > section[hidden] + section::before {
+  content: none;
 }
 
 h1 {
@@ -4199,3 +4218,25 @@ body { font-size: var(--type-body); line-height: 1.65; }
 .hero-image img, .coach-image img, .service-page-image img, .guide-hero-image img,
 .guide-editorial-image img { box-shadow: none; }
 .stage-copy h3 { min-height: 1.4em; }
+
+/* V2.2: connect the existing events-first opening without changing card sizing. */
+.home-page .hero.section-pad {
+  padding-block: clamp(var(--space-lg), 3vw, var(--space-2xl));
+  overflow: visible;
+}
+.home-page .hero h1 { font-size: clamp(2.35rem, 4vw, 3.25rem); }
+.home-page .hero-image { width: min(100%, 300px); }
+.home-page .hero-image img { max-height: 390px; }
+.home-page .events.section-pad {
+  padding-top: clamp(var(--space-lg), 3vw, var(--space-2xl));
+  padding-bottom: var(--space-xl);
+}
+.home-page .event-carousel { margin-top: var(--space-lg); }
+@media (max-width: 860px) {
+  .home-page .hero { gap: var(--space-lg); }
+  .home-page .hero-image { width: min(56vw, 240px); }
+}
+@media (max-width: 560px) {
+  .home-page .events.section-pad { padding-block: var(--space-md); }
+  .home-page .hero-actions { display: flex; }
+}
