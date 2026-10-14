@@ -4173,7 +4173,7 @@ body { font-size: var(--type-body); line-height: 1.65; }
 .events-page-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 320px)); justify-content: center; }
 .testimonial-player { position: relative; }
 .testimonial-cover {
-  position: absolute; inset: 0 0 44px; width: 100%; border: 0; border-radius: 0;
+  position: absolute; inset: 0 0 80px; width: 100%; border: 0; border-radius: 0;
   background: var(--ivory) url("assets/tallai-testimonial-cover.svg") center top / 100% auto no-repeat; cursor: pointer;
 }
 .testimonial-cover:focus-visible { outline: 3px solid var(--green); outline-offset: 4px; }

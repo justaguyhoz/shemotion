@@ -31,6 +31,18 @@ Review branch: `codex/editorial-refinement-v2-1`.
   pages. Header offsets now follow the measured sticky header height; hash targets
   are restored after event loading.
 
+## Files modified
+
+- Public styling and interactions: `styles.css`, `script.js`, `navigation.js`.
+- Public markup/cache revisions: `index.html`, `private-groups-retreats/index.html`,
+  `what-is-shemotion/index.html`, `privacy/index.html`, `terms/index.html`,
+  `cancellations-refunds/index.html`, `shared/public-pages.js`.
+- Media presentation: `shared/media-features.js`.
+- Local poster: `assets/tallai-testimonial-cover.svg`.
+- Existing regression coverage: `test/events.test.js`, `test/media-features.test.js`,
+  `test/public-interactions.test.js`.
+- Documentation: `docs/design-system.md`, `docs/v2-1-review.md`.
+
 ## Verification
 
 - `npm test`: passes. Node's default isolated runner reports 13 passing files in
