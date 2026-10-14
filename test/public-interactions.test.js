@@ -268,3 +268,24 @@ test("testimonial native playback and playback failure both leave native control
   assert.equal(cover.hidden, true);
   assert.equal(root.activeElement, video);
 });
+
+
+test("header offsets and menu height track resizing after phone rotation", () => {
+  const { root, view, node } = fixture();
+  const header = node(), nav = node(), toggle = node();
+  let height = 82, resize;
+  const properties = new Map();
+  root.documentElement = { style: { setProperty: (key, value) => properties.set(key, value) } };
+  header.getBoundingClientRect = () => ({ height });
+  view.ResizeObserver = class { constructor(callback) { resize = callback; } observe() {} };
+  root.selectors.set("[data-header]", [header]);
+  header.selectors.set(".nav-toggle", [toggle]);
+  header.selectors.set(".site-nav", [nav]);
+  setupNavigation(root, view);
+  assert.equal(properties.get("--header-height"), "82px");
+  assert.equal(root.documentElement.style.scrollPaddingTop, "102px");
+  height = 61;
+  resize();
+  assert.equal(properties.get("--header-height"), "61px");
+  assert.equal(root.documentElement.style.scrollPaddingTop, "81px");
+});

@@ -6,7 +6,9 @@ export function setupNavigation(root = document, view = window) {
 
   if (root.documentElement && view.ResizeObserver) {
     const updateOffset = () => {
-      root.documentElement.style.scrollPaddingTop = `${Math.ceil(header.getBoundingClientRect().height) + 20}px`;
+      const height = Math.ceil(header.getBoundingClientRect().height);
+      root.documentElement.style.setProperty("--header-height", `${height}px`);
+      root.documentElement.style.scrollPaddingTop = `${height + 20}px`;
     };
     new view.ResizeObserver(updateOffset).observe(header);
     updateOffset();
