@@ -5,12 +5,8 @@ import { eventBookingPresentation, eventBookingState, eventImageUrl } from "./ev
 
 const BRISBANE_TIMEZONE = "Australia/Brisbane";
 
-const fullDateFormatter = new Intl.DateTimeFormat("en-AU", {
-  weekday: "long",
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-  timeZone: BRISBANE_TIMEZONE,
+const previewDateFormatter = new Intl.DateTimeFormat("en-AU", {
+  weekday: "short", day: "numeric", month: "short", year: "numeric", timeZone: BRISBANE_TIMEZONE,
 });
 
 const timeFormatter = new Intl.DateTimeFormat("en-AU", {
@@ -84,7 +80,7 @@ export function createEventCard(event, idPrefix = "event") {
   } else {
     const date = new Date(event.startAt);
     meta.append(
-      element("span", { text: fullDateFormatter.format(date) }),
+      element("span", { text: previewDateFormatter.format(date) }),
       element("span", { text: event.endAt ? `${compactTime(date)} - ${compactTime(new Date(event.endAt))}` : compactTime(date) })
     );
   }

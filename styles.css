@@ -4375,3 +4375,89 @@ body { font-size: var(--type-body); line-height: 1.65; }
 @media (orientation: landscape) and (max-height: 500px) and (min-width: 740px) and (max-width: 1100px) {
   .home-page .stage { padding-block: 0; }
 }
+
+/* V2.4: compact editorial previews; approved page rhythm and measures remain. */
+.home-page {
+  --preview-card-shadow: 0 4px 14px rgba(79, 74, 69, 0.045);
+  --preview-card-shadow-hover: 0 7px 20px rgba(79, 74, 69, 0.075);
+}
+.home-page .event-carousel { max-width: 944px; }
+.home-page .event-grid { grid-auto-columns: min(460px, 100%); }
+.home-page .event-grid.is-single { width: min(100%, 468px); }
+.home-page .event-grid.is-pair { width: min(100%, 944px); }
+.home-page .event-carousel .event-pill {
+  padding: var(--space-sm);
+  gap: var(--space-xs);
+  border: 1px solid var(--editorial-divider);
+  border-radius: 4px;
+  box-shadow: var(--preview-card-shadow);
+  transform: none;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+.home-page .event-carousel .event-card-main-link {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: var(--space-sm);
+}
+.home-page .event-carousel .event-pill-media {
+  height: 180px;
+  aspect-ratio: auto;
+  background: var(--ivory);
+}
+.home-page .event-carousel .event-pill-media-backdrop { display: none; }
+.home-page .event-carousel .event-pill-media-artwork { object-fit: contain; }
+.home-page .event-carousel .event-pill.has-image:hover .event-pill-media-artwork { transform: none; }
+.home-page .event-carousel .event-pill-title { font-size: 1.1875rem; }
+.home-page .event-carousel .event-pill-meta { display: flex; flex-wrap: wrap; gap: 2px 8px; }
+.home-page .event-carousel .event-pill-description { -webkit-line-clamp: 2; }
+.home-page .event-carousel .event-pill-actions { margin-left: calc(40% + var(--space-sm) * 0.6); }
+.home-page .media-feature-card {
+  flex-basis: 400px;
+  background: var(--white-soft);
+  border: 1px solid var(--editorial-divider);
+  border-radius: 4px;
+  box-shadow: var(--preview-card-shadow);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+.home-page .media-feature-link {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  grid-template-rows: auto;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  align-items: center;
+  text-align: left;
+}
+.home-page .media-feature-thumbnail {
+  padding: var(--space-sm);
+  background: var(--ivory);
+  border: 1px solid rgba(201, 184, 166, 0.22);
+  border-radius: 2px;
+}
+.home-page .media-feature-thumbnail img { max-width: 100%; max-height: 72px; }
+/* The unchanged official black/white PNG blends into its intentional cream frame. */
+.home-page .media-feature-thumbnail img[src="/assets/the-times-logo.png"] { mix-blend-mode: multiply; }
+.home-page .media-feature-fallback { font-size: 1.375rem; }
+.home-page .media-feature-title { font-size: 1.0625rem; }
+.home-page .media-feature-grid.is-many .media-feature-card { padding-top: 0; }
+.home-page .hero-image img, .home-page .coach-image img {
+  box-shadow: 0 5px 18px rgba(79, 74, 69, 0.06);
+}
+@media (max-width: 560px) {
+  .home-page .event-carousel .event-pill-title { font-size: 1.0625rem; }
+  .home-page .event-carousel .event-pill-media { height: 156px; }
+  .home-page .media-feature-link { gap: var(--space-sm); padding: var(--space-sm); }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .home-page .event-carousel .event-pill:hover,
+  .home-page .media-feature-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--preview-card-shadow-hover);
+    border-color: rgba(95, 83, 75, 0.3);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-page .event-carousel .event-pill, .home-page .media-feature-card { transition: none; }
+}
+
+.home-page .media-feature-fallback { max-width: 100%; overflow-wrap: anywhere; }
+.home-page .media-feature-grid.is-many .media-feature-link { grid-template-columns: 1fr; text-align: center; }
+.home-page .media-feature-grid.is-many .media-feature-thumbnail { width: min(100%, 240px); margin-inline: auto; }
