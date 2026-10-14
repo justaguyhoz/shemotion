@@ -48,7 +48,7 @@ test("media input validates required fields, safe links and thumbnail alt text",
   assert.ok(validateMediaFeatureInput({ ...baseItem, publicationDate: "2026-02-31" }).errors);
 });
 
-test("media cards are crawlable, accessible, compact and safely escaped", () => {
+test("media tiles are crawlable, fully clickable, logo-led and safely escaped", () => {
   assert.equal(renderMediaFeaturesSection([]), "");
   const html = renderMediaFeaturesSection([{ ...baseItem, title: "Joy <script>", publisher: "The Times & Co" }]);
   assert.match(html, /media-feature-grid is-single/);
@@ -56,7 +56,9 @@ test("media cards are crawlable, accessible, compact and safely escaped", () => 
   assert.match(html, /Joy &lt;script&gt;/);
   assert.match(html, /target="_blank" rel="noopener noreferrer"/);
   assert.match(html, /data-media-outbound/);
-  assert.match(html, /<time datetime="2026-10-13">13 October 2026<\/time>/);
+  assert.match(html, /class="media-feature-card tile-1"/);
+  assert.match(html, /<a class="media-feature-link"[\s\S]*class="media-feature-thumbnail"/);
+  assert.doesNotMatch(html, /Katty shares her perspective|<time|media-feature-meta/);
   assert.doesNotMatch(html, /<script>/);
   assert.match(renderMediaFeaturesSection([baseItem, { ...baseItem, id: 2 }]), /class="media-feature-grid">/);
   assert.equal(mediaCtaLabel("podcast"), "Listen to podcast");
@@ -76,8 +78,8 @@ test("homepage function injects published media and hides the section when none 
   const response = await renderHomepage({ request: new Request("https://example.test/"), env: { ASSETS: { fetch: asset }, DB: db([row]) } });
   assert.equal(response.headers.get("cache-control"), "public, max-age=0, must-revalidate");
   const withItem = await response.text();
-  assert.match(withItem, /Shemotion in the Spotlight/);
-  assert.ok(withItem.indexOf("Shemotion in the Spotlight") < withItem.indexOf('id="after"'));
+  assert.match(withItem, /In the Media/);
+  assert.ok(withItem.indexOf("In the Media") < withItem.indexOf('id="after"'));
 
   const empty = await (await renderHomepage({ request: new Request("https://example.test/"), env: { ASSETS: { fetch: asset }, DB: db([]) } })).text();
   assert.doesNotMatch(empty, /media-features/);

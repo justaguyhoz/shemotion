@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { setupNavigation } from "../navigation.js";
-import { setupFaq, setupTextRotator } from "../script.js";
+import { setupCoachDisclosure, setupFaq, setupTextRotator } from "../script.js";
 
 class NodeStub extends EventTarget {
   constructor(root) {
@@ -141,6 +141,27 @@ test("rapid FAQ switching and reopening cannot leave a stale visible answer or t
   root.dispatchEvent(escape);
   advance(240);
   assert.equal(items[1].answer.hidden, true);
+});
+
+test("Meet Katty disclosure exposes and hides the existing biography in place", () => {
+  const { root, node } = fixture();
+  const button = node();
+  const content = node();
+  button.setAttribute("aria-controls", "coach-more");
+  button.setAttribute("aria-expanded", "false");
+  button.textContent = "Read More";
+  content.hidden = true;
+  root.selectors.set("[data-coach-disclosure]", [button]);
+  root.selectors.set("#coach-more", [content]);
+  setupCoachDisclosure(root);
+  button.click();
+  assert.equal(content.hidden, false);
+  assert.equal(button.getAttribute("aria-expanded"), "true");
+  assert.equal(button.textContent, "Read Less");
+  button.click();
+  assert.equal(content.hidden, true);
+  assert.equal(button.getAttribute("aria-expanded"), "false");
+  assert.equal(button.textContent, "Read More");
 });
 
 test("reduced motion exposes every quote and cancels rotation, including a pending fade", () => {

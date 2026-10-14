@@ -146,39 +146,20 @@ function escapeHtml(value) {
     .replaceAll("'", "&#39;");
 }
 
-function titleCase(value) {
-  return value ? `${value[0].toUpperCase()}${value.slice(1)}` : "";
-}
-
-function formattedDate(value) {
-  if (!value) return "";
-  return new Intl.DateTimeFormat("en-AU", {
-    day: "numeric", month: "long", year: "numeric", timeZone: "UTC",
-  }).format(new Date(`${value}T00:00:00Z`));
-}
-
-export function renderMediaFeatureCard(item) {
+export function renderMediaFeatureCard(item, index = 0) {
   const title = escapeHtml(item.title);
   const publisher = escapeHtml(item.publisher);
-  const type = escapeHtml(titleCase(item.mediaType));
-  const cta = escapeHtml(mediaCtaLabel(item.mediaType));
   const image = item.thumbnailUrl
     ? `<img src="${escapeHtml(item.thumbnailUrl)}" alt="${escapeHtml(item.imageAlt)}" width="400" height="400" loading="lazy" decoding="async">`
     : `<span class="media-feature-fallback">${publisher}</span>`;
-  const date = item.publicationDate
-    ? `<time datetime="${escapeHtml(item.publicationDate)}">${escapeHtml(formattedDate(item.publicationDate))}</time>`
-    : "";
-  const description = item.shortDescription ? `<p>${escapeHtml(item.shortDescription)}</p>` : "";
   const aria = `${mediaCtaLabel(item.mediaType)}: ${item.title} on ${item.publisher} (opens in a new tab)`;
+  const tile = `tile-${(index % 4) + 1}`;
 
-  return `<article class="media-feature-card">
-    <div class="media-feature-thumbnail">${image}</div>
-    <div class="media-feature-content">
-      <div class="media-feature-meta"><span>${publisher}</span><span>${type}</span>${date}</div>
-      <h3>${title}</h3>
-      ${description}
-      <a class="media-feature-link" href="${escapeHtml(item.externalUrl)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(aria)}" data-media-outbound data-media-id="${escapeHtml(item.id)}" data-media-type="${escapeHtml(item.mediaType)}" data-media-publisher="${publisher}" data-media-title="${title}">${cta}<span aria-hidden="true"> &nearr;</span></a>
-    </div>
+  return `<article class="media-feature-card ${tile}">
+    <a class="media-feature-link" href="${escapeHtml(item.externalUrl)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(aria)}" data-media-outbound data-media-id="${escapeHtml(item.id)}" data-media-type="${escapeHtml(item.mediaType)}" data-media-publisher="${publisher}" data-media-title="${title}">
+      <span class="media-feature-thumbnail">${image}</span>
+      <span class="media-feature-content"><span class="media-feature-publisher">${publisher}</span><span class="media-feature-title">${title}</span><span class="media-feature-arrow" aria-hidden="true">&nearr;</span></span>
+    </a>
   </article>`;
 }
 
@@ -187,9 +168,8 @@ export function renderMediaFeaturesSection(items) {
   const single = items.length === 1 ? " is-single" : "";
   return `<section class="media-features section-pad" aria-labelledby="media-features-title">
     <div class="section-heading">
-      <p class="eyebrow">Media &amp; features</p>
-      <h2 id="media-features-title">Shemotion in the Spotlight</h2>
-      <p>Stories, interviews and conversations exploring movement, wellbeing and reconnecting with joy.</p>
+      <p class="eyebrow">Stories and conversations</p>
+      <h2 id="media-features-title">In the Media</h2>
     </div>
     <div class="media-feature-grid${single}">
       ${items.map(renderMediaFeatureCard).join("\n      ")}

@@ -335,8 +335,8 @@ function setupEventCarousel(list, cards) {
       card.classList.toggle("is-third", state === "third");
       card.classList.toggle("is-before", state === "before");
       card.classList.toggle("is-after", state === "after");
-      card.setAttribute("aria-hidden", String(index !== activeIndex));
-      if ("inert" in card) card.inert = index !== activeIndex;
+      if (state === "current") card.setAttribute("aria-current", "true");
+      else card.removeAttribute("aria-current");
     });
   };
   const updateControls = () => {
@@ -530,6 +530,19 @@ export function setupInstagramGallery(root = document, view = window) {
   grid.tabIndex = 0;
 }
 
+export function setupCoachDisclosure(root = document) {
+  const button = root.querySelector("[data-coach-disclosure]");
+  if (!button) return;
+  const content = root.querySelector(`#${button.getAttribute("aria-controls")}`);
+  if (!content) return;
+  button.addEventListener("click", () => {
+    const expanded = button.getAttribute("aria-expanded") === "true";
+    button.setAttribute("aria-expanded", String(!expanded));
+    button.textContent = expanded ? "Read More" : "Read Less";
+    content.hidden = expanded;
+  });
+}
+
 function initialisePage() {
   const contactAttribution = captureContactAttribution();
   const primaryBookNow = document.querySelector("[data-primary-book-now]");
@@ -538,7 +551,7 @@ function initialisePage() {
   setupNavigation();
 
   setupReveal([...document.querySelectorAll(
-    ".events .section-heading, .experience .section-heading, .stage, .experience-followup, .for-you .narrow, .feedback .section-heading, .coach-grid, .media-features .section-heading, .media-feature-grid, .organisations .section-heading, .organisations .service-card-grid, .contact-shell, .instagram [data-reveal]"
+    ".events .section-heading, .experience .section-heading, .stage, .experience-followup, .feedback-editorial, .coach-grid, .media-features .section-heading, .media-feature-grid, .organisations-invitation-inner, .contact-shell, .instagram [data-reveal]"
   )]);
   document.querySelectorAll("[data-pill-rotator]").forEach((container) => setupTextRotator(container));
   document.querySelectorAll("[data-quote-rotator]").forEach((container) => setupTextRotator(container, { mobileOnly: true, duration: 3700, gap: 700 }));
@@ -546,6 +559,7 @@ function initialisePage() {
   setupEmailCopy();
   setupContactForm(document, fetch, contactAttribution);
   setupInstagramGallery();
+  setupCoachDisclosure();
   setupMediaOutboundTracking();
   loadPublicEvents();
 }
