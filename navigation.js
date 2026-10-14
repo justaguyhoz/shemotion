@@ -4,6 +4,14 @@ export function setupNavigation(root = document, view = window) {
   const nav = header?.querySelector(".site-nav");
   if (!toggle || !nav) return;
 
+  if (root.documentElement && view.ResizeObserver) {
+    const updateOffset = () => {
+      root.documentElement.style.scrollPaddingTop = `${Math.ceil(header.getBoundingClientRect().height) + 20}px`;
+    };
+    new view.ResizeObserver(updateOffset).observe(header);
+    updateOffset();
+  }
+
   const mobile = view.matchMedia("(max-width: 1100px)");
   const setOpen = (open, returnFocus = false) => {
     open = mobile.matches && open;

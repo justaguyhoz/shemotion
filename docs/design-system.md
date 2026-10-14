@@ -43,8 +43,8 @@ may use two or three columns, but collapse into comfortable single-column readin
 flows rather than shrinking content into narrow columns.
 
 Public display headings use one shared proportional scale, capped below the older
-oversized hero treatment. Event artwork keeps the existing 4:3 frame and focal-point
-data. Logo-led media artwork always uses `object-fit: contain` so publication marks
+oversized hero treatment. Homepage and archive event artwork uses a compact 16:10 frame; event details
+retain their 4:3 frame. Both preserve the saved fit and focal-point data. Logo-led media artwork always uses `object-fit: contain` so publication marks
 are not cropped or distorted.
 
 ## Default mobile relationships
@@ -79,3 +79,44 @@ Equivalent relationships should use equivalent spacing throughout the public sit
 For public-page presentation changes, inspect the homepage, events listing, a representative event page, private groups page and The Approach page. Check approximately 320px, 375px, 390px, 430px and a representative tablet width, plus a desktop regression pass.
 
 Review heading and eyebrow wrapping, short copy, buttons, CTA and image spacing, content density, alignment, clipping, horizontal overflow and browser console errors. Record any remaining awkward wrap instead of declaring the work complete.
+
+
+## V2.1 public typography and proportions
+
+The existing brand families are retained. Google Fonts supplies Marcellus at 400
+only, and Inter at 400, 500 and 600. No synthetic 300 weight or extra font is used.
+Display headings remain Marcellus 400; body and labels are Inter 400, with 500 for
+buttons. The local SVG testimonial poster uses the existing Georgia fallback so
+it does not request a font of its own.
+
+| Token | Responsive value |
+| --- | --- |
+| `--type-display` | 37.6–56px, for hero and page titles |
+| `--type-section` | 30.4–42px |
+| `--type-support` | 22.4–28px |
+| `--type-body` | 16px, 1.65 default line height |
+| `--type-eyebrow` | 11.52px, regular weight |
+| `--event-card-width` | 320px, contained by narrow mobile viewports |
+
+Public section padding is generally 44–64px. The contact form is capped at 900px,
+uses four desktop columns, two tablet columns and one mobile column. Inputs retain
+44px targets and 16px text; the message field starts at 96px and remains resizable.
+The submit button sizes to its content. Consent remains optional and visible.
+
+Experience columns centre their icons, numbers, headings and copy. Icons are 76px
+on desktop and 58px on phones; numbers are 23.2px, about 37% smaller than V2.
+Vertical desktop dividers become horizontal mobile dividers.
+
+The testimonial player is capped at 280px wide, centred, 9:16 and uncropped. A
+local cream/blush SVG poster provides the initial cover; playback requires a user
+action and retains native controls. The original MP4 and JPEG poster remain intact.
+
+Event rails shrink to one or two cards when appropriate, show three desktop cards,
+and scroll for additional cards. Controls appear only when content overflows.
+The preview description is limited to three lines; the full description, dates,
+times, location, price and booking state remain on the linked detail page.
+
+Media uses 280px publication tiles for one to three entries and an even three-column
+grid for four or more, becoming two and then one column. The known unapproved Times
+fallback thumbnail is represented by its publication name. Stored media data and
+publication state are unchanged; future approved uploads use the image treatment.

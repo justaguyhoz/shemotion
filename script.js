@@ -85,7 +85,7 @@ export function createEventCard(event, idPrefix = "event") {
     const date = new Date(event.startAt);
     meta.append(
       element("span", { text: fullDateFormatter.format(date) }),
-      element("span", { text: compactTime(date) })
+      element("span", { text: event.endAt ? `${compactTime(date)} - ${compactTime(new Date(event.endAt))}` : compactTime(date) })
     );
   }
   if (event.suburb) meta.append(element("span", { text: event.suburb }));
@@ -130,6 +130,7 @@ export function createEventCard(event, idPrefix = "event") {
     if (media) mainLink.append(media);
     mainLink.append(content);
     card.append(mainLink);
+    content.append(element("span", { className: "event-detail-hint", text: "View details" }));
   } else {
     if (media) card.append(media);
     card.append(content);
@@ -315,6 +316,7 @@ export function setupFaq(root = document, view = window) {
 function setupEventCarousel(list, cards) {
   const controls = document.querySelector("[data-event-controls]");
   list.classList.toggle("is-single", cards.length === 1);
+  list.classList.toggle("is-pair", cards.length === 2);
   cards[0]?.classList.add("is-current");
   if (!controls || cards.length < 2) {
     controls?.setAttribute("hidden", "");
@@ -342,8 +344,8 @@ function setupEventCarousel(list, cards) {
   };
   const updateControls = () => {
     counter.textContent = `${formatNumber(activeIndex + 1)} / ${formatNumber(cards.length)}`;
-    previous.disabled = activeIndex === 0;
-    next.disabled = activeIndex === cards.length - 1;
+    previous.disabled = list.scrollLeft <= 4;
+    next.disabled = list.scrollLeft >= list.scrollWidth - list.clientWidth - 4;
     updateCardStates();
   };
   const goTo = (index) => {
@@ -375,7 +377,9 @@ function setupEventCarousel(list, cards) {
     }, 80);
   }, { passive: true });
 
-  controls.removeAttribute("hidden");
+  const updateOverflow = () => { controls.hidden = list.scrollWidth <= list.clientWidth + 2; };
+  new ResizeObserver(updateOverflow).observe(list);
+  updateOverflow();
   updateControls();
 }
 
@@ -424,9 +428,8 @@ async function loadPublicEvents() {
     setUpcomingEventsVisibility(section, primaryAction, false);
     console.error("Shemotion events could not be loaded.");
   } finally {
-    if (window.location.hash === "#contact") {
-      document.querySelector("#contact")?.scrollIntoView();
-    }
+    const anchor = window.location.hash.slice(1);
+    if (anchor) document.getElementById(anchor)?.scrollIntoView();
   }
 }
 
@@ -544,6 +547,25 @@ export function setupCoachDisclosure(root = document) {
   });
 }
 
+export function setupTestimonial(root = document) {
+  const cover = root.querySelector("[data-testimonial-play]");
+  const video = root.querySelector(".testimonial-player video");
+  if (!cover || !video) return;
+  cover.hidden = false;
+  video.addEventListener("play", () => { cover.hidden = true; });
+  cover.addEventListener("click", async () => {
+    try {
+      await video.play();
+      cover.hidden = true;
+      video.focus();
+    } catch {
+      // Leave native controls available if the browser cannot start playback.
+      cover.hidden = true;
+      video.focus();
+    }
+  });
+}
+
 function initialisePage() {
   const contactAttribution = captureContactAttribution();
   const primaryBookNow = document.querySelector("[data-primary-book-now]");
@@ -561,6 +583,7 @@ function initialisePage() {
   setupContactForm(document, fetch, contactAttribution);
   setupInstagramGallery();
   setupCoachDisclosure();
+  setupTestimonial();
   setupMediaOutboundTracking();
   loadPublicEvents();
 }

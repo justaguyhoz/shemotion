@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { setupNavigation } from "../navigation.js";
-import { setupCoachDisclosure, setupFaq, setupTextRotator } from "../script.js";
+import { setupCoachDisclosure, setupFaq, setupTextRotator, setupTestimonial } from "../script.js";
 
 class NodeStub extends EventTarget {
   constructor(root) {
@@ -233,4 +233,38 @@ test("mobile guide callout is contained without relying on page-level overflow c
   assert.match(calloutRule, /right:\s*0/);
   assert.match(calloutRule, /max-width:\s*min\(240px,\s*calc\(100% - var\(--space-md\)\)\)/);
   assert.doesNotMatch(calloutRule, /right:\s*-/);
+});
+
+
+test("testimonial cover starts playback only on request and hands focus to native controls", async () => {
+  const { root, node } = fixture();
+  const cover = node(), video = node();
+  let plays = 0;
+  video.play = async () => { plays += 1; video.dispatchEvent(new Event("play")); };
+  root.selectors.set("[data-testimonial-play]", [cover]);
+  root.selectors.set(".testimonial-player video", [video]);
+  setupTestimonial(root);
+  assert.equal(plays, 0);
+  assert.equal(cover.hidden, false);
+  cover.click();
+  await Promise.resolve();
+  assert.equal(plays, 1);
+  assert.equal(cover.hidden, true);
+  assert.equal(root.activeElement, video);
+});
+
+test("testimonial native playback and playback failure both leave native controls accessible", async () => {
+  const { root, node } = fixture();
+  const cover = node(), video = node();
+  root.selectors.set("[data-testimonial-play]", [cover]);
+  root.selectors.set(".testimonial-player video", [video]);
+  video.play = async () => { throw new Error("Playback unavailable"); };
+  setupTestimonial(root);
+  video.dispatchEvent(new Event("play"));
+  assert.equal(cover.hidden, true);
+  cover.hidden = false;
+  cover.click();
+  await Promise.resolve();
+  assert.equal(cover.hidden, true);
+  assert.equal(root.activeElement, video);
 });

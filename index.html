@@ -17,7 +17,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet">
     <script>document.documentElement.classList.add("reveal-ready")</script>
-    <link rel="stylesheet" href="styles.css?v=20261014-2">
+    <link rel="stylesheet" href="styles.css?v=20261014-3">
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
@@ -185,13 +185,16 @@
           <div class="section-heading">
           <p class="eyebrow">How you may feel</p>
           <h2 id="feedback-title">How You May Feel After Shemotion</h2>
-            <p>Shemotion creates space to release what you are carrying, reconnect with your body and leave feeling lighter, freer and more grounded.</p>
+            <p>Every Shemotion experience is personal. Hear how one woman felt after joining us at Tallai.</p>
           </div>
           <figure class="testimonial-video">
-            <video controls preload="metadata" playsinline poster="assets/tallai-testimonial-poster.jpg" aria-label="Tallai Shemotion participant testimonial">
+            <div class="testimonial-player">
+            <video controls preload="metadata" playsinline poster="assets/tallai-testimonial-cover.svg" aria-label="Tallai Shemotion participant testimonial">
               <source src="assets/tallai-testimonial.mp4" type="video/mp4">
               <p>Your browser cannot play this video. <a href="assets/tallai-testimonial.mp4">Open the Tallai participant testimonial</a>.</p>
             </video>
+            <button type="button" class="testimonial-cover" data-testimonial-play aria-label="Play the Tallai participant testimonial" hidden><span class="sr-only">Play testimonial</span></button>
+            </div>
             <figcaption>A participant reflects on her Shemotion experience at Tallai.</figcaption>
           </figure>
         </div>
@@ -263,7 +266,7 @@
                 </label>
                 <label class="contact-message-field">
                   <span>Message</span>
-                  <textarea name="message" rows="5" maxlength="5000" required></textarea>
+                  <textarea name="message" rows="3" maxlength="5000" required></textarea>
                 </label>
               </div>
               <label class="contact-consent">
@@ -376,6 +379,6 @@
       </div>
     </footer>
 
-    <script type="module" src="script.js?v=20261001-4"></script>
+    <script type="module" src="script.js?v=20261014-3"></script>
   </body>
 </html>

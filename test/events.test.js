@@ -75,7 +75,7 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.match(html, /assets\/shemotion-step-1-get-out-of-your-head\.png/);
   assert.match(html, /assets\/shemotion-step-2-move-into-joy\.png/);
   assert.match(html, /assets\/shemotion-step-3-land-in-the-afterglow\.png/);
-  assert.match(css, /\/\* Editorial refinement V2 \*\/[\s\S]*?\.stage-icon img\s*\{[\s\S]*?width:\s*92px/);
+  assert.match(css, /\/\* Editorial refinement V2.1:[^*]*\*\/[\s\S]*?\.stage-icon img\s*\{[\s\S]*?width:\s*76px/);
   assert.match(css, /@media \(max-width: 560px\)[\s\S]*?\.stage-icon img\s*\{[\s\S]*?width:\s*58px/);
   assert.match(html, /Want to understand the practice more deeply\?/);
   assert.match(html, /href="\/what-is-shemotion\/">What Is Shemotion\?<\/a>/);
@@ -84,7 +84,7 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   const nextSectionIndex = html.indexOf('<section class="feedback');
   assert.ok(stageThreeIndex < guideLinkIndex && guideLinkIndex < nextSectionIndex, "guide link should follow the complete three-stage experience");
   assert.doesNotMatch(html, /Shemotion May Be for You If You|data-pill-rotator|data-quote-rotator/);
-  assert.match(html, /<video controls preload="metadata" playsinline poster="assets\/tallai-testimonial-poster\.jpg"/);
+  assert.match(html, /<video controls preload="metadata" playsinline poster="assets\/tallai-testimonial-cover\.svg"/);
   assert.match(html, /<source src="assets\/tallai-testimonial\.mp4" type="video\/mp4">/);
   assert.match(html, /data-coach-disclosure/);
   assert.match(css, /\.booking-button::after[\s\S]*animation: booking-button-glow 4\.4s/);
@@ -235,7 +235,7 @@ test("public contact paths and visible punctuation follow the sitewide policy", 
     assert.doesNotMatch(header.match(/<nav class="site-nav"[\s\S]*?<\/nav>/)[0], />Contact<\/a>/);
   });
   sources.forEach((source) => assert.doesNotMatch(source, /shemotion\.au@gmail\.com/i));
-  assert.match(await readFile(new URL("../script.js", import.meta.url), "utf8"), /finally \{[\s\S]*window\.location\.hash === "#contact"[\s\S]*scrollIntoView/);
+  assert.match(await readFile(new URL("../script.js", import.meta.url), "utf8"), /finally \{[\s\S]*window\.location\.hash\.slice\(1\)[\s\S]*scrollIntoView/);
   assert.doesNotMatch(homepage, /Contact Me For a Tailored Quote/);
   assert.match(privateGroups, /href="\/#contact" data-organisation-enquiry>Discuss your organisation or event<\/a>/);
   assert.match(privateGroups, /Tell us about your group, workplace or event and we can discuss a suitable Shemotion experience\./);
