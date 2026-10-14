@@ -4275,7 +4275,7 @@ body { font-size: var(--type-body); line-height: 1.65; }
   grid-template-columns: minmax(0, 1fr);
 }
 .home-page .event-carousel .event-pill:not(.has-image) .event-pill-actions { margin-left: 0; }
-.home-page .contact.section-pad { padding-block: var(--space-xl); }
+.home-page .contact.section-pad { padding-block: var(--space-editorial-section); }
 .home-page .contact-shell { max-width: 720px; gap: var(--space-lg); }
 .home-page .contact-form, .home-page .contact-form-grid { gap: var(--space-sm); }
 .home-page .contact-form label { gap: 6px; }
@@ -4334,4 +4334,44 @@ body { font-size: var(--type-body); line-height: 1.65; }
   .home-page .stage-icon { min-height: 68px; }
   .home-page .stage-icon img { width: 58px; }
   .home-page .stage-copy h3 { min-height: 2.6em; }
+}
+
+/* Editorial breathing room: narrower content islands between shared fine rules. */
+.home-page { --space-editorial-section: clamp(56px, 6vw, 88px); }
+.home-page main > .section-pad { padding-block: var(--space-editorial-section); }
+.home-page .hero.section-pad,
+.home-page .events.section-pad { padding-block: clamp(32px, 4vw, 56px); }
+.home-page .section-heading {
+  width: min(100%, var(--content-reading));
+  margin-inline: auto;
+  text-align: center;
+}
+.home-page .contact-shell {
+  width: min(100%, var(--content-reading));
+  max-width: var(--content-reading);
+  margin-inline: auto;
+  gap: var(--space-xl);
+}
+.home-page .contact-intro { width: 100%; text-align: center; }
+.home-page .contact-card {
+  width: min(600px, calc(100% - var(--space-xl)));
+  margin-inline: auto;
+  justify-self: center;
+}
+.home-page .contact-form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.home-page .stage-list { margin-top: var(--space-2xl); }
+@media (max-width: 860px) {
+  .home-page .stage { padding-block: var(--space-2xl); }
+  .home-page .stage:first-child { padding-top: 0; }
+  .home-page .stage-copy { width: 100%; max-width: 30ch; margin-inline: auto; text-align: center; }
+  .home-page .stage-copy h3 { margin-inline: auto; }
+}
+@media (max-width: 560px) {
+  .home-page .contact-form-grid { grid-template-columns: 1fr; }
+}
+@media (orientation: landscape) and (max-height: 500px) and (min-width: 568px) and (max-width: 1100px) {
+  .home-page main > .section-pad:not(.hero):not(.events) { padding-block: var(--space-2xl); }
+}
+@media (orientation: landscape) and (max-height: 500px) and (min-width: 740px) and (max-width: 1100px) {
+  .home-page .stage { padding-block: 0; }
 }
