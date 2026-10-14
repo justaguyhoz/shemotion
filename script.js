@@ -314,6 +314,7 @@ export function setupFaq(root = document, view = window) {
 
 function setupEventCarousel(list, cards) {
   const controls = document.querySelector("[data-event-controls]");
+  list.classList.toggle("is-single", cards.length === 1);
   cards[0]?.classList.add("is-current");
   if (!controls || cards.length < 2) {
     controls?.setAttribute("hidden", "");

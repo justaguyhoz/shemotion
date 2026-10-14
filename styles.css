@@ -541,6 +541,10 @@ p:last-child {
   display: none;
 }
 
+.event-grid.is-single {
+  justify-content: center;
+}
+
 .event-pill {
   position: relative;
   display: grid;
