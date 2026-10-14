@@ -30,6 +30,23 @@ every heading globally.
 
 Use the scale deliberately rather than mechanically replacing every numeric value. Preserve intentional desktop and component-specific exceptions.
 
+## Editorial layout
+
+The public pages extend the existing scale with two shared content measures:
+
+- `--content-wide` (1180px) for event rows, forms and editorial grids.
+- `--content-reading` (660px) for introductions and focused reading copy.
+
+Major homepage sections use `--editorial-divider`, a quiet clay-tinted rule that
+separates content without creating card-like containers. Desktop editorial grids
+may use two or three columns, but collapse into comfortable single-column reading
+flows rather than shrinking content into narrow columns.
+
+Public display headings use one shared proportional scale, capped below the older
+oversized hero treatment. Event artwork keeps the existing 4:3 frame and focal-point
+data. Logo-led media artwork always uses `object-fit: contain` so publication marks
+are not cropped or distorted.
+
 ## Default mobile relationships
 
 - Eyebrow to major heading: 12px
