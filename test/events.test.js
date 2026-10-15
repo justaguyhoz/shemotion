@@ -65,7 +65,7 @@ test("public homepage preserves tracking and navigation in the V3 editorial comp
   assert.doesNotMatch(publicScript, /setupPublicCalendar|setupEventsMap|nominatim|calendar\.js/);
   assert.doesNotMatch(css, /\.event-view-switch|\.events-calendar|\.events-map|\.calendar-|\.leaflet-/);
   assert.doesNotMatch(html.match(/<nav class="site-nav"[\s\S]*?<\/nav>/)[0], />Contact<\/a>/);
-  assert.match(html, /<h2 id="experience-title">The Shemotion Experience<\/h2>\s*<p>Move\. Release\. Reconnect with Joy\.<\/p>/);
+  assert.match(html, /<h2 id="experience-title">The Shemotion Experience<\/h2>\s*<p>Guided movement, free expression and a gentle return to grounding\.<\/p>/);
   assert.match(html, /<title>Women's Movement &amp; Embodiment Gold Coast \| Shemotion<\/title>/);
   assert.match(html, /A women-only movement experience for freedom, expression &amp; joy\./);
   assert.match(html, /assets\/shemotion-step-1-get-out-of-your-head\.png/);
@@ -168,7 +168,7 @@ test("What Is Shemotion guide has complete metadata, positioning and internal pa
   assert.match(privateGroupsHtml, /href="\/what-is-shemotion\/">What Is Shemotion\?<\/a>/);
   assert.match(sharedPagesSource, /href="\/what-is-shemotion\/">What Is Shemotion\?<\/a>/);
   assert.match(redirects, /\/what-is-feminine-movement-meditation\/ \/what-is-shemotion\/ 301/);
-  assert.match(html, /src="\/assets\/v3-meadow\.webp"/);
+  assert.match(html, /src="\/assets\/concept5-grounding\.webp"/);
   assert.doesNotMatch(html, /FAQPage|"@type":"FAQPage"/);
 });
 
@@ -194,14 +194,14 @@ test("homepage and organisation route reflect the broader commercial positioning
 
   assert.match(organisations, /<title>Women's Wellbeing Events & Workplaces \| Shemotion<\/title>/);
   assert.match(organisations, /<link rel="canonical" href="https:\/\/shemotion\.com\.au\/private-groups-retreats\/">/);
-  assert.match(organisations, /<h1>Shemotion for Organisations<\/h1>/);
+  assert.match(organisations, /<h1[^>]*>Shemotion for Organisations<\/h1>/);
   assert.match(organisations, /Workplace Wellbeing/);
   assert.match(organisations, /Women's Events and Conferences/);
   assert.match(organisations, /Retreats and Private Groups/);
   assert.match(organisations, /Studios and Wellbeing Spaces/);
   assert.match(organisations, /Gold Coast and Brisbane/);
-  assert.match(organisations, /positive coaching prompts to help women step away from mental pressure/);
-  assert.match(organisations, /src="\/assets\/v3-meadow\.webp"/);
+  assert.match(organisations, /Every format remains women-only, with guided feminine movement, free expression and positive coaching prompts/);
+  assert.match(organisations, /src="\/assets\/concept5-shared\.webp"/);
   assert.match(organisations, /data-organisation-enquiry/);
   assert.doesNotMatch(organisations, /data-private-enquiry/);
   assert.match(publicPageScript, /OrganisationEnquiryClick/);
@@ -232,7 +232,7 @@ test("public contact paths and visible punctuation follow the sitewide policy", 
   assert.match(await readFile(new URL("../script.js", import.meta.url), "utf8"), /finally \{[\s\S]*window\.location\.hash\.slice\(1\)[\s\S]*scrollIntoView/);
   assert.doesNotMatch(homepage, /Contact Me For a Tailored Quote/);
   assert.match(privateGroups, /href="\/#contact" data-organisation-enquiry>Discuss your organisation or event<\/a>/);
-  assert.match(privateGroups, /Tell us about your group, workplace or event and we can discuss a suitable Shemotion experience\./);
+  assert.match(privateGroups, /Tell us about your group, workplace or event\./);
   assert.match(privateGroups, /href="\/#contact" data-organisation-enquiry>Enquire about an organisation or event<\/a>/);
   assert.match(sharedPages, /class="header-cta" href="\/#contact">Contact Shemotion<\/a>/);
   assert.doesNotMatch(eventsPage, /event-pill-action[^>]*href="\/#contact"/);

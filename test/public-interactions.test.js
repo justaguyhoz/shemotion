@@ -198,10 +198,11 @@ test("reduced motion exposes every quote and cancels rotation, including a pendi
   assert.equal(tasks.size, 0);
 });
 
-test("private contact section participates in the existing shared reveal initialization", async () => {
+test("organisation enquiry remains directly available without entrance animation", async () => {
   const html = await readFile(new URL("../private-groups-retreats/index.html", import.meta.url), "utf8");
   const script = await readFile(new URL("../public-page.js", import.meta.url), "utf8");
-  assert.match(html, /class="contact-shell" data-reveal/);
+  assert.match(html, /class="organisation-enquiry section-pad"/);
+  assert.equal((html.match(/data-organisation-enquiry/g) || []).length, 2);
   assert.match(script, /querySelectorAll\("\[data-reveal\]"\)/);
 });
 

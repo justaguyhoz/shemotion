@@ -1,3 +1,4 @@
+import { setupFloralMotion } from "./floral-motion.js";
 import { setupNavigation } from "./navigation.js";
 import { addCustomEventClickTracking, eventBookingMetadata, setupMediaOutboundTracking } from "./tracking.js";
 import { captureContactAttribution } from "./attribution.js";
@@ -60,8 +61,19 @@ export function createEventCard(event, idPrefix = "event") {
   card.dataset.eventId = String(event.id);
   if (eventBookingState(event) === "cancelled") card.classList.add("is-cancelled");
 
-  // Homepage event bands intentionally omit artwork; event pages retain it.
-  const media = null;
+  const dateBlock = element("div", { className: "event-date-block" });
+  dateBlock.setAttribute("aria-hidden", "true");
+  if (event.dateStatus === "tbc") {
+    dateBlock.append(element("span", { text: "Date" }), element("strong", { text: "TBC" }));
+  } else {
+    const date = new Date(event.startAt);
+    dateBlock.append(
+      element("span", { text: new Intl.DateTimeFormat("en-AU", { month: "short", timeZone: BRISBANE_TIMEZONE }).format(date) }),
+      element("strong", { text: new Intl.DateTimeFormat("en-AU", { day: "2-digit", timeZone: BRISBANE_TIMEZONE }).format(date) }),
+      element("span", { text: new Intl.DateTimeFormat("en-AU", { year: "numeric", timeZone: BRISBANE_TIMEZONE }).format(date) })
+    );
+  }
+  card.append(dateBlock);
 
   const content = element("div", { className: "event-pill-content" });
   const meta = element("div", { className: "event-pill-meta" });
@@ -114,12 +126,10 @@ export function createEventCard(event, idPrefix = "event") {
     const mainLink = element("a", { className: "event-card-main-link" });
     mainLink.href = `/events/${encodeURIComponent(event.slug)}/`;
     mainLink.setAttribute("aria-label", `View ${event.title} event details`);
-    if (media) mainLink.append(media);
     mainLink.append(content);
     card.append(mainLink);
     content.append(element("span", { className: "event-detail-hint", text: "View details" }));
   } else {
-    if (media) card.append(media);
     card.append(content);
   }
   card.append(actions);
@@ -485,9 +495,91 @@ export function setupContactForm(root = document, fetchImpl = fetch, attribution
 
 export function setupInstagramGallery(root = document, view = window) {
   const grid = root.querySelector(".instagram-grid");
-  if (!grid) return;
+  const track = grid?.querySelector(".instagram-track");
+  const group = track?.querySelector(".instagram-card-group");
+  if (!grid || !group) return;
   grid.setAttribute("aria-label", "Featured Instagram posts");
   grid.tabIndex = 0;
+  const control = root.querySelector("[data-instagram-motion]");
+  const reduced = view.matchMedia("(prefers-reduced-motion: reduce)");
+  let paused = false, hovered = false, focused = false, visible = true;
+  let dragging = null, suppressClick = false, holdUntil = 0, cycle = 0, frame = 0, last = null, position = 0;
+  const measure = () => { cycle = group.getBoundingClientRect().width; position = grid.scrollLeft; };
+  const canMove = () => !paused && !hovered && !focused && !dragging && !reduced.matches && visible && !root.hidden;
+  const tick = (now) => {
+    if (!canMove()) return;
+    if (last !== null && now >= holdUntil && cycle > 0) {
+      position += Math.min(now - last, 50) * 0.018;
+      if (position >= cycle) position %= cycle;
+      grid.scrollLeft = position;
+    }
+    if (now < holdUntil) position = grid.scrollLeft;
+    last = now;
+    frame = view.requestAnimationFrame(tick);
+  };
+  const sync = () => {
+    view.cancelAnimationFrame(frame);
+    last = null;
+    position = grid.scrollLeft;
+    if (control) {
+      control.hidden = reduced.matches;
+      control.setAttribute("aria-pressed", String(paused));
+      control.textContent = paused ? "Resume Instagram" : "Pause Instagram";
+    }
+    if (canMove()) frame = view.requestAnimationFrame(tick);
+  };
+  control?.addEventListener("click", () => { paused = !paused; sync(); });
+  grid.addEventListener("mouseenter", () => { hovered = true; sync(); });
+  grid.addEventListener("mouseleave", () => { hovered = false; sync(); });
+  grid.addEventListener("focusin", () => { focused = true; sync(); });
+  grid.addEventListener("focusout", (event) => {
+    focused = grid.contains(event.relatedTarget);
+    holdUntil = view.performance.now() + 1500;
+    sync();
+  });
+  grid.addEventListener("wheel", () => { holdUntil = view.performance.now() + 2000; }, { passive: true });
+  grid.addEventListener("keydown", (event) => {
+    if (!["ArrowLeft", "ArrowRight"].includes(event.key) || event.target !== grid) return;
+    event.preventDefault();
+    grid.scrollLeft += event.key === "ArrowRight" ? 180 : -180;
+  });
+  grid.addEventListener("pointerdown", (event) => {
+    if (event.button !== 0) return;
+    dragging = { id: event.pointerId, x: event.clientX, scroll: grid.scrollLeft, mouse: event.pointerType === "mouse", moved: false };
+    suppressClick = false;
+    sync();
+  });
+  grid.addEventListener("pointermove", (event) => {
+    if (!dragging || !dragging.mouse || event.pointerId !== dragging.id) return;
+    const delta = event.clientX - dragging.x;
+    if (!dragging.moved && Math.abs(delta) < 6) return;
+    dragging.moved = true;
+    suppressClick = true;
+    grid.setPointerCapture(event.pointerId);
+    grid.classList.add("is-dragging");
+    event.preventDefault();
+    grid.scrollLeft = dragging.scroll - delta;
+  });
+  const release = (event) => {
+    if (!dragging || event.pointerId !== dragging.id) return;
+    if (grid.hasPointerCapture(event.pointerId)) grid.releasePointerCapture(event.pointerId);
+    dragging = null;
+    grid.classList.remove("is-dragging");
+    holdUntil = view.performance.now() + 2000;
+    sync();
+  };
+  view.addEventListener("pointerup", release);
+  view.addEventListener("pointercancel", release);
+  grid.addEventListener("dragstart", (event) => event.preventDefault());
+  grid.addEventListener("click", (event) => {
+    if (suppressClick) { event.preventDefault(); event.stopPropagation(); suppressClick = false; }
+  }, true);
+  reduced.addEventListener("change", sync);
+  root.addEventListener("visibilitychange", sync);
+  if (view.ResizeObserver) new view.ResizeObserver(measure).observe(group);
+  if (view.IntersectionObserver) new view.IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); }).observe(grid);
+  measure();
+  sync();
 }
 
 export function setupCoachDisclosure(root = document) {
@@ -520,27 +612,6 @@ export function setupTestimonial(root = document) {
       video.focus();
     }
   });
-}
-
-function setupFloralMotion(root = document, view = window) {
-  const button = root.querySelector("[data-floral-motion]");
-  if (!button) return;
-  const preference = view.matchMedia("(prefers-reduced-motion: reduce)");
-  let paused = false;
-  try { paused = view.localStorage.getItem("shemotion-floral-motion") === "paused"; } catch {}
-  const render = () => {
-    root.documentElement.dataset.flowerMotion = paused ? "paused" : "playing";
-    button.hidden = preference.matches;
-    button.setAttribute("aria-pressed", String(paused));
-    button.textContent = paused ? "Resume floral motion" : "Pause floral motion";
-  };
-  button.addEventListener("click", () => {
-    paused = !paused;
-    try { view.localStorage.setItem("shemotion-floral-motion", paused ? "paused" : "playing"); } catch {}
-    render();
-  });
-  preference.addEventListener("change", render);
-  render();
 }
 
 function initialisePage() {

@@ -1,3 +1,4 @@
+import { setupFloralMotion } from "./floral-motion.js";
 import { addCustomEventClickTracking, trackCustomEvent } from "./tracking.js";
 import { captureContactAttribution } from "./attribution.js";
 
@@ -5,6 +6,7 @@ import { setupNavigation } from "./navigation.js";
 
 captureContactAttribution();
 setupNavigation();
+setupFloralMotion();
 
 document.querySelectorAll("[data-event-booking]").forEach((link) => {
   addCustomEventClickTracking(link, "EventBookingClick", {

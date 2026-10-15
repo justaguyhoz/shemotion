@@ -122,8 +122,8 @@
       <section class="home-body section-pad" id="about" aria-labelledby="home-body-title">
         <div class="home-body-art">
           <div class="home-body-photo torn-photo"><img src="assets/v3-meadow.webp" alt="A woman seen from behind moving freely in an ivory dress in a sunlit meadow" width="1536" height="1024" loading="lazy"></div>
-          <div class="joy-inset torn-photo"><img src="assets/v3-joy.webp" alt="A woman smiling softly in warm sunlight" width="1536" height="1024" loading="lazy"></div>
-          <p class="paper-note" aria-hidden="true">Come home<br>to your body<span>♡</span></p>
+          <div class="joy-inset torn-photo"><img src="assets/concept5-detail.webp" alt="Sunlit hands releasing soft folds of ivory fabric" width="1024" height="1536" loading="lazy"></div>
+          <p class="paper-note" aria-hidden="true">Move the way<br>you feel<span>♡</span></p>
         </div>
         <div class="home-body-copy">
           <p class="eyebrow">About Shemotion</p>
@@ -137,9 +137,9 @@
       <section class="experience section-pad" id="experience" aria-labelledby="experience-title">
         <div class="section-heading">
 
-          <p class="eyebrow">A little less thinking. A little more feeling.</p>
+
           <h2 id="experience-title">The Shemotion Experience</h2>
-          <p>Move. Release. Reconnect with Joy.</p>
+          <p>Guided movement, free expression and a gentle return to grounding.</p>
         </div>
 
         <div class="stage-list">
@@ -188,7 +188,6 @@
 
       <section class="events section-pad" id="upcoming-events" aria-labelledby="events-title" data-events-section hidden>
         <div class="section-heading">
-          <p class="eyebrow">Make time for you</p>
           <h2 id="events-title">Upcoming Events</h2>
           <p><a class="section-link" href="/events/">View all events</a></p>
         </div>
@@ -210,7 +209,6 @@
         <div class="feedback-editorial">
           <div class="section-heading">
 
-          <p class="eyebrow">Real voices. Real experiences.</p>
           <h2 id="feedback-title">How You May Feel After Shemotion</h2>
             <p>Every Shemotion experience is personal. Hear how women have felt after joining us.</p>
           </div>
@@ -235,7 +233,6 @@
           </div>
 
           <div class="coach-copy">
-            <p class="eyebrow">Your guide to coming home</p>
             <h2 id="coach-title">Meet Katty</h2>
             <p>I am a certified feminine embodiment coach with a focus on helping women reconnect with their bodies through guided movement, breath, coaching prompts and embodiment practices.</p>
             <p>Shemotion brings these techniques into a supportive group experience designed to help women move out of their heads, release tension and reconnect with themselves without judgement or pressure to perform.</p>
@@ -267,10 +264,11 @@
           <h2 id="instagram-title">Follow Shemotion</h2>
           <p>Movement, upcoming experiences and a closer look at what Shemotion feels like.</p>
         </div>
-        <div class="instagram-grid" data-reveal>
+        <div class="instagram-grid" id="instagram-gallery" data-reveal>
           <!-- INSTAGRAM_GALLERY_CARDS -->
         </div>
         <div class="instagram-action" data-reveal>
+          <button class="instagram-motion-control" type="button" data-instagram-motion aria-controls="instagram-gallery" aria-pressed="false" hidden>Pause Instagram</button>
           <a class="button button-ghost" href="https://www.instagram.com/shemotion.au/" target="_blank" rel="noopener noreferrer">Follow @shemotion.au <svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
         </div>
       </section>
@@ -278,7 +276,6 @@
       <section class="contact section-pad" id="contact" aria-labelledby="contact-title">
         <div class="contact-shell">
           <div class="contact-intro">
-            <p class="eyebrow">Let’s connect</p>
             <h2 id="contact-title">I’d Love to Hear <em>from You</em></h2>
             <p>For event bookings, workplace experiences, private groups or general enquiries, we’d love to hear from you.</p>
           </div>
@@ -383,22 +380,16 @@
     </main>
 
     <footer class="site-footer">
-      <a class="brand" href="#top" aria-label="Shemotion home">
+      <div class="footer-brand"><a class="brand" href="#top" aria-label="Shemotion home">
         <img src="assets/shemotion-logo.png" alt="Shemotion" width="1042" height="150">
-      </a>
-
-      <div class="footer-copy">
-        <p>Feminine embodiment, movement and release</p>
-        <nav class="footer-nav" aria-label="Footer navigation">
+      </a><p>Feminine embodiment, movement and release</p></div>
+      <div class="footer-links"><nav class="footer-nav" aria-label="Footer navigation">
           <a href="/privacy/">Privacy Policy</a>
           <a href="/terms/">Terms of Use</a>
           <a href="/cancellations-refunds/">Cancellation &amp; Refund Policy</a>
           <a href="#contact">Contact</a>
-        </nav>
-        <button class="floral-motion-control" type="button" data-floral-motion aria-pressed="false" hidden>Pause floral motion</button>
-        <p class="footer-meta"><span>&copy; 2026 Shemotion</span><span>ABN 88 489 599 018</span></p>
-
-        <div class="social-links footer-social-links" aria-label="Shemotion social media links">
+        </nav></div>
+      <div class="footer-details"><div class="social-links footer-social-links" aria-label="Shemotion social media links">
           <a class="social-link" href="https://www.facebook.com/profile.php?id=61590301600564" target="_blank" rel="noopener noreferrer" aria-label="Shemotion on Facebook">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <path d="M14.2 8.1h2.4V4.3c-.4-.1-1.8-.2-3.4-.2-3.4 0-5.7 2.1-5.7 6v3.4H3.8v4.2h3.7V24h4.5v-6.3h3.7l.6-4.2H12v-3c0-1.2.3-2.4 2.2-2.4Z"/>
@@ -410,8 +401,7 @@
               <path d="M7.3 2h9.4A5.3 5.3 0 0 1 22 7.3v9.4a5.3 5.3 0 0 1-5.3 5.3H7.3A5.3 5.3 0 0 1 2 16.7V7.3A5.3 5.3 0 0 1 7.3 2Zm0 2.1a3.2 3.2 0 0 0-3.2 3.2v9.4a3.2 3.2 0 0 0 3.2 3.2h9.4a3.2 3.2 0 0 0 3.2-3.2V7.3a3.2 3.2 0 0 0-3.2-3.2H7.3Zm4.7 3.4A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5Zm0 2.1a2.4 2.4 0 1 0 2.4 2.4A2.4 2.4 0 0 0 12 9.6Zm5-2.5a1.1 1.1 0 1 1-1.1 1.1A1.1 1.1 0 0 1 17 7.1Z"/>
             </svg>
           </a>
-        </div>
-      </div>
+        </div><p class="footer-meta"><span>&copy; 2026 Shemotion</span><span>ABN 88 489 599 018</span></p><button class="floral-motion-control" type="button" data-floral-motion aria-pressed="false" hidden>Pause floral motion</button></div>
     </footer>
 
     <script type="module" src="script.js?v=20261015-7"></script>

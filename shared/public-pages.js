@@ -40,13 +40,9 @@ export function siteHeader() {
 
 export function siteFooter() {
   return `<footer class="site-footer">
-      <a class="brand" href="/" aria-label="Shemotion home"><img src="/assets/shemotion-logo.png" alt="Shemotion" width="1042" height="150"></a>
-      <div class="footer-copy">
-        <p>Feminine embodiment, movement and release</p>
-        <nav class="footer-nav" aria-label="Footer navigation"><a href="/privacy/">Privacy Policy</a><a href="/terms/">Terms of Use</a><a href="/cancellations-refunds/">Cancellation &amp; Refund Policy</a><a href="/#contact">Contact</a></nav>
-        <p class="footer-meta"><span>&copy; 2026 Shemotion</span><span>ABN 88 489 599 018</span></p>
-        ${socialLinks("footer-social-links")}
-      </div>
+      <div class="footer-brand"><a class="brand" href="/" aria-label="Shemotion home"><img src="/assets/shemotion-logo.png" alt="Shemotion" width="1042" height="150"></a><p>Feminine embodiment, movement and release</p></div>
+      <div class="footer-links"><nav class="footer-nav" aria-label="Footer navigation"><a href="/privacy/">Privacy Policy</a><a href="/terms/">Terms of Use</a><a href="/cancellations-refunds/">Cancellation &amp; Refund Policy</a><a href="/#contact">Contact</a></nav></div>
+      <div class="footer-details">${socialLinks("footer-social-links")}<p class="footer-meta"><span>&copy; 2026 Shemotion</span><span>ABN 88 489 599 018</span></p><button class="floral-motion-control" type="button" data-floral-motion aria-pressed="false" hidden>Pause floral motion</button></div>
     </footer>`;
 }
 
