@@ -394,6 +394,12 @@ body:not(.home-page) .contact-intro h2 { max-width: 22ch; font-size: var(--type-
 .home-page .contact-intro::before { left: -120px; top: -145px; width: 160px; height: 250px; }
 .joy-inset img { object-position: 70% center; }
 .home-body-photo img { object-position: 50% 0%; transform: none; }
+.home-body-photo { right: 90px; }
+.home-body-art .paper-note { width: 140px; padding: 12px; font-size: 23px; bottom: -8px; }
+@media(max-width:700px) {
+ .home-body-photo { right: 27%; }
+ .home-body-art .paper-note { width: 100px; padding: 8px; font-size: 18px; bottom: -28px; }
+}
 
 /* Text-only events: a date illustration and a warm, offset paper surface. */
 .home-page main > .events { isolation: isolate; padding-block: 24px; }
