@@ -39,20 +39,16 @@ const baseEvent = {
   slug: "special-introductory-class-helensvale",
 };
 
-test("public homepage installs one Meta Pixel PageView and marks only the primary Book Now CTA", async () => {
+test("public homepage preserves tracking and navigation in the V3 editorial composition", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const adminHtml = await readFile(new URL("../admin/index.html", import.meta.url), "utf8");
   const css = await readFile(new URL("../styles.css", import.meta.url), "utf8");
   assert.match(html, /4344672809106563/);
   assert.equal((html.match(/fbq\('track', 'PageView'\)/g) || []).length, 1);
-  assert.match(html, /<a class="button booking-button" href="#upcoming-events" data-primary-book-now hidden>Book Now<\/a>/);
+  assert.match(html, /href="\/events\/" data-primary-explore>Explore Experiences/);
   assert.match(html, /data-events-section hidden/);
-  assert.equal((html.match(/data-primary-book-now/g) || []).length, 1);
-  assert.equal((html.match(/href="#upcoming-events"/g) || []).length, 1);
-  assert.ok(
-    html.indexOf('id="upcoming-events"') < html.indexOf('class="hero section-pad"'),
-    "upcoming events should appear before the hero section"
-  );
+  assert.equal((html.match(/data-primary-explore/g) || []).length, 1);
+  assert.ok(html.indexOf('class="hero section-pad"') < html.indexOf('id="upcoming-events"'), "V3 hero precedes the event band");
   assert.doesNotMatch(html, /announcement-bar|data-announcement-/);
   assert.match(
     html,
@@ -71,7 +67,7 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.doesNotMatch(html.match(/<nav class="site-nav"[\s\S]*?<\/nav>/)[0], />Contact<\/a>/);
   assert.match(html, /<h2 id="experience-title">The Shemotion Experience<\/h2>\s*<p>Move\. Release\. Reconnect with Joy\.<\/p>/);
   assert.match(html, /<title>Women's Movement &amp; Embodiment Gold Coast \| Shemotion<\/title>/);
-  assert.match(html, /A women-only movement experience for freedom, expression and joy\./);
+  assert.match(html, /A women-only movement experience for freedom, expression &amp; joy\./);
   assert.match(html, /assets\/shemotion-step-1-get-out-of-your-head\.png/);
   assert.match(html, /assets\/shemotion-step-2-move-into-joy\.png/);
   assert.match(html, /assets\/shemotion-step-3-land-in-the-afterglow\.png/);
@@ -172,7 +168,7 @@ test("What Is Shemotion guide has complete metadata, positioning and internal pa
   assert.match(privateGroupsHtml, /href="\/what-is-shemotion\/">What Is Shemotion\?<\/a>/);
   assert.match(sharedPagesSource, /href="\/what-is-shemotion\/">What Is Shemotion\?<\/a>/);
   assert.match(redirects, /\/what-is-feminine-movement-meditation\/ \/what-is-shemotion\/ 301/);
-  assert.match(html, /<img src="\/assets\/studio-1\.jpg\?v=20261007-2" alt="Katty seated in front of a women-only movement group in a bright studio">/);
+  assert.match(html, /src="\/assets\/v3-meadow\.webp"/);
   assert.doesNotMatch(html, /FAQPage|"@type":"FAQPage"/);
 });
 
@@ -205,7 +201,7 @@ test("homepage and organisation route reflect the broader commercial positioning
   assert.match(organisations, /Studios and Wellbeing Spaces/);
   assert.match(organisations, /Gold Coast and Brisbane/);
   assert.match(organisations, /positive coaching prompts to help women step away from mental pressure/);
-  assert.match(organisations, /src="\/assets\/step-1\.jpg"/);
+  assert.match(organisations, /src="\/assets\/v3-meadow\.webp"/);
   assert.match(organisations, /data-organisation-enquiry/);
   assert.doesNotMatch(organisations, /data-private-enquiry/);
   assert.match(publicPageScript, /OrganisationEnquiryClick/);

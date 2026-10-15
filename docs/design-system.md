@@ -1,40 +1,39 @@
-# Shemotion public design system — V2.7
+# Shemotion public design system — V3
 
-This is the current source of truth. Historical V2.1–V2.6 typography/layout overrides have been consolidated into the public design-system section of `styles.css`; admin has separate stylesheets.
+V3 follows the approved cream/blush editorial paper-collage reference. `v3.css` is the public presentation layer after `styles.css`; the latter retains the existing functional component foundation. Admin uses its own unchanged stylesheets. No public route or data source is replaced.
+
+| Token | Colour | Use |
+| --- | --- | --- |
+| `--ivory` | #f8f0e6 | Main paper, light text |
+| `--cream` | #f2e6d8 | Secondary paper surfaces |
+| `--white-soft` | #fcf7ef | Lightest cards |
+| `--blush` | #ead0c5 | Events, supporting panels |
+| `--rose` | #c59489 | Dusty floral/art accents |
+| `--sand` | #dfc9b5 | Offset frames |
+| `--taupe` | #9b8171 | Warm secondary accents |
+| `--chocolate` | #4b3126 | Testimonial band, deeper panel text |
+| `--charcoal` | #38281f | Primary editorial text |
+| `--muted` | #655044 | Supporting body text |
+| `--green` | #4e5b3b | Muted olive CTAs |
 
 ## Typography
 
-The actual V2.6 reference step heading measured Marcellus 400 at 28px. The reference FAQ question measured Marcellus 400 at 16.96px. Existing Google Fonts definitions supply Marcellus 400 and Inter 400/500/600. No family or synthetic light weight is added.
+Three self-hosted, open-license roles: Cormorant Garamond 400/500 and true italics for editorial headings; Inter 400/500/600 for body and functional controls; Caveat 400 for decorative handwritten notes only. Subset WOFF files and their OFL licenses live in `assets/fonts/`. Public pages make no third-party font requests. Functional input values stay 16px. Main hero is 60–92px desktop, 58–86px mobile; section headings generally 32–48px; body is compact 12–14px. Short headings balance and paragraphs use pretty wrapping. Preserve semantic heading levels independently of visual size.
 
-| Role | Family / weight | Size / line height |
-| --- | --- | --- |
-| Page and section headings | Marcellus 400 | 24–28px / 1.3 |
-| Step and supporting headings | Marcellus 400 | 22px / 1.3 |
-| Editorial paragraphs and FAQ questions | Marcellus 400 | 16px / 1.65 (questions 1.5) |
-| Navigation, labels and metadata | Inter 400 | 14px / 1.5 |
-| Buttons, compact labels and links | Inter 400/500 | 12px / 1.5 |
-| Form input values | Inter 400 | 16px / 1.5 |
+## Layout and spacing
 
-The body switches from Inter to the existing Marcellus family to match Katty’s explicitly requested FAQ reference. Functional controls retain Inter. Semantic h1/h2/h3 hierarchy is preserved despite the restrained visual scale. Headings balance wrapping; paragraphs use pretty wrapping.
+The wide measure is 1160px; existing shared spacing tokens remain 8, 12, 16, 24, 32 and 40px. Related heading/copy/action gaps are generally 10–16px. Homepage section spacing is generally 26–40px, with explicit optical positioning for collage images and torn-paper overlaps. These placements intentionally differ from standard document flow to reproduce the reference. They are not a second arbitrary paragraph spacing scale.
 
-## Colours and surfaces
+The hero pairs a large left headline with an expansive torn photograph. The second section combines a distinct back-to-camera image, a small smiling close-up, a handwritten paper note and compact copy. Stages form three desktop columns and compact mobile icon/text rows. Events are data-driven horizontal bands without artwork. The dark testimonial band contains real 9:16 footage; the framed player extends outside the panel. Katty retains her original studio photograph, cropped using CSS to focus on her. Media cards retain approved identities only. Instagram precedes Contact, followed by the closed FAQ and footer.
 
-Exactly two editorial text tokens: `--text-heading` = existing charcoal #4f4a45 and `--text-body` = existing grey #726961. The only light-text exception is a filled green control. Green remains available for borders, icons, focus indicators and button backgrounds. Footer and former dark editorial panels now use warm neutral surfaces so body text needs no extra colours.
+## Decorations and motion
 
-Homepage sections alternate existing ivory #f7f2ec and soft white #fffaf4. No extra divider is placed at every colour transition. Fine rules remain inside the steps, FAQ and selected components.
+Reusable irregular CSS paper clips, two small SVGs (paper grain and sun), offset photo frames, soft shadows and two different transparent botanical artworks. The generated movement photos are illustrative brand imagery, not claims of real participants or events. They never replace Katty or the Tallai video.
 
-## Measures and rhythm
+Flowers sway by roughly two degrees and three pixels over 9–11 seconds using CSS individual transforms. The footer offers Pause/Resume floral motion, with local preference persistence. Reduced motion disables it completely. Entrance animation and the automatic Instagram marquee are removed; the real Instagram snapshot remains manually scrollable. Decorative art is excluded from the accessibility tree.
 
-`--content-wide`: 1120px; `--content-reading`: 640px; section padding 40–64px; gutters 20–64px. Shared spacing scale remains 8, 12, 16, 24, 32 and 40px. Heading-to-copy gap 16px; text-to-action 24px.
+## Public routes and accessibility
 
-Desktop events, hero, testimonial, biography and contact use balanced horizontal compositions. At mobile widths they stack naturally. Hero and biography images share 260×340px desktop and 220×288px mobile displays. Testimonial is 204px wide on desktop and up to 220px on mobile, with its original 9:16 footage and poster.
+The events archive/details, organisations, guide and legal pages share fonts, paper colours and CTA treatments. Event images and saved framing remain on event pages. Homepage cards omit them. Real booking states, data ordering, media publication controls, form fields/consent, APIs, tracking, SEO and admin interfaces remain intact. The primary Explore action retains the existing `BookNowClick` tracking event and remains available when the event list is empty.
 
-Event rails remain scrollable within the right content column; card fit and focal values come from saved records. The homepage-only Afterglow excerpt remains complete. Publication identities retain natural aspect ratios. Form values retain 16px text and ordinary controls retain at least 44px targets; checkboxes retain their visible labels and touch row.
-
-## Accessibility and verification
-
-FAQ buttons retain native keyboard activation, aria-expanded/aria-controls, hidden/inert answers and a rotating SVG chevron. All start collapsed. Coach disclosure and native video controls remain. Reduced motion, no-JavaScript visibility and print rules remain supported. Visually review 320, 375, 390, 430, 768, 1024 and 1440px and verify there is no horizontal page overflow. Never force reveal styles visible when generating review screenshots.
-
-## V2.7 review corrections
-
-At mobile widths up to 700px, homepage editorial headings, paragraphs, CTA groups and the shared footer align centrally. Form labels, field values, event details and accordion questions keep their functional reading alignment. FAQ now uses a native, initially closed section disclosure, with the existing individual question accordions nested inside it. Its closed title row is compact on both desktop and mobile, and its chevron reflects the native open state. No JavaScript is needed to open the outer disclosure.
+Keyboard navigation, native user-initiated video controls, FAQ/disclosure semantics, validation/status handling and reduced-motion support remain. See `docs/v3-review.md` and `review/*.json` for measured browser and accessibility results.

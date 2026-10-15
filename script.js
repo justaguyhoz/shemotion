@@ -1,12 +1,12 @@
 import { setupNavigation } from "./navigation.js";
 import { addCustomEventClickTracking, eventBookingMetadata, setupMediaOutboundTracking } from "./tracking.js";
 import { captureContactAttribution } from "./attribution.js";
-import { eventBookingPresentation, eventBookingState, eventImageUrl } from "./event-booking.js";
+import { eventBookingPresentation, eventBookingState } from "./event-booking.js";
 
 const BRISBANE_TIMEZONE = "Australia/Brisbane";
 
 const previewDateFormatter = new Intl.DateTimeFormat("en-AU", {
-  weekday: "short", day: "numeric", month: "short", year: "numeric", timeZone: BRISBANE_TIMEZONE,
+  weekday: "long", day: "2-digit", month: "2-digit", year: "2-digit", timeZone: BRISBANE_TIMEZONE,
 });
 
 const timeFormatter = new Intl.DateTimeFormat("en-AU", {
@@ -17,7 +17,7 @@ const timeFormatter = new Intl.DateTimeFormat("en-AU", {
 });
 
 function compactTime(date) {
-  return timeFormatter.format(date).replace(":", ".").replace(/\s/g, "").toLowerCase();
+  return timeFormatter.format(date).toLowerCase();
 }
 
 export function eventDestination(event) {
@@ -45,10 +45,12 @@ function element(tag, options = {}) {
 }
 
 export function homepageEventExcerpt(event) {
-  if (event.slug === "shemotion-at-stellar-helensvale-11") {
-    return "An evening of cacao, expressive movement and joyful dancing for women over 30.";
+  const description = event.shortDescription?.trim();
+  const afterglow = description?.match(/\b(a women-only cacao \+ dance party for women over 30)\b/i);
+  if (event.slug === "shemotion-at-stellar-helensvale-11" && afterglow) {
+    return `${afterglow[1][0].toUpperCase()}${afterglow[1].slice(1)}.`;
   }
-  return event.shortDescription?.trim() === "-" ? "" : event.shortDescription?.trim();
+  return description === "-" ? "" : description;
 }
 
 export function createEventCard(event, idPrefix = "event") {
@@ -58,27 +60,8 @@ export function createEventCard(event, idPrefix = "event") {
   card.dataset.eventId = String(event.id);
   if (eventBookingState(event) === "cancelled") card.classList.add("is-cancelled");
 
-  const imageUrl = eventImageUrl(event);
-  let media;
-  if (imageUrl) {
-    card.classList.add("has-image");
-    media = element("div", { className: `event-pill-media event-media-frame fit-${event.imageFit === "cover" ? "cover" : "contain"}` });
-    media.style.setProperty("--event-focal-x", `${event.imageFocalX ?? 50}%`);
-    media.style.setProperty("--event-focal-y", `${event.imageFocalY ?? 50}%`);
-    const backdrop = element("img", { className: "event-pill-media-backdrop" });
-    backdrop.src = imageUrl;
-    backdrop.alt = "";
-    backdrop.setAttribute("aria-hidden", "true");
-    backdrop.loading = "lazy";
-    backdrop.decoding = "async";
-    const image = element("img");
-    image.className = "event-pill-media-artwork";
-    image.src = imageUrl;
-    image.alt = `${event.title} event artwork`;
-    image.loading = "lazy";
-    image.decoding = "async";
-    media.append(backdrop, image);
-  }
+  // Homepage event bands intentionally omit artwork; event pages retain it.
+  const media = null;
 
   const content = element("div", { className: "event-pill-content" });
   const meta = element("div", { className: "event-pill-meta" });
@@ -87,10 +70,11 @@ export function createEventCard(event, idPrefix = "event") {
   } else {
     const date = new Date(event.startAt);
     meta.append(
-      element("span", { text: previewDateFormatter.format(date) }),
+      element("span", { text: previewDateFormatter.format(date).replace(",", "").replaceAll("/", ".") }),
       element("span", { text: event.endAt ? `${compactTime(date)} - ${compactTime(new Date(event.endAt))}` : compactTime(date) })
     );
   }
+  if (event.audience) meta.append(element("span", { text: event.audience }));
   if (event.suburb) meta.append(element("span", { text: event.suburb }));
   content.append(
     element("p", { className: "event-pill-venue", text: event.venueName }),
@@ -177,36 +161,6 @@ export function setupEventDetails(cards, eventRoot = document) {
   eventRoot.addEventListener("keydown", (event) => {
     if (event.key === "Escape") cards.forEach(closeEventDetails);
   });
-}
-
-function setupReveal(items) {
-  if (!items.length) return;
-  items.forEach((item, index) => {
-    item.classList.add("reveal");
-    if (item.matches(".section-heading, .narrow, .contact-shell")) item.classList.add("reveal-soft");
-    if (item.matches("blockquote")) item.style.setProperty("--reveal-delay", `${(index % 5) * 90}ms`);
-  });
-
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const reveal = (item) => {
-    item.addEventListener("transitionend", () => item.style.removeProperty("--reveal-delay"), { once: true });
-    item.classList.add("is-visible");
-  };
-
-  if (reducedMotion || !("IntersectionObserver" in window)) {
-    items.forEach((item) => item.classList.add("is-visible"));
-    return;
-  }
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        reveal(entry.target);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.16, rootMargin: "0px 0px -8% 0px" });
-  items.forEach((item) => observer.observe(item));
-  document.documentElement.classList.add("reveal-ready");
 }
 
 export function setupTextRotator(container, { mobileOnly = false, duration = 3600, gap = 750 } = {}, view = window) {
@@ -568,16 +522,36 @@ export function setupTestimonial(root = document) {
   });
 }
 
+function setupFloralMotion(root = document, view = window) {
+  const button = root.querySelector("[data-floral-motion]");
+  if (!button) return;
+  const preference = view.matchMedia("(prefers-reduced-motion: reduce)");
+  let paused = false;
+  try { paused = view.localStorage.getItem("shemotion-floral-motion") === "paused"; } catch {}
+  const render = () => {
+    root.documentElement.dataset.flowerMotion = paused ? "paused" : "playing";
+    button.hidden = preference.matches;
+    button.setAttribute("aria-pressed", String(paused));
+    button.textContent = paused ? "Resume floral motion" : "Pause floral motion";
+  };
+  button.addEventListener("click", () => {
+    paused = !paused;
+    try { view.localStorage.setItem("shemotion-floral-motion", paused ? "paused" : "playing"); } catch {}
+    render();
+  });
+  preference.addEventListener("change", render);
+  render();
+}
+
 function initialisePage() {
   const contactAttribution = captureContactAttribution();
-  const primaryBookNow = document.querySelector("[data-primary-book-now]");
+  const primaryBookNow = document.querySelector("[data-primary-book-now], [data-primary-explore]");
   addCustomEventClickTracking(primaryBookNow, "BookNowClick");
 
   setupNavigation();
+  setupFloralMotion();
 
-  setupReveal([...document.querySelectorAll(
-    ".events .section-heading, .experience .section-heading, .stage, .experience-followup, .coach-grid, .media-features .section-heading, .media-feature-grid, .organisations-invitation-inner, .contact-shell, .instagram [data-reveal]"
-  )]);
+  // V3 editorial compositions are visible immediately; no entrance animation.
   document.querySelectorAll("[data-pill-rotator]").forEach((container) => setupTextRotator(container));
   document.querySelectorAll("[data-quote-rotator]").forEach((container) => setupTextRotator(container, { mobileOnly: true, duration: 3700, gap: 700 }));
   setupFaq();

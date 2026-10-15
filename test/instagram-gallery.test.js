@@ -23,14 +23,14 @@ test("curated Instagram gallery uses nine distinct Shemotion grid covers", async
   await access(new URL(`../${INSTAGRAM_GRID_IMAGE}`, import.meta.url));
 });
 
-test("homepage build injects accessible static Instagram cards between Contact and FAQs", async () => {
+test("homepage build injects accessible static Instagram cards before Contact and FAQs", async () => {
   const source = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const rendered = injectInstagramGallery(source);
   const contactIndex = rendered.indexOf('<section class="contact');
   const instagramIndex = rendered.indexOf('<section class="instagram');
   const faqIndex = rendered.indexOf('<section class="faq');
 
-  assert.ok(contactIndex >= 0 && contactIndex < instagramIndex && instagramIndex < faqIndex);
+  assert.ok(instagramIndex >= 0 && instagramIndex < contactIndex && contactIndex < faqIndex);
   assert.equal((rendered.match(/class="instagram-card"/g) || []).length, 18);
   assert.equal((rendered.match(/loading="lazy"/g) || []).length >= 18, true);
   assert.match(rendered, /class="instagram-track"/);
@@ -55,7 +55,7 @@ test("Instagram gallery reserves media dimensions and has responsive accessible 
   assert.match(css, /@media \(max-width: 700px\)[\s\S]*\.instagram-card[\s\S]*clamp\(72px, 23vw, 100px\)/);
   assert.match(css, /\.instagram-grid::\-webkit-scrollbar[\s\S]*display:\s*none/);
   assert.match(css, /@media \(hover: hover\) and \(pointer: fine\) and \(prefers-reduced-motion: no-preference\)[\s\S]*\.instagram-card:hover/);
-  assert.match(script, /\.instagram \[data-reveal\]/);
+  assert.doesNotMatch(script, /setupReveal\(\[\.\.\.document\.querySelectorAll/);
   assert.match(script, /export function setupInstagramGallery/);
   assert.match(css, /@keyframes instagram-stream/);
   assert.match(css, /translateX\(-50%\)/);

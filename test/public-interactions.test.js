@@ -292,9 +292,10 @@ test("header offsets and menu height track resizing after phone rotation", () =>
 
 
 test("homepage Afterglow excerpt is complete without mutating event content", () => {
-  const event = { slug: "shemotion-at-stellar-helensvale-11", shortDescription: "Full original description" };
-  assert.equal(homepageEventExcerpt(event), "An evening of cacao, expressive movement and joyful dancing for women over 30.");
-  assert.equal(event.shortDescription, "Full original description");
+  const event = { slug: "shemotion-at-stellar-helensvale-11", shortDescription: "Afterglow is a women-only cacao + dance party for women over 30 who want to feel alive again." };
+  assert.equal(homepageEventExcerpt(event), "A women-only cacao + dance party for women over 30.");
+  assert.equal(event.shortDescription, "Afterglow is a women-only cacao + dance party for women over 30 who want to feel alive again.");
+  assert.equal(homepageEventExcerpt({ ...event, shortDescription: "Updated by admin" }), "Updated by admin");
   assert.equal(homepageEventExcerpt({ slug: "other-event", shortDescription: " Other event copy " }), "Other event copy");
   assert.equal(homepageEventExcerpt({ shortDescription: "-" }), "");
 });
