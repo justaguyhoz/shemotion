@@ -274,7 +274,6 @@ export function setupFaq(root = document, view = window) {
     view.cancelAnimationFrame(openFrames.get(item));
     view.clearTimeout(closeTimers.get(item));
     button.setAttribute("aria-expanded", "false");
-    button.querySelector("span").textContent = "+";
     answer.classList.remove("is-open");
     answer.inert = true;
     answer.setAttribute("aria-hidden", "true");
@@ -295,7 +294,6 @@ export function setupFaq(root = document, view = window) {
     answer.inert = false;
     answer.removeAttribute("aria-hidden");
     button.setAttribute("aria-expanded", "true");
-    button.querySelector("span").textContent = "−";
     activeItem = item;
     openFrames.set(item, view.requestAnimationFrame(() => {
       if (activeItem === item) answer.classList.add("is-open");

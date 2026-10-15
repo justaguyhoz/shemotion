@@ -1,159 +1,36 @@
-# Shemotion design system
+# Shemotion public design system — V2.7
 
-## Mobile spacing scale
+This is the current source of truth. Historical V2.1–V2.6 typography/layout overrides have been consolidated into the public design-system section of `styles.css`; admin has separate stylesheets.
 
-The public site uses these CSS custom properties:
+## Typography
 
-| Token | Value |
-| --- | ---: |
-| `--space-xs` | 8px |
-| `--space-sm` | 12px |
-| `--space-md` | 16px |
-| `--space-lg` | 24px |
-| `--space-xl` | 32px |
-| `--space-2xl` | 40px |
-| `--space-section` | 64px |
+The actual V2.6 reference step heading measured Marcellus 400 at 28px. The reference FAQ question measured Marcellus 400 at 16.96px. Existing Google Fonts definitions supply Marcellus 400 and Inter 400/500/600. No family or synthetic light weight is added.
 
-Relationship aliases keep equivalent content gaps tied to that scale:
+| Role | Family / weight | Size / line height |
+| --- | --- | --- |
+| Page and section headings | Marcellus 400 | 24–28px / 1.3 |
+| Step and supporting headings | Marcellus 400 | 22px / 1.3 |
+| Editorial paragraphs and FAQ questions | Marcellus 400 | 16px / 1.65 (questions 1.5) |
+| Navigation, labels and metadata | Inter 400 | 14px / 1.5 |
+| Buttons, compact labels and links | Inter 400/500 | 12px / 1.5 |
+| Form input values | Inter 400 | 16px / 1.5 |
 
-| Token | Relationship | Value |
-| --- | --- | ---: |
-| `--space-label-heading` | Eyebrow or label to heading | 12px |
-| `--space-heading-body` | Major heading to introductory copy | 16px |
-| `--space-subheading-body` | Minor heading or lead to body copy | 12px |
-| `--space-body-action` | Body copy to CTA | 24px |
-| `--space-content-group` | Related content groups | 32px |
+The body switches from Inter to the existing Marcellus family to match Katty’s explicitly requested FAQ reference. Functional controls retain Inter. Semantic h1/h2/h3 hierarchy is preserved despite the restrained visual scale. Headings balance wrapping; paragraphs use pretty wrapping.
 
-Heading measures use `--heading-measure-compact` (13ch) and
-`--heading-measure-standard` (18ch). Apply them by heading type rather than to
-every heading globally.
+## Colours and surfaces
 
-Use the scale deliberately rather than mechanically replacing every numeric value. Preserve intentional desktop and component-specific exceptions.
+Exactly two editorial text tokens: `--text-heading` = existing charcoal #4f4a45 and `--text-body` = existing grey #726961. The only light-text exception is a filled green control. Green remains available for borders, icons, focus indicators and button backgrounds. Footer and former dark editorial panels now use warm neutral surfaces so body text needs no extra colours.
 
-## Editorial layout
+Homepage sections alternate existing ivory #f7f2ec and soft white #fffaf4. No extra divider is placed at every colour transition. Fine rules remain inside the steps, FAQ and selected components.
 
-The public pages extend the existing scale with two shared content measures:
+## Measures and rhythm
 
-- `--content-wide` (1180px) for event rows, forms and editorial grids.
-- `--content-reading` (660px) for introductions and focused reading copy.
+`--content-wide`: 1120px; `--content-reading`: 640px; section padding 40–64px; gutters 20–64px. Shared spacing scale remains 8, 12, 16, 24, 32 and 40px. Heading-to-copy gap 16px; text-to-action 24px.
 
-Major homepage sections use `--editorial-divider`, a quiet clay-tinted rule that
-separates content without creating card-like containers. Desktop editorial grids
-may use two or three columns, but collapse into comfortable single-column reading
-flows rather than shrinking content into narrow columns.
+Desktop events, hero, testimonial, biography and contact use balanced horizontal compositions. At mobile widths they stack naturally. Hero and biography images share 260×340px desktop and 220×288px mobile displays. Testimonial is 204px wide on desktop and up to 220px on mobile, with its original 9:16 footage and poster.
 
-Public display headings use one shared proportional scale, capped below the older
-oversized hero treatment. Homepage and archive event artwork uses a compact 16:10 frame; event details
-retain their 4:3 frame. Both preserve the saved fit and focal-point data. Logo-led media artwork always uses `object-fit: contain` so publication marks
-are not cropped or distorted.
+Event rails remain scrollable within the right content column; card fit and focal values come from saved records. The homepage-only Afterglow excerpt remains complete. Publication identities retain natural aspect ratios. Form values retain 16px text and ordinary controls retain at least 44px targets; checkboxes retain their visible labels and touch row.
 
-## Default mobile relationships
+## Accessibility and verification
 
-- Eyebrow to major heading: 12px
-- Major heading to lead or subheading: 16px
-- Lead or subheading to body copy: 16px
-- Paragraph to paragraph: 12px
-- Body copy to supporting note: 16px
-- Text group to CTA: 24px
-- CTA to CTA: 12px
-- Section introduction to image or content: 32px
-- Image to step number: 24px
-- Step number to step heading: 12px
-- Step heading to paragraph: 16px
-- Content block to the next major block: 40px
-- Major section to major section: 64px
-
-Equivalent relationships should use equivalent spacing throughout the public site. These are defaults, not a requirement to flatten hierarchy.
-
-## Typography and wrapping
-
-- Use `text-wrap: balance` for headings, eyebrows, short introductions and CTA labels where it improves composition.
-- Use `text-wrap: pretty` for normal paragraphs where supported.
-- Avoid isolated final words and keep meaningful phrases such as "Gold Coast" together where practical.
-- Prefer container width, max-width, font size, line-height, letter spacing and wrapping rules over device-specific fixes.
-- Deliberate responsive line breaks are acceptable only for intentional compositions. Never add arbitrary `<br>` elements to repair a single viewport.
-- The Approach hero keeps “Movement Meditation?” together on narrow screens only. On wider layouts it may wrap so the text cannot overlap the portrait column.
-
-## Required visual QA
-
-For public-page presentation changes, inspect the homepage, events listing, a representative event page, private groups page and The Approach page. Check approximately 320px, 375px, 390px, 430px and a representative tablet width, plus a desktop regression pass.
-
-Review heading and eyebrow wrapping, short copy, buttons, CTA and image spacing, content density, alignment, clipping, horizontal overflow and browser console errors. Record any remaining awkward wrap instead of declaring the work complete.
-
-
-## V2.1 public typography and proportions
-
-The existing brand families are retained. Google Fonts supplies Marcellus at 400
-only, and Inter at 400, 500 and 600. No synthetic 300 weight or extra font is used.
-Display headings remain Marcellus 400; body and labels are Inter 400, with 500 for
-buttons. The local SVG testimonial poster uses the existing Georgia fallback so
-it does not request a font of its own.
-
-| Token | Responsive value |
-| --- | --- |
-| `--type-display` | 37.6–56px, for hero and page titles |
-| `--type-section` | 30.4–42px |
-| `--type-support` | 22.4–28px |
-| `--type-body` | 16px, 1.65 default line height |
-| `--type-eyebrow` | 11.52px, regular weight |
-| `--event-card-width` | 320px, contained by narrow mobile viewports |
-
-Public section padding is generally 44–64px. The contact form is capped at 900px,
-uses four desktop columns, two tablet columns and one mobile column. Inputs retain
-44px targets and 16px text; the message field starts at 96px and remains resizable.
-The submit button sizes to its content. Consent remains optional and visible.
-
-Experience columns centre their icons, numbers, headings and copy. Icons are 76px
-on desktop and 58px on phones; numbers are 23.2px, about 37% smaller than V2.
-Vertical desktop dividers become horizontal mobile dividers.
-
-The testimonial player is capped at 280px wide, centred, 9:16 and uncropped. A
-local cream/blush SVG poster provides the initial cover; playback requires a user
-action and retains native controls. The original MP4 and JPEG poster remain intact.
-
-Event rails shrink to one or two cards when appropriate, show three desktop cards,
-and scroll for additional cards. Controls appear only when content overflows.
-The preview description is limited to three lines; the full description, dates,
-times, location, price and booking state remain on the linked detail page.
-
-Media uses 280px publication tiles for one to three entries and an even three-column
-grid for four or more, becoming two and then one column. The known unapproved Times
-fallback thumbnail is represented by its publication name. Stored media data and
-publication state are unchanged; future approved uploads use the image treatment.
-
-
-## V2.2 homepage surfaces and opening
-
-All major homepage sections share `--ivory` (`#f7f2ec`). Separators use the existing
-`--editorial-divider` colour at 1px height, centred on a common measure: at most
-1180px, inset by the shared responsive page gutter. Decorative pseudo-elements
-keep separators out of the accessibility tree and remove the first separator
-when the optional events section is hidden. The hero permits its divider to
-extend to the shared measure despite its narrower content layout.
-
-Homepage hero padding is 24–40px and its headline is 37.6–52px. The portrait is
-capped at 300px desktop and 240px on stacked layouts, with a 24px mobile gap.
-Hero actions wrap naturally on phones instead of requiring a separate grid row
-for each button. Homepage events padding is 24–40px above / 32px below on larger
-screens and 16px on phones; the card rail starts 24px below its heading group.
-The existing 320px card width, image fitting, single-card sizing and carousel
-interactions are retained. Other public-page layouts retain V2.1 proportions.
-
-Cream section surfaces do not override component surfaces: publication tiles,
-form fields, event artwork, the video cover, buttons and icons retain their own
-existing treatment. The shared header and footer retain their existing branding.
-
-
-## V2.3 homepage component proportions
-
-Homepage event cards are 560px landscape previews, with a 200px left image and
-right text. Two cards fit on a wide desktop; narrow viewports keep a 96px image
-beside the copy. The archive retains 320px cards and event pages retain their
-existing layout. Scoped homepage rules avoid changing saved image fit/focal-point
-behaviour or introducing a new event data model.
-
-The homepage contact form is capped at 720px, uses 12px field gaps and an 80px
-resizable textarea; input text stays 16px and touch controls at least 44px tall.
-The authentic Times wordmark is a local, unchanged official PNG and retains its
-392:73 ratio at a restrained maximum width. No typography, shared surfaces or
-other section composition was reopened in this iteration.
+FAQ buttons retain native keyboard activation, aria-expanded/aria-controls, hidden/inert answers and a rotating SVG chevron. All start collapsed. Coach disclosure and native video controls remain. Reduced motion, no-JavaScript visibility and print rules remain supported. Visually review 320, 375, 390, 430, 768, 1024 and 1440px and verify there is no horizontal page overflow. Never force reveal styles visible when generating review screenshots.

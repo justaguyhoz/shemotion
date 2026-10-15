@@ -71,12 +71,11 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.doesNotMatch(html.match(/<nav class="site-nav"[\s\S]*?<\/nav>/)[0], />Contact<\/a>/);
   assert.match(html, /<h2 id="experience-title">The Shemotion Experience<\/h2>\s*<p>Move\. Release\. Reconnect with Joy\.<\/p>/);
   assert.match(html, /<title>Women's Movement &amp; Embodiment Gold Coast \| Shemotion<\/title>/);
-  assert.match(html, /A women-only movement experience for freedom, expression &amp; joy\./);
+  assert.match(html, /A women-only movement experience for freedom, expression and joy\./);
   assert.match(html, /assets\/shemotion-step-1-get-out-of-your-head\.png/);
   assert.match(html, /assets\/shemotion-step-2-move-into-joy\.png/);
   assert.match(html, /assets\/shemotion-step-3-land-in-the-afterglow\.png/);
-  assert.match(css, /\/\* Editorial refinement V2.1:[^*]*\*\/[\s\S]*?\.stage-icon img\s*\{[\s\S]*?width:\s*76px/);
-  assert.match(css, /@media \(max-width: 560px\)[\s\S]*?\.stage-icon img\s*\{[\s\S]*?width:\s*58px/);
+  assert.match(css, /\.stage-icon img\s*\{[^}]*width:\s*60px/);
   assert.match(html, /Want to understand the practice more deeply\?/);
   assert.match(html, /href="\/what-is-shemotion\/">What Is Shemotion\?<\/a>/);
   const stageThreeIndex = html.indexOf("<h3>Land in the Afterglow</h3>");
@@ -88,7 +87,6 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.match(html, /<source src="assets\/tallai-testimonial\.mp4" type="video\/mp4">/);
   assert.match(html, /data-coach-disclosure/);
   assert.match(css, /\.booking-button::after[\s\S]*animation: booking-button-glow 4\.4s/);
-  assert.match(css, /\.event-pill-action\.button\.booking-button\s*\{[\s\S]*min-height: 30px;[\s\S]*font-size: 0\.68rem;/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.booking-button::after[\s\S]*animation: none/);
   assert.doesNotMatch(html, /<script>document\.documentElement\.classList\.add\("reveal-ready"\)<\/script>/, "HTML must stay visible if the animation module fails to load");
   assert.match(css, /html\.reveal-ready \[data-reveal\][\s\S]*opacity: 0;[\s\S]*translateY\(14px\)/);
@@ -180,7 +178,7 @@ test("What Is Shemotion guide has complete metadata, positioning and internal pa
 
 test("public events page uses the compact requested introduction", async () => {
   const source = await readFile(new URL("../functions/events/index.js", import.meta.url), "utf8");
-  assert.match(source, /<p class="eyebrow">Upcoming events<\/p><h1>Shemotion Classes &amp; Workshops<\/h1><p>Women-only movement and embodiment experiences across the Gold Coast\.<\/p>/);
+  assert.match(source, /<h1>Shemotion Classes &amp; Workshops<\/h1><p>Women-only movement and embodiment experiences across the Gold Coast\.<\/p>/);
 });
 
 test("homepage and organisation route reflect the broader commercial positioning", async () => {

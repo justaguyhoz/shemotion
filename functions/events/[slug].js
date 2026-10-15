@@ -23,7 +23,7 @@ function currentOccurrence(event, now = new Date()) {
 export async function onRequestGet({ env, params }) {
   const event = await getPublishedEventBySlug(env.DB, String(params.slug || ""));
   if (!event) {
-    const body = '<main id="top"><section class="page-hero section-pad"><div class="section-heading"><p class="eyebrow">Shemotion events</p><h1>Event not found</h1><p>This event is not available. Explore the current Shemotion events instead.</p><a class="button" href="/events/">View upcoming events</a></div></section></main>';
+    const body = '<main id="top"><section class="page-hero section-pad"><div class="section-heading"><h1>Event not found</h1><p>This event is not available. Explore the current Shemotion events instead.</p><a class="button" href="/events/">View upcoming events</a></div></section></main>';
     return htmlResponse(pageDocument({ title: "Event Not Found | Shemotion", description: "This Shemotion event is not available.", canonical: `${SITE_URL}/events/`, body, status: 404 }), 404);
   }
 
@@ -50,7 +50,7 @@ export async function onRequestGet({ env, params }) {
   const fit = event.imageFit === "cover" ? "cover" : "contain";
   const media = imageUrl ? `<div class="event-detail-media event-media-frame fit-${fit}" style="${focal}"><img class="event-detail-media-backdrop" src="${escapeHtml(imageUrl)}" alt="" aria-hidden="true"><img class="event-detail-media-artwork" src="${escapeHtml(imageUrl)}" alt="${escapeHtml(`${event.title} event artwork`)}"></div>` : "";
   const body = `<main id="top" data-event-detail data-event-id="${escapeHtml(event.id)}" data-event-name="${escapeHtml(event.title)}" data-event-type="${escapeHtml(event.eventType)}" data-venue-name="${escapeHtml(event.venueName)}" data-suburb="${escapeHtml(event.suburb || "")}">
-    <article class="event-detail-page section-pad"><p class="eyebrow">${escapeHtml(event.eventType)} &middot; ${escapeHtml(event.audience)}</p><h1>${escapeHtml(event.title)}</h1><p class="event-detail-intro">${escapeHtml(description)}</p>
+    <article class="event-detail-page section-pad"><h1>${escapeHtml(event.title)}</h1><p class="event-detail-context">${escapeHtml(event.eventType)} &middot; ${escapeHtml(event.audience)}</p><p class="event-detail-intro">${escapeHtml(description)}</p>
     ${media}${lifecycleNotice}<dl class="event-facts"><div><dt>Date</dt><dd>${escapeHtml(formatEventDate(occurrence))}</dd></div><div><dt>Time</dt><dd>${escapeHtml(formatEventTime(occurrence))}</dd></div><div><dt>Venue</dt><dd>${escapeHtml(location)}</dd></div>${occurrence.address ? `<div><dt>Address</dt><dd>${escapeHtml(occurrence.address)}</dd></div>` : ""}<div><dt>Booking</dt><dd>${escapeHtml(availability)}</dd></div><div><dt>Audience</dt><dd>${escapeHtml(occurrence.audience)}</dd></div></dl>
     <div class="event-detail-actions">${booking}${maps ? `<a class="button button-ghost" href="${escapeHtml(maps)}" target="_blank" rel="noopener noreferrer">Open in Google Maps</a>` : ""}</div><nav class="page-back-link" aria-label="Event navigation"><a href="/events/">All events</a> &middot; <a href="/">Shemotion home</a></nav></article></main>`;
   return htmlResponse(pageDocument({ title, description, canonical, body, structuredData: eventJsonLd(occurrence, canonical, now), bodyAttributes: 'class="event-detail-body"' }), 200, "no-store");
