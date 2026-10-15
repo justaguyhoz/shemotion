@@ -26,3 +26,7 @@ The connected Cloudflare project is `shemotion`, linked to `justaguyhoz/shemotio
 ## Testimonial visibility correction
 
 Normal-motion review found a legacy reveal selector hiding the testimonial heading while JavaScript revealed its parent only. Earlier screenshots forced reveal visibility and therefore masked this bug. The nested heading hide selector and testimonial parent reveal dependency are removed: title, introduction, cover and caption remain visible without animation. Corrected evidence is captured with normal motion, natural scrolling and no forced visibility styles.
+
+## Saved event image presentation
+
+Removed the V2.4 homepage contain override so existing admin fit and focal settings govern homepage artwork again. Afterglow currently uses cover at 93% horizontal / 18% vertical. No image, event record, card size, booking logic or admin code is changed. Earlier full-artwork containment is superseded by the saved administrator preference.

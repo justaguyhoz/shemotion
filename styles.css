@@ -4403,7 +4403,6 @@ body { font-size: var(--type-body); line-height: 1.65; }
   background: var(--ivory);
 }
 .home-page .event-carousel .event-pill-media-backdrop { display: none; }
-.home-page .event-carousel .event-pill-media-artwork { object-fit: contain; }
 .home-page .event-carousel .event-pill.has-image:hover .event-pill-media-artwork { transform: none; }
 .home-page .event-carousel .event-pill-title { font-size: 1.1875rem; }
 .home-page .event-carousel .event-pill-meta { display: flex; flex-wrap: wrap; gap: 2px 8px; }
