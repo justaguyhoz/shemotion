@@ -1,0 +1,18 @@
+{
+  "automaticPixelsIn1_3Seconds": 23,
+  "hoverPause": true,
+  "explicitPauseResume": true,
+  "focusPauseAndKeyboard": true,
+  "mouseDrag": true,
+  "postClickOpensDestination": true,
+  "loopPixelDifferenceMeanRGB": [
+    0.6560916608022519,
+    0.6177076002814919,
+    0.5932309992962702
+  ],
+  "continuousLoopWrap": true,
+  "reducedMotionManualOnly": true,
+  "scrollbarHidden": true,
+  "nativeTouchSwipePixels": 175,
+  "noPageOverflow": true
+}

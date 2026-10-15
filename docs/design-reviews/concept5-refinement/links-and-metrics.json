@@ -1,0 +1,115 @@
+{
+  "links": [
+    {
+      "route": "/",
+      "internalLinksChecked": 12,
+      "passed": true
+    },
+    {
+      "route": "/what-is-shemotion/",
+      "internalLinksChecked": 13,
+      "passed": true
+    },
+    {
+      "route": "/private-groups-retreats/",
+      "internalLinksChecked": 10,
+      "passed": true
+    },
+    {
+      "route": "/events/",
+      "internalLinksChecked": 11,
+      "passed": true
+    },
+    {
+      "route": "/events/shemotion-at-stellar-helensvale-11/",
+      "internalLinksChecked": 10,
+      "passed": true
+    }
+  ],
+  "metrics": [
+    {
+      "width": 375,
+      "headerButton": {
+        "horizontalError": 0,
+        "verticalError": 0.203125,
+        "height": 40,
+        "display": "flex",
+        "align": "center"
+      },
+      "footerHeight": 271.75,
+      "eventBandHeight": 402.6875,
+      "heroNoteWithinViewport": true,
+      "overflow": 0
+    },
+    {
+      "width": 430,
+      "headerButton": {
+        "horizontalError": 0,
+        "verticalError": 0.203125,
+        "height": 40,
+        "display": "flex",
+        "align": "center"
+      },
+      "footerHeight": 271.75,
+      "eventBandHeight": 383.6875,
+      "heroNoteWithinViewport": true,
+      "overflow": 0
+    },
+    {
+      "width": 768,
+      "headerButton": {
+        "horizontalError": 0,
+        "verticalError": 0.34375,
+        "height": 44,
+        "display": "flex",
+        "align": "center"
+      },
+      "footerHeight": 137,
+      "eventBandHeight": 321.796875,
+      "heroNoteWithinViewport": true,
+      "overflow": 0
+    },
+    {
+      "width": 1024,
+      "headerButton": {
+        "horizontalError": 0,
+        "verticalError": 0.34375,
+        "height": 44,
+        "display": "flex",
+        "align": "center"
+      },
+      "footerHeight": 137,
+      "eventBandHeight": 257.796875,
+      "heroNoteWithinViewport": true,
+      "overflow": 0
+    },
+    {
+      "width": 1440,
+      "headerButton": {
+        "horizontalError": 0,
+        "verticalError": 0.34375,
+        "height": 44,
+        "display": "flex",
+        "align": "center"
+      },
+      "footerHeight": 137,
+      "eventBandHeight": 263.765625,
+      "heroNoteWithinViewport": true,
+      "overflow": 0
+    },
+    {
+      "width": 1920,
+      "headerButton": {
+        "horizontalError": 0,
+        "verticalError": 0.34375,
+        "height": 44,
+        "display": "flex",
+        "align": "center"
+      },
+      "footerHeight": 137,
+      "eventBandHeight": 264.09375,
+      "heroNoteWithinViewport": true,
+      "overflow": 0
+    }
+  ]
+}

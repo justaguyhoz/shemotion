@@ -1,0 +1,36 @@
+{
+  "preview": "https://d60eae6c.shemotion.pages.dev",
+  "implementationCommit": "156a7b35ba9926788e674916c6bbd7cb6914fcdb",
+  "pages": [
+    {
+      "path": "/",
+      "status": 200,
+      "width": 1440,
+      "scroll": 1440,
+      "title": "Women's Movement & Embodiment Gold Coast | Shemotion"
+    },
+    {
+      "path": "/",
+      "status": 200,
+      "width": 375,
+      "scroll": 375,
+      "title": "Women's Movement & Embodiment Gold Coast | Shemotion"
+    },
+    {
+      "path": "/private-groups-retreats/",
+      "status": 200,
+      "width": 1440,
+      "scroll": 1440,
+      "title": "Women's Wellbeing Events & Workplaces | Shemotion"
+    },
+    {
+      "path": "/what-is-shemotion/",
+      "status": 200,
+      "width": 1440,
+      "scroll": 1440,
+      "title": "What Is Shemotion? | Women's Movement & Embodiment Gold Coast"
+    }
+  ],
+  "pageErrors": [],
+  "remoteRequests": "GET/HEAD/OPTIONS only; external analytics blocked"
+}

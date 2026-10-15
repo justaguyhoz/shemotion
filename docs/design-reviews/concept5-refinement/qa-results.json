@@ -1,0 +1,424 @@
+{
+  "responsive": [
+    {
+      "width": 320,
+      "scroll": 320,
+      "height": 5625,
+      "videoRatio": 0.5621301775147929,
+      "videoExtends": true,
+      "videoNativeRatio": 0.5625,
+      "videoReady": 4,
+      "events": 1,
+      "fonts": "loaded",
+      "messageFullWidth": true,
+      "eventBackground": "rgb(234, 208, 197)",
+      "brokenImages": []
+    },
+    {
+      "width": 375,
+      "scroll": 375,
+      "height": 5354,
+      "videoRatio": 0.5621301775147929,
+      "videoExtends": true,
+      "videoNativeRatio": 0.5625,
+      "videoReady": 4,
+      "events": 1,
+      "fonts": "loaded",
+      "messageFullWidth": true,
+      "eventBackground": "rgb(234, 208, 197)",
+      "brokenImages": []
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "height": 5330,
+      "videoRatio": 0.5621301775147929,
+      "videoExtends": true,
+      "videoNativeRatio": 0.5625,
+      "videoReady": 4,
+      "events": 1,
+      "fonts": "loaded",
+      "messageFullWidth": true,
+      "eventBackground": "rgb(234, 208, 197)",
+      "brokenImages": []
+    },
+    {
+      "width": 430,
+      "scroll": 430,
+      "height": 5217,
+      "videoRatio": 0.5621301775147929,
+      "videoExtends": true,
+      "videoNativeRatio": 0.5625,
+      "videoReady": 4,
+      "events": 1,
+      "fonts": "loaded",
+      "messageFullWidth": true,
+      "eventBackground": "rgb(234, 208, 197)",
+      "brokenImages": []
+    },
+    {
+      "width": 768,
+      "scroll": 768,
+      "height": 3762,
+      "videoRatio": 0.5630026809651475,
+      "videoExtends": true,
+      "videoNativeRatio": 0.5625,
+      "videoReady": 4,
+      "events": 1,
+      "fonts": "loaded",
+      "messageFullWidth": true,
+      "eventBackground": "rgb(234, 208, 197)",
+      "brokenImages": []
+    },
+    {
+      "width": 1024,
+      "scroll": 1024,
+      "height": 3680,
+      "videoRatio": 0.5630026809651475,
+      "videoExtends": true,
+      "videoNativeRatio": 0.5625,
+      "videoReady": 4,
+      "events": 1,
+      "fonts": "loaded",
+      "messageFullWidth": true,
+      "eventBackground": "rgb(234, 208, 197)",
+      "brokenImages": []
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "height": 3799,
+      "videoRatio": 0.5630026809651475,
+      "videoExtends": true,
+      "videoNativeRatio": 0.5625,
+      "videoReady": 4,
+      "events": 1,
+      "fonts": "loaded",
+      "messageFullWidth": true,
+      "eventBackground": "rgb(234, 208, 197)",
+      "brokenImages": []
+    },
+    {
+      "width": 1920,
+      "scroll": 1920,
+      "height": 3824,
+      "videoRatio": 0.5630026809651475,
+      "videoExtends": true,
+      "videoNativeRatio": 0.5625,
+      "videoReady": 4,
+      "events": 1,
+      "fonts": "loaded",
+      "messageFullWidth": true,
+      "eventBackground": "rgb(234, 208, 197)",
+      "brokenImages": []
+    }
+  ],
+  "publicPages": [
+    {
+      "route": "/events/",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1
+    },
+    {
+      "route": "/events/",
+      "width": 375,
+      "scroll": 375,
+      "h1": 1
+    },
+    {
+      "route": "/events/",
+      "width": 430,
+      "scroll": 430,
+      "h1": 1
+    },
+    {
+      "route": "/events/",
+      "width": 768,
+      "scroll": 768,
+      "h1": 1
+    },
+    {
+      "route": "/events/",
+      "width": 1024,
+      "scroll": 1024,
+      "h1": 1
+    },
+    {
+      "route": "/events/",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1
+    },
+    {
+      "route": "/events/",
+      "width": 1920,
+      "scroll": 1920,
+      "h1": 1
+    },
+    {
+      "route": "/events/shemotion-at-stellar-helensvale-11/",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1
+    },
+    {
+      "route": "/events/shemotion-at-stellar-helensvale-11/",
+      "width": 375,
+      "scroll": 375,
+      "h1": 1
+    },
+    {
+      "route": "/events/shemotion-at-stellar-helensvale-11/",
+      "width": 430,
+      "scroll": 430,
+      "h1": 1
+    },
+    {
+      "route": "/events/shemotion-at-stellar-helensvale-11/",
+      "width": 768,
+      "scroll": 768,
+      "h1": 1
+    },
+    {
+      "route": "/events/shemotion-at-stellar-helensvale-11/",
+      "width": 1024,
+      "scroll": 1024,
+      "h1": 1
+    },
+    {
+      "route": "/events/shemotion-at-stellar-helensvale-11/",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1
+    },
+    {
+      "route": "/events/shemotion-at-stellar-helensvale-11/",
+      "width": 1920,
+      "scroll": 1920,
+      "h1": 1
+    },
+    {
+      "route": "/what-is-shemotion/",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1
+    },
+    {
+      "route": "/what-is-shemotion/",
+      "width": 375,
+      "scroll": 375,
+      "h1": 1
+    },
+    {
+      "route": "/what-is-shemotion/",
+      "width": 430,
+      "scroll": 430,
+      "h1": 1
+    },
+    {
+      "route": "/what-is-shemotion/",
+      "width": 768,
+      "scroll": 768,
+      "h1": 1
+    },
+    {
+      "route": "/what-is-shemotion/",
+      "width": 1024,
+      "scroll": 1024,
+      "h1": 1
+    },
+    {
+      "route": "/what-is-shemotion/",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1
+    },
+    {
+      "route": "/what-is-shemotion/",
+      "width": 1920,
+      "scroll": 1920,
+      "h1": 1
+    },
+    {
+      "route": "/private-groups-retreats/",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1
+    },
+    {
+      "route": "/private-groups-retreats/",
+      "width": 375,
+      "scroll": 375,
+      "h1": 1
+    },
+    {
+      "route": "/private-groups-retreats/",
+      "width": 430,
+      "scroll": 430,
+      "h1": 1
+    },
+    {
+      "route": "/private-groups-retreats/",
+      "width": 768,
+      "scroll": 768,
+      "h1": 1
+    },
+    {
+      "route": "/private-groups-retreats/",
+      "width": 1024,
+      "scroll": 1024,
+      "h1": 1
+    },
+    {
+      "route": "/private-groups-retreats/",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1
+    },
+    {
+      "route": "/private-groups-retreats/",
+      "width": 1920,
+      "scroll": 1920,
+      "h1": 1
+    },
+    {
+      "route": "/privacy/",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1
+    },
+    {
+      "route": "/privacy/",
+      "width": 375,
+      "scroll": 375,
+      "h1": 1
+    },
+    {
+      "route": "/privacy/",
+      "width": 430,
+      "scroll": 430,
+      "h1": 1
+    },
+    {
+      "route": "/privacy/",
+      "width": 768,
+      "scroll": 768,
+      "h1": 1
+    },
+    {
+      "route": "/privacy/",
+      "width": 1024,
+      "scroll": 1024,
+      "h1": 1
+    },
+    {
+      "route": "/privacy/",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1
+    },
+    {
+      "route": "/privacy/",
+      "width": 1920,
+      "scroll": 1920,
+      "h1": 1
+    },
+    {
+      "route": "/terms/",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1
+    },
+    {
+      "route": "/terms/",
+      "width": 375,
+      "scroll": 375,
+      "h1": 1
+    },
+    {
+      "route": "/terms/",
+      "width": 430,
+      "scroll": 430,
+      "h1": 1
+    },
+    {
+      "route": "/terms/",
+      "width": 768,
+      "scroll": 768,
+      "h1": 1
+    },
+    {
+      "route": "/terms/",
+      "width": 1024,
+      "scroll": 1024,
+      "h1": 1
+    },
+    {
+      "route": "/terms/",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1
+    },
+    {
+      "route": "/terms/",
+      "width": 1920,
+      "scroll": 1920,
+      "h1": 1
+    },
+    {
+      "route": "/cancellations-refunds/",
+      "width": 320,
+      "scroll": 320,
+      "h1": 1
+    },
+    {
+      "route": "/cancellations-refunds/",
+      "width": 375,
+      "scroll": 375,
+      "h1": 1
+    },
+    {
+      "route": "/cancellations-refunds/",
+      "width": 430,
+      "scroll": 430,
+      "h1": 1
+    },
+    {
+      "route": "/cancellations-refunds/",
+      "width": 768,
+      "scroll": 768,
+      "h1": 1
+    },
+    {
+      "route": "/cancellations-refunds/",
+      "width": 1024,
+      "scroll": 1024,
+      "h1": 1
+    },
+    {
+      "route": "/cancellations-refunds/",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": 1
+    },
+    {
+      "route": "/cancellations-refunds/",
+      "width": 1920,
+      "scroll": 1920,
+      "h1": 1
+    }
+  ],
+  "interactions": {
+    "menuKeyboard": true,
+    "faqKeyboard": true,
+    "biographyToggle": true,
+    "invalidFormBlocks": true,
+    "mockedFormSuccess": true,
+    "mockedFormError": true,
+    "realVideoPlayback": true,
+    "reducedMotion": true,
+    "noScriptContent": true
+  },
+  "errors": []
+}
