@@ -1,0 +1,25 @@
+
+> shemotion-events@1.0.0 test
+> node --test
+
+✔ test/admin-event-list.test.js (62.8921ms)
+✔ test/admin-navigation.test.js (52.504425ms)
+✔ test/contact-outreach.test.js (103.337045ms)
+✔ test/contacts.test.js (91.014497ms)
+✔ test/event-booking.test.js (99.108226ms)
+✔ test/event-lifecycle.test.js (95.316236ms)
+✔ test/event-media.test.js (92.406851ms)
+✔ test/events.test.js (126.879383ms)
+✔ test/helpers/memory-contacts-db.js (26.631857ms)
+✔ test/instagram-gallery.test.js (49.950486ms)
+✔ test/media-features.test.js (79.03576ms)
+✔ test/public-interactions.test.js (71.758905ms)
+✔ test/recurrence-boundaries.test.js (63.856646ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1056.705283
