@@ -47,3 +47,7 @@ Homepage events use an offset warm paper surface, a decorative date illustration
 Organisations is a short commercial chapter with four settings, regional information and enquiry pathways. The practice guide uses four numbered explanations, a concise aside, first-session information and the original five questions. Each has a fresh dedicated concept image; neither duplicates the homepage primary photographs. Katty's authentic portrait is unchanged. Selected flowers can cross section boundaries; only intentional viewport-edge photo bleed is clipped horizontally.
 
 Current review handover: `docs/design-reviews/concept5-refinement/README.md`. Screenshots and QA evidence live on the development branch, with direct GitHub links for review outside the workspace.
+
+## Headline alignment and media paper follow-up
+
+Homepage section headings share the left edge of their supporting copy, following the Come Home composition on mobile and desktop. Explicit margin resets prevent legacy responsive centring from insetting narrower headlines. Experience step headings and copy also align left. The media band uses the existing blush token and paper grain on a separate decorative layer with uneven upper and lower tears; its real publication cards and links remain unclipped.

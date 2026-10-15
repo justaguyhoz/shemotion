@@ -590,3 +590,18 @@ body:not(.home-page) .contact-intro h2 { max-width: 22ch; font-size: var(--type-
 @media(min-width:701px) and (max-width:1100px) { .home-page .contact-intro::before { display: none; } }
 @media(max-width:700px) { .home-page .contact-intro::before { left: auto; right: 0; width: 100px; } }
 .home-page .event-pill-meta span + span::before { width: auto; height: auto; background: transparent; }
+
+/* Editorial headings share the leading edge of their own supporting copy. */
+.home-page .section-heading { margin-inline: 0; text-align: left; }
+.home-page .section-heading > p { margin-inline: 0; }
+.home-page main h2 { margin-inline: 0; text-align: left; }
+.home-page .stage-copy { text-align: left; }
+.home-page .stage-copy h3 { margin-inline: 0; text-align: left; }
+
+/* A blush paper sheet with broad, uneven tears; content remains unclipped. */
+.home-page main > section.media-features { background: transparent; isolation: isolate; z-index: 1; }
+.home-page main > section.media-features::before {
+  content: ''; position: absolute; inset: -12px 0; z-index: -1; pointer-events: none;
+  background: var(--blush) url('assets/v3-paper.svg');
+  clip-path: polygon(0 13px, 3% 9px, 5% 11px, 9% 5px, 12% 8px, 16% 3px, 19% 6px, 23% 2px, 27% 7px, 31% 4px, 35% 11px, 38% 8px, 42% 14px, 46% 10px, 50% 16px, 54% 11px, 58% 13px, 62% 6px, 66% 9px, 70% 3px, 74% 7px, 78% 2px, 82% 5px, 86% 1px, 90% 7px, 94% 4px, 97% 10px, 100% 6px, 100% calc(100% - 9px), 96% calc(100% - 4px), 92% calc(100% - 8px), 88% calc(100% - 2px), 84% calc(100% - 6px), 80% calc(100% - 3px), 76% calc(100% - 11px), 72% calc(100% - 7px), 68% calc(100% - 14px), 64% calc(100% - 9px), 60% calc(100% - 12px), 56% calc(100% - 5px), 52% calc(100% - 8px), 48% calc(100% - 2px), 44% calc(100% - 6px), 40% calc(100% - 3px), 36% calc(100% - 9px), 32% calc(100% - 5px), 28% calc(100% - 12px), 24% calc(100% - 8px), 20% calc(100% - 14px), 16% calc(100% - 10px), 12% calc(100% - 5px), 8% calc(100% - 9px), 4% calc(100% - 3px), 0 calc(100% - 7px));
+}
