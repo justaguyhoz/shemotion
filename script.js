@@ -44,6 +44,13 @@ function element(tag, options = {}) {
   return node;
 }
 
+export function homepageEventExcerpt(event) {
+  if (event.slug === "shemotion-at-stellar-helensvale-11") {
+    return "An evening of cacao, expressive movement and joyful dancing for women over 30.";
+  }
+  return event.shortDescription?.trim() === "-" ? "" : event.shortDescription?.trim();
+}
+
 export function createEventCard(event, idPrefix = "event") {
   const booking = eventBookingPresentation(event);
   const destination = eventDestination(event);
@@ -103,8 +110,8 @@ export function createEventCard(event, idPrefix = "event") {
     content.append(element("span", { className: "event-pill-recurrence", text: `${label} series` }));
   }
 
-  const description = event.shortDescription?.trim() === "-" ? "" : event.shortDescription?.trim();
-  if (description) content.append(element("p", { className: "event-pill-description", text: description }));
+  const description = homepageEventExcerpt(event);
+  if (description) content.append(element("p", { className: `event-pill-description${event.slug === "shemotion-at-stellar-helensvale-11" ? " is-homepage-excerpt" : ""}`, text: description }));
   const actions = element("div", { className: "event-pill-actions" });
 
   if (destination) {
@@ -199,6 +206,7 @@ function setupReveal(items) {
     });
   }, { threshold: 0.16, rootMargin: "0px 0px -8% 0px" });
   items.forEach((item) => observer.observe(item));
+  document.documentElement.classList.add("reveal-ready");
 }
 
 export function setupTextRotator(container, { mobileOnly = false, duration = 3600, gap = 750 } = {}, view = window) {

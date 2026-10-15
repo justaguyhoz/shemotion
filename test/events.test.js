@@ -90,7 +90,7 @@ test("public homepage installs one Meta Pixel PageView and marks only the primar
   assert.match(css, /\.booking-button::after[\s\S]*animation: booking-button-glow 4\.4s/);
   assert.match(css, /\.event-pill-action\.button\.booking-button\s*\{[\s\S]*min-height: 30px;[\s\S]*font-size: 0\.68rem;/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)[\s\S]*\.booking-button::after[\s\S]*animation: none/);
-  assert.match(html, /<script>document\.documentElement\.classList\.add\("reveal-ready"\)<\/script>\s*<link rel="stylesheet"/);
+  assert.doesNotMatch(html, /<script>document\.documentElement\.classList\.add\("reveal-ready"\)<\/script>/, "HTML must stay visible if the animation module fails to load");
   assert.match(css, /html\.reveal-ready \[data-reveal\][\s\S]*opacity: 0;[\s\S]*translateY\(14px\)/);
   assert.match(css, /opacity 440ms cubic-bezier/);
   assert.match(css, /html\.reveal-ready \[id="upcoming-events"\] \.section-heading/);

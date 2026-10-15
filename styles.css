@@ -4459,3 +4459,39 @@ body { font-size: var(--type-body); line-height: 1.65; }
 .home-page .media-feature-fallback { max-width: 100%; overflow-wrap: anywhere; }
 .home-page .media-feature-grid.is-many .media-feature-link { grid-template-columns: 1fr; text-align: center; }
 .home-page .media-feature-grid.is-many .media-feature-thumbnail { width: min(100%, 240px); margin-inline: auto; }
+
+/* V2.6: presentation copy, consistent external indicators and resilient printing. */
+.external-link-icon { display: inline-block; width: 0.875em; height: 0.875em; vertical-align: -0.1em; flex-shrink: 0; }
+.home-page .event-carousel .event-pill-description.is-homepage-excerpt {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+  text-wrap: pretty;
+}
+@media (max-width: 560px) {
+  .home-page .organisations-invitation-inner > p:not(.eyebrow),
+  .home-page .contact-intro > p,
+  .home-page .contact-success p:not(.eyebrow) {
+    font-size: 0.9375rem;
+    line-height: 1.65;
+  }
+}
+@media print {
+  @page { margin: 15mm; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+  html.reveal-ready .reveal, html.reveal-ready [data-reveal],
+  html.reveal-ready [data-service-card], html.reveal-ready .for-you .narrow,
+  .reveal, .reveal-soft { opacity: 1 !important; transform: none !important; }
+  .site-header { position: static; box-shadow: none; }
+  .site-nav, .nav-toggle, .header-cta, [data-event-controls] { display: none !important; }
+  h1, h2, h3, .section-heading { break-inside: avoid; break-after: avoid; }
+  .home-page main > .section-pad { padding-block: var(--space-xl) !important; }
+  .home-page .event-grid { display: grid; grid-template-columns: minmax(0, 460px); justify-content: center; width: 100%; max-width: 100%; overflow: visible; }
+  .home-page .event-carousel { overflow: visible; }
+  .event-pill, .media-feature-card, .stage, .testimonial-video { break-inside: avoid; box-shadow: none !important; }
+  .home-page .testimonial-video { width: 48mm; max-width: 100%; }
+  .home-page .testimonial-player { width: 100%; }
+  .home-page .testimonial-player video { width: 100%; height: auto; max-height: 90mm; }
+  .home-page .media-feature-grid { overflow: visible; }
+}

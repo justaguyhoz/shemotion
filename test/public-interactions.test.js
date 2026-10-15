@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { setupNavigation } from "../navigation.js";
-import { setupCoachDisclosure, setupFaq, setupTextRotator, setupTestimonial } from "../script.js";
+import { homepageEventExcerpt, setupCoachDisclosure, setupFaq, setupTextRotator, setupTestimonial } from "../script.js";
 
 class NodeStub extends EventTarget {
   constructor(root) {
@@ -288,4 +288,13 @@ test("header offsets and menu height track resizing after phone rotation", () =>
   resize();
   assert.equal(properties.get("--header-height"), "61px");
   assert.equal(root.documentElement.style.scrollPaddingTop, "81px");
+});
+
+
+test("homepage Afterglow excerpt is complete without mutating event content", () => {
+  const event = { slug: "shemotion-at-stellar-helensvale-11", shortDescription: "Full original description" };
+  assert.equal(homepageEventExcerpt(event), "An evening of cacao, expressive movement and joyful dancing for women over 30.");
+  assert.equal(event.shortDescription, "Full original description");
+  assert.equal(homepageEventExcerpt({ slug: "other-event", shortDescription: " Other event copy " }), "Other event copy");
+  assert.equal(homepageEventExcerpt({ shortDescription: "-" }), "");
 });
