@@ -1,0 +1,711 @@
+{
+  "responsive": [
+    {
+      "width": 320,
+      "scrollWidth": 320,
+      "headings": [
+        {
+          "text": "Come Home to Your Body",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "The Shemotion Experience",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "Get Out of Your Head",
+          "x": 92,
+          "align": "left",
+          "paragraphX": 92
+        },
+        {
+          "text": "Move Into Joy",
+          "x": 92,
+          "align": "left",
+          "paragraphX": 92
+        },
+        {
+          "text": "Land in the Afterglow",
+          "x": 92,
+          "align": "left",
+          "paragraphX": 92
+        },
+        {
+          "text": "Upcoming Events",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "How You May Feel After Shemotion",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "Meet Katty",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "Shemotion in the Media",
+          "x": 22,
+          "align": "left",
+          "paragraphX": null
+        },
+        {
+          "text": "Bring Shemotion to Your Space",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "Follow Shemotion",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "I\u2019d Love to Hear from You",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "Frequently Asked Questions",
+          "x": 22,
+          "align": "left",
+          "paragraphX": null
+        }
+      ],
+      "media": {
+        "background": "rgb(234, 208, 197)",
+        "clip": "polygon(0px 13px, 3% 9px, 5% 11px, 9% 5px, 12% 8px, 16% 3px, 19% 6px, 23% 2px, 27% 7px, 31% 4px, 35% 11px, 38% 8px, 42% 14px, 46% 10px, 50% 16px, 54% 11px, 58% 13px, 62% 6px, 66% 9px, 70% 3px, 74% 7px, 78% 2px, 82% 5px, 86% 1px, 90% 7px, 94% 4px, 97% 10px, 100% 6px, 100% calc(100% - 9px), 96% calc(100% - 4px), 92% calc(100% - 8px), 88% calc(100% - 2px), 84% calc(100% - 6px), 80% calc(100% - 3px), 76% calc(100% - 11px), 72% calc(100% - 7px), 68% calc(100% - 14px), 64% calc(100% - 9px), 60% calc(100% - 12px), 56% calc(100% - 5px), 52% calc(100% - 8px), 48% calc(100% - 2px), 44% calc(100% - 6px), 40% calc(100% - 3px), 36% calc(100% - 9px), 32% calc(100% - 5px), 28% calc(100% - 12px), 24% calc(100% - 8px), 20% calc(100% - 14px), 16% calc(100% - 10px), 12% calc(100% - 5px), 8% calc(100% - 9px), 4% calc(100% - 3px), 0px calc(100% - 7px))"
+      }
+    },
+    {
+      "width": 375,
+      "scrollWidth": 375,
+      "headings": [
+        {
+          "text": "Come Home to Your Body",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "The Shemotion Experience",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "Get Out of Your Head",
+          "x": 108,
+          "align": "left",
+          "paragraphX": 108
+        },
+        {
+          "text": "Move Into Joy",
+          "x": 108,
+          "align": "left",
+          "paragraphX": 108
+        },
+        {
+          "text": "Land in the Afterglow",
+          "x": 108,
+          "align": "left",
+          "paragraphX": 108
+        },
+        {
+          "text": "Upcoming Events",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 264.8125
+        },
+        {
+          "text": "How You May Feel After Shemotion",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "Meet Katty",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "Shemotion in the Media",
+          "x": 22,
+          "align": "left",
+          "paragraphX": null
+        },
+        {
+          "text": "Bring Shemotion to Your Space",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "Follow Shemotion",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "I\u2019d Love to Hear from You",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "Frequently Asked Questions",
+          "x": 22,
+          "align": "left",
+          "paragraphX": null
+        }
+      ],
+      "media": {
+        "background": "rgb(234, 208, 197)",
+        "clip": "polygon(0px 13px, 3% 9px, 5% 11px, 9% 5px, 12% 8px, 16% 3px, 19% 6px, 23% 2px, 27% 7px, 31% 4px, 35% 11px, 38% 8px, 42% 14px, 46% 10px, 50% 16px, 54% 11px, 58% 13px, 62% 6px, 66% 9px, 70% 3px, 74% 7px, 78% 2px, 82% 5px, 86% 1px, 90% 7px, 94% 4px, 97% 10px, 100% 6px, 100% calc(100% - 9px), 96% calc(100% - 4px), 92% calc(100% - 8px), 88% calc(100% - 2px), 84% calc(100% - 6px), 80% calc(100% - 3px), 76% calc(100% - 11px), 72% calc(100% - 7px), 68% calc(100% - 14px), 64% calc(100% - 9px), 60% calc(100% - 12px), 56% calc(100% - 5px), 52% calc(100% - 8px), 48% calc(100% - 2px), 44% calc(100% - 6px), 40% calc(100% - 3px), 36% calc(100% - 9px), 32% calc(100% - 5px), 28% calc(100% - 12px), 24% calc(100% - 8px), 20% calc(100% - 14px), 16% calc(100% - 10px), 12% calc(100% - 5px), 8% calc(100% - 9px), 4% calc(100% - 3px), 0px calc(100% - 7px))"
+      }
+    },
+    {
+      "width": 390,
+      "scrollWidth": 390,
+      "headings": [
+        {
+          "text": "Come Home to Your Body",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "The Shemotion Experience",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "Get Out of Your Head",
+          "x": 108,
+          "align": "left",
+          "paragraphX": 108
+        },
+        {
+          "text": "Move Into Joy",
+          "x": 108,
+          "align": "left",
+          "paragraphX": 108
+        },
+        {
+          "text": "Land in the Afterglow",
+          "x": 108,
+          "align": "left",
+          "paragraphX": 108
+        },
+        {
+          "text": "Upcoming Events",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 279.8125
+        },
+        {
+          "text": "How You May Feel After Shemotion",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "Meet Katty",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "Shemotion in the Media",
+          "x": 22,
+          "align": "left",
+          "paragraphX": null
+        },
+        {
+          "text": "Bring Shemotion to Your Space",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "Follow Shemotion",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "I\u2019d Love to Hear from You",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "Frequently Asked Questions",
+          "x": 22,
+          "align": "left",
+          "paragraphX": null
+        }
+      ],
+      "media": {
+        "background": "rgb(234, 208, 197)",
+        "clip": "polygon(0px 13px, 3% 9px, 5% 11px, 9% 5px, 12% 8px, 16% 3px, 19% 6px, 23% 2px, 27% 7px, 31% 4px, 35% 11px, 38% 8px, 42% 14px, 46% 10px, 50% 16px, 54% 11px, 58% 13px, 62% 6px, 66% 9px, 70% 3px, 74% 7px, 78% 2px, 82% 5px, 86% 1px, 90% 7px, 94% 4px, 97% 10px, 100% 6px, 100% calc(100% - 9px), 96% calc(100% - 4px), 92% calc(100% - 8px), 88% calc(100% - 2px), 84% calc(100% - 6px), 80% calc(100% - 3px), 76% calc(100% - 11px), 72% calc(100% - 7px), 68% calc(100% - 14px), 64% calc(100% - 9px), 60% calc(100% - 12px), 56% calc(100% - 5px), 52% calc(100% - 8px), 48% calc(100% - 2px), 44% calc(100% - 6px), 40% calc(100% - 3px), 36% calc(100% - 9px), 32% calc(100% - 5px), 28% calc(100% - 12px), 24% calc(100% - 8px), 20% calc(100% - 14px), 16% calc(100% - 10px), 12% calc(100% - 5px), 8% calc(100% - 9px), 4% calc(100% - 3px), 0px calc(100% - 7px))"
+      }
+    },
+    {
+      "width": 430,
+      "scrollWidth": 430,
+      "headings": [
+        {
+          "text": "Come Home to Your Body",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "The Shemotion Experience",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "Get Out of Your Head",
+          "x": 108,
+          "align": "left",
+          "paragraphX": 108
+        },
+        {
+          "text": "Move Into Joy",
+          "x": 108,
+          "align": "left",
+          "paragraphX": 108
+        },
+        {
+          "text": "Land in the Afterglow",
+          "x": 108,
+          "align": "left",
+          "paragraphX": 108
+        },
+        {
+          "text": "Upcoming Events",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 319.8125
+        },
+        {
+          "text": "How You May Feel After Shemotion",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "Meet Katty",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "Shemotion in the Media",
+          "x": 22,
+          "align": "left",
+          "paragraphX": null
+        },
+        {
+          "text": "Bring Shemotion to Your Space",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "Follow Shemotion",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "I\u2019d Love to Hear from You",
+          "x": 22,
+          "align": "left",
+          "paragraphX": 22
+        },
+        {
+          "text": "Frequently Asked Questions",
+          "x": 22,
+          "align": "left",
+          "paragraphX": null
+        }
+      ],
+      "media": {
+        "background": "rgb(234, 208, 197)",
+        "clip": "polygon(0px 13px, 3% 9px, 5% 11px, 9% 5px, 12% 8px, 16% 3px, 19% 6px, 23% 2px, 27% 7px, 31% 4px, 35% 11px, 38% 8px, 42% 14px, 46% 10px, 50% 16px, 54% 11px, 58% 13px, 62% 6px, 66% 9px, 70% 3px, 74% 7px, 78% 2px, 82% 5px, 86% 1px, 90% 7px, 94% 4px, 97% 10px, 100% 6px, 100% calc(100% - 9px), 96% calc(100% - 4px), 92% calc(100% - 8px), 88% calc(100% - 2px), 84% calc(100% - 6px), 80% calc(100% - 3px), 76% calc(100% - 11px), 72% calc(100% - 7px), 68% calc(100% - 14px), 64% calc(100% - 9px), 60% calc(100% - 12px), 56% calc(100% - 5px), 52% calc(100% - 8px), 48% calc(100% - 2px), 44% calc(100% - 6px), 40% calc(100% - 3px), 36% calc(100% - 9px), 32% calc(100% - 5px), 28% calc(100% - 12px), 24% calc(100% - 8px), 20% calc(100% - 14px), 16% calc(100% - 10px), 12% calc(100% - 5px), 8% calc(100% - 9px), 4% calc(100% - 3px), 0px calc(100% - 7px))"
+      }
+    },
+    {
+      "width": 768,
+      "scrollWidth": 768,
+      "headings": [
+        {
+          "text": "Come Home to Your Body",
+          "x": 353.6875,
+          "align": "left",
+          "paragraphX": 353.6875
+        },
+        {
+          "text": "The Shemotion Experience",
+          "x": 38.390625,
+          "align": "left",
+          "paragraphX": 38.390625
+        },
+        {
+          "text": "Get Out of Your Head",
+          "x": 56.390625,
+          "align": "left",
+          "paragraphX": 56.390625
+        },
+        {
+          "text": "Move Into Joy",
+          "x": 287.796875,
+          "align": "left",
+          "paragraphX": 287.796875
+        },
+        {
+          "text": "Land in the Afterglow",
+          "x": 518.203125,
+          "align": "left",
+          "paragraphX": 518.203125
+        },
+        {
+          "text": "Upcoming Events",
+          "x": 38.390625,
+          "align": "left",
+          "paragraphX": 38.390625
+        },
+        {
+          "text": "How You May Feel After Shemotion",
+          "x": 38.390625,
+          "align": "left",
+          "paragraphX": 38.390625
+        },
+        {
+          "text": "Meet Katty",
+          "x": 313.390625,
+          "align": "left",
+          "paragraphX": 313.390625
+        },
+        {
+          "text": "Shemotion in the Media",
+          "x": 38.390625,
+          "align": "left",
+          "paragraphX": null
+        },
+        {
+          "text": "Bring Shemotion to Your Space",
+          "x": 38.390625,
+          "align": "left",
+          "paragraphX": 38.390625
+        },
+        {
+          "text": "Follow Shemotion",
+          "x": 38.390625,
+          "align": "left",
+          "paragraphX": 38.390625
+        },
+        {
+          "text": "I\u2019d Love to Hear from You",
+          "x": 63.390625,
+          "align": "left",
+          "paragraphX": 63.390625
+        },
+        {
+          "text": "Frequently Asked Questions",
+          "x": 226.09375,
+          "align": "left",
+          "paragraphX": null
+        }
+      ],
+      "media": {
+        "background": "rgb(234, 208, 197)",
+        "clip": "polygon(0px 13px, 3% 9px, 5% 11px, 9% 5px, 12% 8px, 16% 3px, 19% 6px, 23% 2px, 27% 7px, 31% 4px, 35% 11px, 38% 8px, 42% 14px, 46% 10px, 50% 16px, 54% 11px, 58% 13px, 62% 6px, 66% 9px, 70% 3px, 74% 7px, 78% 2px, 82% 5px, 86% 1px, 90% 7px, 94% 4px, 97% 10px, 100% 6px, 100% calc(100% - 9px), 96% calc(100% - 4px), 92% calc(100% - 8px), 88% calc(100% - 2px), 84% calc(100% - 6px), 80% calc(100% - 3px), 76% calc(100% - 11px), 72% calc(100% - 7px), 68% calc(100% - 14px), 64% calc(100% - 9px), 60% calc(100% - 12px), 56% calc(100% - 5px), 52% calc(100% - 8px), 48% calc(100% - 2px), 44% calc(100% - 6px), 40% calc(100% - 3px), 36% calc(100% - 9px), 32% calc(100% - 5px), 28% calc(100% - 12px), 24% calc(100% - 8px), 20% calc(100% - 14px), 16% calc(100% - 10px), 12% calc(100% - 5px), 8% calc(100% - 9px), 4% calc(100% - 3px), 0px calc(100% - 7px))"
+      }
+    },
+    {
+      "width": 1024,
+      "scrollWidth": 1024,
+      "headings": [
+        {
+          "text": "Come Home to Your Body",
+          "x": 463.265625,
+          "align": "left",
+          "paragraphX": 463.265625
+        },
+        {
+          "text": "The Shemotion Experience",
+          "x": 51.1875,
+          "align": "left",
+          "paragraphX": 51.1875
+        },
+        {
+          "text": "Get Out of Your Head",
+          "x": 69.1875,
+          "align": "left",
+          "paragraphX": 69.1875
+        },
+        {
+          "text": "Move Into Joy",
+          "x": 377.390625,
+          "align": "left",
+          "paragraphX": 377.390625
+        },
+        {
+          "text": "Land in the Afterglow",
+          "x": 684.59375,
+          "align": "left",
+          "paragraphX": 684.59375
+        },
+        {
+          "text": "Upcoming Events",
+          "x": 51.1875,
+          "align": "left",
+          "paragraphX": 51.1875
+        },
+        {
+          "text": "How You May Feel After Shemotion",
+          "x": 51.1875,
+          "align": "left",
+          "paragraphX": 51.1875
+        },
+        {
+          "text": "Meet Katty",
+          "x": 326.1875,
+          "align": "left",
+          "paragraphX": 326.1875
+        },
+        {
+          "text": "Shemotion in the Media",
+          "x": 51.1875,
+          "align": "left",
+          "paragraphX": null
+        },
+        {
+          "text": "Bring Shemotion to Your Space",
+          "x": 51.1875,
+          "align": "left",
+          "paragraphX": 51.1875
+        },
+        {
+          "text": "Follow Shemotion",
+          "x": 51.1875,
+          "align": "left",
+          "paragraphX": 51.1875
+        },
+        {
+          "text": "I\u2019d Love to Hear from You",
+          "x": 76.1875,
+          "align": "left",
+          "paragraphX": 76.1875
+        },
+        {
+          "text": "Frequently Asked Questions",
+          "x": 354.09375,
+          "align": "left",
+          "paragraphX": null
+        }
+      ],
+      "media": {
+        "background": "rgb(234, 208, 197)",
+        "clip": "polygon(0px 13px, 3% 9px, 5% 11px, 9% 5px, 12% 8px, 16% 3px, 19% 6px, 23% 2px, 27% 7px, 31% 4px, 35% 11px, 38% 8px, 42% 14px, 46% 10px, 50% 16px, 54% 11px, 58% 13px, 62% 6px, 66% 9px, 70% 3px, 74% 7px, 78% 2px, 82% 5px, 86% 1px, 90% 7px, 94% 4px, 97% 10px, 100% 6px, 100% calc(100% - 9px), 96% calc(100% - 4px), 92% calc(100% - 8px), 88% calc(100% - 2px), 84% calc(100% - 6px), 80% calc(100% - 3px), 76% calc(100% - 11px), 72% calc(100% - 7px), 68% calc(100% - 14px), 64% calc(100% - 9px), 60% calc(100% - 12px), 56% calc(100% - 5px), 52% calc(100% - 8px), 48% calc(100% - 2px), 44% calc(100% - 6px), 40% calc(100% - 3px), 36% calc(100% - 9px), 32% calc(100% - 5px), 28% calc(100% - 12px), 24% calc(100% - 8px), 20% calc(100% - 14px), 16% calc(100% - 10px), 12% calc(100% - 5px), 8% calc(100% - 9px), 4% calc(100% - 3px), 0px calc(100% - 7px))"
+      }
+    },
+    {
+      "width": 1440,
+      "scrollWidth": 1440,
+      "headings": [
+        {
+          "text": "Come Home to Your Body",
+          "x": 657.1875,
+          "align": "left",
+          "paragraphX": 657.1875
+        },
+        {
+          "text": "The Shemotion Experience",
+          "x": 140,
+          "align": "left",
+          "paragraphX": 140
+        },
+        {
+          "text": "Get Out of Your Head",
+          "x": 188.078125,
+          "align": "left",
+          "paragraphX": 188.078125
+        },
+        {
+          "text": "Move Into Joy",
+          "x": 575.234375,
+          "align": "left",
+          "paragraphX": 575.234375
+        },
+        {
+          "text": "Land in the Afterglow",
+          "x": 961.90625,
+          "align": "left",
+          "paragraphX": 961.90625
+        },
+        {
+          "text": "Upcoming Events",
+          "x": 140,
+          "align": "left",
+          "paragraphX": 140
+        },
+        {
+          "text": "How You May Feel After Shemotion",
+          "x": 140,
+          "align": "left",
+          "paragraphX": 140
+        },
+        {
+          "text": "Meet Katty",
+          "x": 588,
+          "align": "left",
+          "paragraphX": 588
+        },
+        {
+          "text": "Shemotion in the Media",
+          "x": 140,
+          "align": "left",
+          "paragraphX": null
+        },
+        {
+          "text": "Bring Shemotion to Your Space",
+          "x": 240,
+          "align": "left",
+          "paragraphX": 240
+        },
+        {
+          "text": "Follow Shemotion",
+          "x": 140,
+          "align": "left",
+          "paragraphX": 140
+        },
+        {
+          "text": "I\u2019d Love to Hear from You",
+          "x": 165,
+          "align": "left",
+          "paragraphX": 165
+        },
+        {
+          "text": "Frequently Asked Questions",
+          "x": 562.09375,
+          "align": "left",
+          "paragraphX": null
+        }
+      ],
+      "media": {
+        "background": "rgb(234, 208, 197)",
+        "clip": "polygon(0px 13px, 3% 9px, 5% 11px, 9% 5px, 12% 8px, 16% 3px, 19% 6px, 23% 2px, 27% 7px, 31% 4px, 35% 11px, 38% 8px, 42% 14px, 46% 10px, 50% 16px, 54% 11px, 58% 13px, 62% 6px, 66% 9px, 70% 3px, 74% 7px, 78% 2px, 82% 5px, 86% 1px, 90% 7px, 94% 4px, 97% 10px, 100% 6px, 100% calc(100% - 9px), 96% calc(100% - 4px), 92% calc(100% - 8px), 88% calc(100% - 2px), 84% calc(100% - 6px), 80% calc(100% - 3px), 76% calc(100% - 11px), 72% calc(100% - 7px), 68% calc(100% - 14px), 64% calc(100% - 9px), 60% calc(100% - 12px), 56% calc(100% - 5px), 52% calc(100% - 8px), 48% calc(100% - 2px), 44% calc(100% - 6px), 40% calc(100% - 3px), 36% calc(100% - 9px), 32% calc(100% - 5px), 28% calc(100% - 12px), 24% calc(100% - 8px), 20% calc(100% - 14px), 16% calc(100% - 10px), 12% calc(100% - 5px), 8% calc(100% - 9px), 4% calc(100% - 3px), 0px calc(100% - 7px))"
+      }
+    },
+    {
+      "width": 1920,
+      "scrollWidth": 1920,
+      "headings": [
+        {
+          "text": "Come Home to Your Body",
+          "x": 897.1875,
+          "align": "left",
+          "paragraphX": 897.1875
+        },
+        {
+          "text": "The Shemotion Experience",
+          "x": 380,
+          "align": "left",
+          "paragraphX": 380
+        },
+        {
+          "text": "Get Out of Your Head",
+          "x": 428.078125,
+          "align": "left",
+          "paragraphX": 428.078125
+        },
+        {
+          "text": "Move Into Joy",
+          "x": 815.234375,
+          "align": "left",
+          "paragraphX": 815.234375
+        },
+        {
+          "text": "Land in the Afterglow",
+          "x": 1201.90625,
+          "align": "left",
+          "paragraphX": 1201.90625
+        },
+        {
+          "text": "Upcoming Events",
+          "x": 380,
+          "align": "left",
+          "paragraphX": 380
+        },
+        {
+          "text": "How You May Feel After Shemotion",
+          "x": 380,
+          "align": "left",
+          "paragraphX": 380
+        },
+        {
+          "text": "Meet Katty",
+          "x": 828,
+          "align": "left",
+          "paragraphX": 828
+        },
+        {
+          "text": "Shemotion in the Media",
+          "x": 380,
+          "align": "left",
+          "paragraphX": null
+        },
+        {
+          "text": "Bring Shemotion to Your Space",
+          "x": 480,
+          "align": "left",
+          "paragraphX": 480
+        },
+        {
+          "text": "Follow Shemotion",
+          "x": 380,
+          "align": "left",
+          "paragraphX": 380
+        },
+        {
+          "text": "I\u2019d Love to Hear from You",
+          "x": 405,
+          "align": "left",
+          "paragraphX": 405
+        },
+        {
+          "text": "Frequently Asked Questions",
+          "x": 802.09375,
+          "align": "left",
+          "paragraphX": null
+        }
+      ],
+      "media": {
+        "background": "rgb(234, 208, 197)",
+        "clip": "polygon(0px 13px, 3% 9px, 5% 11px, 9% 5px, 12% 8px, 16% 3px, 19% 6px, 23% 2px, 27% 7px, 31% 4px, 35% 11px, 38% 8px, 42% 14px, 46% 10px, 50% 16px, 54% 11px, 58% 13px, 62% 6px, 66% 9px, 70% 3px, 74% 7px, 78% 2px, 82% 5px, 86% 1px, 90% 7px, 94% 4px, 97% 10px, 100% 6px, 100% calc(100% - 9px), 96% calc(100% - 4px), 92% calc(100% - 8px), 88% calc(100% - 2px), 84% calc(100% - 6px), 80% calc(100% - 3px), 76% calc(100% - 11px), 72% calc(100% - 7px), 68% calc(100% - 14px), 64% calc(100% - 9px), 60% calc(100% - 12px), 56% calc(100% - 5px), 52% calc(100% - 8px), 48% calc(100% - 2px), 44% calc(100% - 6px), 40% calc(100% - 3px), 36% calc(100% - 9px), 32% calc(100% - 5px), 28% calc(100% - 12px), 24% calc(100% - 8px), 20% calc(100% - 14px), 16% calc(100% - 10px), 12% calc(100% - 5px), 8% calc(100% - 9px), 4% calc(100% - 3px), 0px calc(100% - 7px))"
+      }
+    }
+  ],
+  "pageErrors": [],
+  "axeViolations": [],
+  "axePasses": 18
+}
