@@ -589,3 +589,4 @@ body:not(.home-page) .contact-intro h2 { max-width: 22ch; font-size: var(--type-
 .home-page .contact-intro::before { left: -135px; width: 130px; }
 @media(min-width:701px) and (max-width:1100px) { .home-page .contact-intro::before { display: none; } }
 @media(max-width:700px) { .home-page .contact-intro::before { left: auto; right: 0; width: 100px; } }
+.home-page .event-pill-meta span + span::before { width: auto; height: auto; background: transparent; }
