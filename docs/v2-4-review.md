@@ -22,3 +22,7 @@ Based on V2.3 `1e73de04e403439d6f8216f7476eb6b0bd449f35`, including the latest m
 ## Preview workflow
 
 The connected Cloudflare project is `shemotion`, linked to `justaguyhoz/shemotion`, with production branch `main` and previews enabled for development branches. Publishing the dedicated V2.4 branch triggers its review-only Preview. Production remains on `157acb82c41e73440c02fd862550bc35b931804c`. No settings or bindings are changed. Existing Preview database/storage bindings are shared, so live QA remains read-only and invalid-form-only. See `cloudflare-preview-workflow.md` for the established workflow.
+
+## Testimonial visibility correction
+
+Normal-motion review found a legacy reveal selector hiding the testimonial heading while JavaScript revealed its parent only. Earlier screenshots forced reveal visibility and therefore masked this bug. The nested heading hide selector and testimonial parent reveal dependency are removed: title, introduction, cover and caption remain visible without animation. Corrected evidence is captured with normal motion, natural scrolling and no forced visibility styles.

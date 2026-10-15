@@ -570,7 +570,7 @@ function initialisePage() {
   setupNavigation();
 
   setupReveal([...document.querySelectorAll(
-    ".events .section-heading, .experience .section-heading, .stage, .experience-followup, .feedback-editorial, .coach-grid, .media-features .section-heading, .media-feature-grid, .organisations-invitation-inner, .contact-shell, .instagram [data-reveal]"
+    ".events .section-heading, .experience .section-heading, .stage, .experience-followup, .coach-grid, .media-features .section-heading, .media-feature-grid, .organisations-invitation-inner, .contact-shell, .instagram [data-reveal]"
   )]);
   document.querySelectorAll("[data-pill-rotator]").forEach((container) => setupTextRotator(container));
   document.querySelectorAll("[data-quote-rotator]").forEach((container) => setupTextRotator(container, { mobileOnly: true, duration: 3700, gap: 700 }));
