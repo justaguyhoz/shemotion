@@ -1,0 +1,22 @@
+{
+  "preview": "https://1334387e.shemotion.pages.dev",
+  "implementationCommit": "aec59c5ca67c22bed34e056a8dfbf1892d99249c",
+  "pages": [
+    {
+      "path": "/",
+      "status": 200,
+      "width": 1440,
+      "scroll": 1440,
+      "title": "Women's Movement & Embodiment Gold Coast | Shemotion"
+    },
+    {
+      "path": "/",
+      "status": 200,
+      "width": 375,
+      "scroll": 375,
+      "title": "Women's Movement & Embodiment Gold Coast | Shemotion"
+    }
+  ],
+  "pageErrors": [],
+  "remoteRequests": "GET/HEAD/OPTIONS only; external analytics blocked"
+}

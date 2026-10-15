@@ -1,0 +1,157 @@
+{
+  "responsive": [
+    {
+      "width": 320,
+      "scrollWidth": 320,
+      "images": [
+        {
+          "src": "assets/concept5-home-calm.webp",
+          "alt": "A woman in an ivory dress resting quietly in warm sunlight, with a hand over her heart",
+          "loaded": true,
+          "position": "50% 0%"
+        },
+        {
+          "src": "assets/v3-joy.webp",
+          "alt": "A smiling woman enjoying the golden afternoon sunlight",
+          "loaded": true,
+          "position": "70% 50%"
+        }
+      ],
+      "hero": "assets/v3-movement.webp"
+    },
+    {
+      "width": 375,
+      "scrollWidth": 375,
+      "images": [
+        {
+          "src": "assets/concept5-home-calm.webp",
+          "alt": "A woman in an ivory dress resting quietly in warm sunlight, with a hand over her heart",
+          "loaded": true,
+          "position": "50% 0%"
+        },
+        {
+          "src": "assets/v3-joy.webp",
+          "alt": "A smiling woman enjoying the golden afternoon sunlight",
+          "loaded": true,
+          "position": "70% 50%"
+        }
+      ],
+      "hero": "assets/v3-movement.webp"
+    },
+    {
+      "width": 390,
+      "scrollWidth": 390,
+      "images": [
+        {
+          "src": "assets/concept5-home-calm.webp",
+          "alt": "A woman in an ivory dress resting quietly in warm sunlight, with a hand over her heart",
+          "loaded": true,
+          "position": "50% 0%"
+        },
+        {
+          "src": "assets/v3-joy.webp",
+          "alt": "A smiling woman enjoying the golden afternoon sunlight",
+          "loaded": true,
+          "position": "70% 50%"
+        }
+      ],
+      "hero": "assets/v3-movement.webp"
+    },
+    {
+      "width": 430,
+      "scrollWidth": 430,
+      "images": [
+        {
+          "src": "assets/concept5-home-calm.webp",
+          "alt": "A woman in an ivory dress resting quietly in warm sunlight, with a hand over her heart",
+          "loaded": true,
+          "position": "50% 0%"
+        },
+        {
+          "src": "assets/v3-joy.webp",
+          "alt": "A smiling woman enjoying the golden afternoon sunlight",
+          "loaded": true,
+          "position": "70% 50%"
+        }
+      ],
+      "hero": "assets/v3-movement.webp"
+    },
+    {
+      "width": 768,
+      "scrollWidth": 768,
+      "images": [
+        {
+          "src": "assets/concept5-home-calm.webp",
+          "alt": "A woman in an ivory dress resting quietly in warm sunlight, with a hand over her heart",
+          "loaded": true,
+          "position": "50% 0%"
+        },
+        {
+          "src": "assets/v3-joy.webp",
+          "alt": "A smiling woman enjoying the golden afternoon sunlight",
+          "loaded": true,
+          "position": "70% 50%"
+        }
+      ],
+      "hero": "assets/v3-movement.webp"
+    },
+    {
+      "width": 1024,
+      "scrollWidth": 1024,
+      "images": [
+        {
+          "src": "assets/concept5-home-calm.webp",
+          "alt": "A woman in an ivory dress resting quietly in warm sunlight, with a hand over her heart",
+          "loaded": true,
+          "position": "50% 0%"
+        },
+        {
+          "src": "assets/v3-joy.webp",
+          "alt": "A smiling woman enjoying the golden afternoon sunlight",
+          "loaded": true,
+          "position": "70% 50%"
+        }
+      ],
+      "hero": "assets/v3-movement.webp"
+    },
+    {
+      "width": 1440,
+      "scrollWidth": 1440,
+      "images": [
+        {
+          "src": "assets/concept5-home-calm.webp",
+          "alt": "A woman in an ivory dress resting quietly in warm sunlight, with a hand over her heart",
+          "loaded": true,
+          "position": "50% 0%"
+        },
+        {
+          "src": "assets/v3-joy.webp",
+          "alt": "A smiling woman enjoying the golden afternoon sunlight",
+          "loaded": true,
+          "position": "70% 50%"
+        }
+      ],
+      "hero": "assets/v3-movement.webp"
+    },
+    {
+      "width": 1920,
+      "scrollWidth": 1920,
+      "images": [
+        {
+          "src": "assets/concept5-home-calm.webp",
+          "alt": "A woman in an ivory dress resting quietly in warm sunlight, with a hand over her heart",
+          "loaded": true,
+          "position": "50% 0%"
+        },
+        {
+          "src": "assets/v3-joy.webp",
+          "alt": "A smiling woman enjoying the golden afternoon sunlight",
+          "loaded": true,
+          "position": "70% 50%"
+        }
+      ],
+      "hero": "assets/v3-movement.webp"
+    }
+  ],
+  "pageErrors": []
+}
