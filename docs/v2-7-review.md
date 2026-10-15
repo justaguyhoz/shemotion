@@ -38,3 +38,9 @@ Native Safari/WebKit is unavailable because this environment lacks its host libr
 `styles.css`, `index.html`, `script.js`, `shared/public-pages.js`, `functions/events/index.js`, `functions/events/[slug].js`, public static entrypoints in `private-groups-retreats`, `what-is-shemotion`, `privacy`, `terms`, `cancellations-refunds`, `test/events.test.js`, `docs/design-system.md` and this review document.
 
 No admin stylesheet/interface, API behaviour, database record, migration, dependency, image/video asset or production setting is changed. Deployment uses the existing justaguyh GitHub-to-Cloudflare Pages Preview integration, project `shemotion`. `main` remains the production branch at `157acb82c41e73440c02fd862550bc35b931804c`.
+
+## Review follow-up: mobile alignment and nested FAQ
+
+Homepage editorial text and CTA groups now centre at mobile widths up to 700px, as does the shared mobile footer. Functional labels, event details and question rows keep their reading alignment. FAQ uses a native section-level details/summary disclosure, initially closed, containing the existing individual question accordions. The section title opens and closes the question list by pointer, Enter or Space, with a rotating chevron; the outer disclosure also works without JavaScript. Closed FAQ height is 96px at 375px and about 100px at 1440px, expanding to the question list only when requested.
+
+120 tests and production build pass. Actual Chromium checks at 320, 375, 390, 430, 768, 1024 and 1440px verify the requested mobile centring, initial collapse, outer keyboard/click toggles, inner question toggles and no overflow. Normal-motion desktop/mobile screenshots capture closed and expanded states. No admin, booking, contact, data or production settings change.

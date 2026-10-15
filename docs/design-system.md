@@ -34,3 +34,7 @@ Event rails remain scrollable within the right content column; card fit and foca
 ## Accessibility and verification
 
 FAQ buttons retain native keyboard activation, aria-expanded/aria-controls, hidden/inert answers and a rotating SVG chevron. All start collapsed. Coach disclosure and native video controls remain. Reduced motion, no-JavaScript visibility and print rules remain supported. Visually review 320, 375, 390, 430, 768, 1024 and 1440px and verify there is no horizontal page overflow. Never force reveal styles visible when generating review screenshots.
+
+## V2.7 review corrections
+
+At mobile widths up to 700px, homepage editorial headings, paragraphs, CTA groups and the shared footer align centrally. Form labels, field values, event details and accordion questions keep their functional reading alignment. FAQ now uses a native, initially closed section disclosure, with the existing individual question accordions nested inside it. Its closed title row is compact on both desktop and mobile, and its chevron reflects the native open state. No JavaScript is needed to open the outer disclosure.
