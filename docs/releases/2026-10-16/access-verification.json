@@ -1,0 +1,41 @@
+{
+  "fixture": "Locally generated RSA test keys and isolated test issuer only; no live tokens or auth configuration changed",
+  "checks": [
+    {
+      "name": "valid allowlisted admin",
+      "status": 200
+    },
+    {
+      "name": "expired token",
+      "status": 401
+    },
+    {
+      "name": "wrong audience",
+      "status": 401
+    },
+    {
+      "name": "wrong issuer",
+      "status": 401
+    },
+    {
+      "name": "unapproved email",
+      "status": 403
+    },
+    {
+      "name": "not-yet-valid token",
+      "status": 401
+    },
+    {
+      "name": "missing token",
+      "status": 401
+    },
+    {
+      "name": "malformed token",
+      "status": 401
+    },
+    {
+      "name": "tampered signature",
+      "status": 401
+    }
+  ]
+}

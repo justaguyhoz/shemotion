@@ -1,0 +1,66 @@
+{
+  "environment": "Local D1/R2 only. Existing localhost development authentication path; no production writes or external email requests.",
+  "checks": [
+    {
+      "check": "admin screen and shared navigation",
+      "path": "/admin/",
+      "status": 200
+    },
+    {
+      "check": "admin screen and shared navigation",
+      "path": "/admin/media/",
+      "status": 200
+    },
+    {
+      "check": "admin screen and shared navigation",
+      "path": "/admin/contacts/",
+      "status": 200
+    },
+    {
+      "check": "admin screen and shared navigation",
+      "path": "/admin/outreach/",
+      "status": 200
+    },
+    {
+      "check": "events editor dialog and calendar/list switch",
+      "passed": true
+    },
+    {
+      "check": "event create, draft exclusion, publish, detail route, sold-out update and delete",
+      "passed": true
+    },
+    {
+      "check": "media UI create/edit/publish/delete, homepage publication state, R2 image upload/read/removal",
+      "passed": true
+    },
+    {
+      "check": "local admin data API",
+      "path": "/api/admin/contacts",
+      "status": 200
+    },
+    {
+      "check": "local admin data API",
+      "path": "/api/admin/locations",
+      "status": 200
+    },
+    {
+      "check": "local admin data API",
+      "path": "/api/admin/events",
+      "status": 200
+    },
+    {
+      "check": "local admin data API",
+      "path": "/api/admin/media-features",
+      "status": 200
+    },
+    {
+      "check": "invalid admin inputs and contact origin/validation rejection",
+      "passed": true
+    },
+    {
+      "check": "mobile admin menu open and Escape close",
+      "passed": true
+    }
+  ],
+  "pageErrors": []
+}

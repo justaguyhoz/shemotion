@@ -1,0 +1,36 @@
+[
+  {
+    "id": 1,
+    "title": "When Did We Stop Moving for Joy?",
+    "publisher": "The Times",
+    "mediaType": "article",
+    "externalUrl": "https://thetimes.com.au/lifestyle/health/53105-when-did-we-stop-moving-for-joy",
+    "shortDescription": "Katty shares her perspective on rediscovering the freedom to move, express ourselves and reconnect with joy.",
+    "thumbnailUrl": "/media/features/060abb3e-e2ee-4ce7-ae5f-492c8dc24958.webp",
+    "imageAlt": "The Times logo",
+    "publicationDate": "2026-10-13",
+    "contributionType": "written_by_katty",
+    "status": "published",
+    "isFeatured": true,
+    "displayOrder": 1,
+    "createdAt": "2026-10-13 05:14:07",
+    "updatedAt": "2026-10-13 05:36:33"
+  },
+  {
+    "id": 2,
+    "title": "Your Body Is Not a Performance: Feminine Embodiment, Movement & Self-Trust",
+    "publisher": "Spotify",
+    "mediaType": "podcast",
+    "externalUrl": "https://open.spotify.com/episode/6fjAUemp1Evoz40N13fkbx",
+    "shortDescription": "Katty discusses feminine embodiment, movement and self-trust.",
+    "thumbnailUrl": "/assets/katty-podcast-cover.webp",
+    "imageAlt": "Podcast episode artwork from Spotify",
+    "publicationDate": null,
+    "contributionType": "podcast_guest",
+    "status": "published",
+    "isFeatured": true,
+    "displayOrder": 2,
+    "createdAt": "2026-10-16 00:24:29",
+    "updatedAt": "2026-10-16 00:24:29"
+  }
+]

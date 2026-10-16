@@ -149,6 +149,9 @@ function escapeHtml(value) {
 export function renderMediaFeatureCard(item, index = 0) {
   const title = escapeHtml(item.title);
   const publisher = escapeHtml(item.publisher);
+  const subtitleAt = item.mediaType === "podcast" ? item.title.indexOf(": ") : -1;
+  const displayTitle = subtitleAt < 0 ? title
+    : `${escapeHtml(item.title.slice(0, subtitleAt + 1))} <span class="media-feature-subtitle">${escapeHtml(item.title.slice(subtitleAt + 2))}</span>`;
   // Use the official Times wordmark for the old fallback without changing its record.
   const fallbackArtwork = "/media/features/060abb3e-e2ee-4ce7-ae5f-492c8dc24958.webp";
   const useTimesLogo = (!item.thumbnailUrl || item.thumbnailUrl === fallbackArtwork)
@@ -165,7 +168,7 @@ export function renderMediaFeatureCard(item, index = 0) {
   return `<article class="media-feature-card ${tile}">
     <a class="media-feature-link" href="${escapeHtml(item.externalUrl)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(aria)}" data-media-outbound data-media-id="${escapeHtml(item.id)}" data-media-type="${escapeHtml(item.mediaType)}" data-media-publisher="${publisher}" data-media-title="${title}">
       <span class="media-feature-thumbnail">${image}</span>
-      <span class="media-feature-content">${hasIdentity ? `<span class="media-feature-publisher">${publisher}</span>` : ""}<span class="media-feature-title">${title}</span><span class="media-feature-arrow" aria-hidden="true"><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></span></span>
+      <span class="media-feature-content">${hasIdentity ? `<span class="media-feature-publisher">${publisher}</span>` : ""}<span class="media-feature-title">${displayTitle}</span><span class="media-feature-arrow" aria-hidden="true"><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></span></span>
     </a>
   </article>`;
 }

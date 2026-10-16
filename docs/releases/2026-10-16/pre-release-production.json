@@ -1,0 +1,9 @@
+{
+  "deploymentId": "2c3c23c6-e236-41ae-b459-8d59c887bfd7",
+  "commit": "157acb82c41e73440c02fd862550bc35b931804c",
+  "databaseQuickCheck": "ok",
+  "mediaBeforeRelease": [{"id":1,"title":"When Did We Stop Moving for Joy?","status":"published","isFeatured":true}],
+  "podcastPreviouslyPresent": false,
+  "schemaChanges": false,
+  "dataChangeScope": "Approved Spotify podcast record only; no event/contact/enquiry updates."
+}

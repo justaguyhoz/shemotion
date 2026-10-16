@@ -392,7 +392,8 @@ body:not(.home-page) .contact-intro h2 { max-width: 22ch; font-size: var(--type-
 .body-flower { width: 150px; height: 245px; right: 20px; bottom: -34px; opacity: .9; }
 .experience .section-heading > p:last-child { font: 400 13px/1.65 var(--sans); margin-top: var(--space-sm); }
 .home-page .contact-intro::before { left: -120px; top: -145px; width: 160px; height: 250px; }
-.joy-inset img { object-position: 70% center; }
+.joy-inset-photo { width: 100%; height: 100%; overflow: hidden; clip-path: var(--torn); }
+.joy-inset img { object-position: 45% center; transform: scale(1.65); transform-origin: 42% 22%; }
 .home-body-photo img { object-position: 50% 0%; transform: none; }
 .home-body-photo { right: 90px; }
 .home-body-art .paper-note { width: 140px; padding: 12px; font-size: 23px; bottom: -8px; }
@@ -533,14 +534,17 @@ body:not(.home-page) .contact-intro h2 { max-width: 22ch; font-size: var(--type-
  .home-page .event-carousel .event-pill-description { font-size: 14px; }
  .home-page .event-grid { padding: 10px 5px 15px; }
  .home-page .event-detail-hint { margin-top: 6px; }
- .site-footer { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 16px; padding-block: 20px; }
- .footer-brand { justify-items: center; gap: 8px; }
- .footer-brand p { font-size: 15px; max-width: none; }
- .footer-links .footer-nav { justify-content: center; gap: 2px 20px; }
- .footer-links a { font-size: 11px; }
- .footer-details { justify-items: center; gap: 5px; }
- .footer-details .footer-social-links { justify-content: center; }
- .footer-details .footer-meta { display: flex; gap: 12px; justify-content: center; font-size: 10px; }
+ .site-footer { grid-template-columns: 1fr; justify-items: stretch; text-align: left; gap: var(--space-md); padding-block: var(--space-lg); }
+ .footer-brand { justify-items: start; gap: var(--space-sm); }
+ .footer-brand p { font-size: 14px; max-width: 32ch; }
+ .footer-links { border-block: 1px solid var(--editorial-divider); padding-block: var(--space-xs); }
+ .footer-links .footer-nav { grid-template-columns: repeat(2,minmax(0,1fr)); justify-content: start; gap: 0 var(--space-md); }
+ .footer-links a { min-height: 44px; font-size: 11px; text-align: left; }
+ .footer-details { grid-template-columns: 1fr auto; align-items: center; justify-items: start; gap: var(--space-sm) var(--space-md); }
+ .footer-details .footer-social-links { grid-column: 1; grid-row: 1; justify-content: start; gap: var(--space-sm); }
+ .footer-details .social-link { width: 40px; height: 40px; }
+ .footer-details .footer-meta { grid-column: 1 / -1; grid-row: 2; display: grid; justify-items: start; gap: 3px; font-size: 10px; }
+ .footer-details .floral-motion-control { grid-column: 2; grid-row: 1; min-height: 44px; text-align: right; font-size: 11px; }
  .organisation-opening,.practice-opening { grid-template-columns: 1fr; gap: var(--space-lg); }
  .organisation-opening h1,.practice-opening h1 { font-size: 44px; }
  .chapter-lead { font-size: 23px; }
@@ -617,4 +621,17 @@ body:not(.home-page) .contact-intro h2 { max-width: 22ch; font-size: var(--type-
   content: ''; position: absolute; inset: -12px 0; z-index: -1; pointer-events: none;
   background: var(--blush) url('assets/v3-paper.svg');
   clip-path: polygon(0 13px, 3% 9px, 5% 11px, 9% 5px, 12% 8px, 16% 3px, 19% 6px, 23% 2px, 27% 7px, 31% 4px, 35% 11px, 38% 8px, 42% 14px, 46% 10px, 50% 16px, 54% 11px, 58% 13px, 62% 6px, 66% 9px, 70% 3px, 74% 7px, 78% 2px, 82% 5px, 86% 1px, 90% 7px, 94% 4px, 97% 10px, 100% 6px, 100% calc(100% - 9px), 96% calc(100% - 4px), 92% calc(100% - 8px), 88% calc(100% - 2px), 84% calc(100% - 6px), 80% calc(100% - 3px), 76% calc(100% - 11px), 72% calc(100% - 7px), 68% calc(100% - 14px), 64% calc(100% - 9px), 60% calc(100% - 12px), 56% calc(100% - 5px), 52% calc(100% - 8px), 48% calc(100% - 2px), 44% calc(100% - 6px), 40% calc(100% - 3px), 36% calc(100% - 9px), 32% calc(100% - 5px), 28% calc(100% - 12px), 24% calc(100% - 8px), 20% calc(100% - 14px), 16% calc(100% - 10px), 12% calc(100% - 5px), 8% calc(100% - 9px), 4% calc(100% - 3px), 0 calc(100% - 7px));
+}
+
+/* Publication cards share the paper band without squeezing longer podcast titles. */
+.home-page .media-feature-grid:not(.is-single) { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); width: 100%; }
+.home-page .media-feature-link { height: 100%; grid-template-columns: 90px minmax(0,1fr); }
+.media-feature-subtitle { display: block; margin-top: var(--space-sm); font: 400 11px/1.5 var(--sans); letter-spacing: 0; }
+.media-feature-link[data-media-type="podcast"] .media-feature-title { font-size: 22px; line-height: 1.12; }
+@media(min-width:701px) and (max-width:900px) {
+ .home-page main > section.media-features { grid-template-columns: 1fr; gap: var(--space-lg); }
+}
+@media(max-width:700px) {
+ .home-page .media-feature-grid:not(.is-single) { grid-template-columns: 1fr; }
+ .home-page .media-feature-link { grid-template-columns: 76px minmax(0,1fr); }
 }

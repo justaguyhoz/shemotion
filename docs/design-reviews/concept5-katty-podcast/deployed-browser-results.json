@@ -1,0 +1,108 @@
+{
+  "preview": "https://6a183746.shemotion.pages.dev",
+  "commit": "uncommitted; base 53a52a0004593e44fbb3c17a2c585db50e7a5e86",
+  "results": [
+    {
+      "width": 375,
+      "scrollWidth": 375,
+      "photos": [
+        {
+          "src": "assets/katty-studio-landscape.webp",
+          "loaded": true
+        },
+        {
+          "src": "assets/katty-cream-portrait.webp",
+          "loaded": true
+        }
+      ],
+      "podcasts": 1,
+      "podcastHref": "https://open.spotify.com/episode/6fjAUemp1Evoz40N13fkbx",
+      "timesHref": "https://thetimes.com.au/lifestyle/health/53105-when-did-we-stop-moving-for-joy",
+      "eventCount": 1,
+      "booking": "https://api.leadconnectorhq.com/widget/booking/YAZLi8tXkHkdcCnmjAy8"
+    },
+    {
+      "width": 768,
+      "scrollWidth": 768,
+      "photos": [
+        {
+          "src": "assets/katty-studio-landscape.webp",
+          "loaded": true
+        },
+        {
+          "src": "assets/katty-cream-portrait.webp",
+          "loaded": true
+        }
+      ],
+      "podcasts": 1,
+      "podcastHref": "https://open.spotify.com/episode/6fjAUemp1Evoz40N13fkbx",
+      "timesHref": "https://thetimes.com.au/lifestyle/health/53105-when-did-we-stop-moving-for-joy",
+      "eventCount": 1,
+      "booking": "https://api.leadconnectorhq.com/widget/booking/YAZLi8tXkHkdcCnmjAy8"
+    },
+    {
+      "width": 1024,
+      "scrollWidth": 1024,
+      "photos": [
+        {
+          "src": "assets/katty-studio-landscape.webp",
+          "loaded": true
+        },
+        {
+          "src": "assets/katty-cream-portrait.webp",
+          "loaded": true
+        }
+      ],
+      "podcasts": 1,
+      "podcastHref": "https://open.spotify.com/episode/6fjAUemp1Evoz40N13fkbx",
+      "timesHref": "https://thetimes.com.au/lifestyle/health/53105-when-did-we-stop-moving-for-joy",
+      "eventCount": 1,
+      "booking": "https://api.leadconnectorhq.com/widget/booking/YAZLi8tXkHkdcCnmjAy8"
+    },
+    {
+      "width": 1440,
+      "scrollWidth": 1440,
+      "photos": [
+        {
+          "src": "assets/katty-studio-landscape.webp",
+          "loaded": true
+        },
+        {
+          "src": "assets/katty-cream-portrait.webp",
+          "loaded": true
+        }
+      ],
+      "podcasts": 1,
+      "podcastHref": "https://open.spotify.com/episode/6fjAUemp1Evoz40N13fkbx",
+      "timesHref": "https://thetimes.com.au/lifestyle/health/53105-when-did-we-stop-moving-for-joy",
+      "eventCount": 1,
+      "booking": "https://api.leadconnectorhq.com/widget/booking/YAZLi8tXkHkdcCnmjAy8"
+    },
+    {
+      "path": "/api/events",
+      "status": 200
+    },
+    {
+      "path": "/what-is-shemotion/",
+      "status": 200
+    },
+    {
+      "path": "/private-groups-retreats/",
+      "status": 200
+    },
+    {
+      "path": "/design-review/",
+      "status": 200
+    },
+    {
+      "path": "/design-review/come-home-375.jpg",
+      "status": 200
+    },
+    {
+      "path": "/design-review/media-1440.jpg",
+      "status": 200
+    }
+  ],
+  "pageErrors": [],
+  "remoteRequests": "GET/HEAD/OPTIONS only"
+}

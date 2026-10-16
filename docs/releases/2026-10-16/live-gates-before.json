@@ -1,0 +1,62 @@
+{
+  "checks": [
+    {
+      "path": "/api/events",
+      "status": 200
+    },
+    {
+      "path": "/sitemap.xml",
+      "status": 200
+    },
+    {
+      "path": "/events/",
+      "status": 200
+    },
+    {
+      "path": "/admin/",
+      "unauthenticatedStatus": 302,
+      "accessRedirect": true
+    },
+    {
+      "path": "/admin/media/",
+      "unauthenticatedStatus": 302,
+      "accessRedirect": true
+    },
+    {
+      "path": "/api/admin/events",
+      "unauthenticatedStatus": 302,
+      "accessRedirect": true
+    },
+    {
+      "path": "/api/admin/media-features",
+      "unauthenticatedStatus": 302,
+      "accessRedirect": true
+    },
+    {
+      "path": "/api/admin/contacts",
+      "unauthenticatedStatus": 302,
+      "accessRedirect": true
+    },
+    {
+      "path": "/api/admin/locations",
+      "unauthenticatedStatus": 302,
+      "accessRedirect": true
+    },
+    {
+      "path": "/api/admin/outreach",
+      "unauthenticatedStatus": 302,
+      "accessRedirect": true
+    },
+    {
+      "path": "/api/contact",
+      "check": "foreign origin rejected before storage/delivery",
+      "status": 403
+    },
+    {
+      "path": "/api/contact",
+      "check": "empty payload rejected before storage/delivery",
+      "status": 400
+    }
+  ],
+  "limitations": "No interactive authenticated production admin session and no valid live email submission performed. Local admin CRUD and mocked delivery are checked separately."
+}

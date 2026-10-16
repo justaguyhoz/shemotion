@@ -1,0 +1,338 @@
+{
+  "responsive": [
+    {
+      "width": 320,
+      "scrollWidth": 320,
+      "images": [
+        {
+          "src": "assets/katty-studio-landscape.webp",
+          "alt": "Katty seated in a sunlit studio, with women gathered in the background",
+          "loaded": true
+        },
+        {
+          "src": "assets/katty-cream-portrait.webp",
+          "alt": "Katty in a flowing cream dress, with one hand over her heart",
+          "loaded": true
+        }
+      ],
+      "media": [
+        {
+          "href": "https://thetimes.com.au/lifestyle/health/53105-when-did-we-stop-moving-for-joy",
+          "label": "Read article: When Did We Stop Moving for Joy? on The Times (opens in a new tab)",
+          "type": "article",
+          "title": "When Did We Stop Moving for Joy?"
+        },
+        {
+          "href": "https://open.spotify.com/episode/6fjAUemp1Evoz40N13fkbx",
+          "label": "Listen to podcast: Your Body Is Not a Performance: Feminine Embodiment, Movement & Self-Trust on Spotify (opens in a new tab)",
+          "type": "podcast",
+          "title": "Your Body Is Not a Performance: Feminine Embodiment, Movement & Self-Trust"
+        }
+      ],
+      "videoRatio": 0.5621301775147929,
+      "faqClosed": true,
+      "contactFields": [
+        "name",
+        "email",
+        "phone",
+        "interestCategory",
+        "message",
+        "marketingConsent"
+      ]
+    },
+    {
+      "width": 375,
+      "scrollWidth": 375,
+      "images": [
+        {
+          "src": "assets/katty-studio-landscape.webp",
+          "alt": "Katty seated in a sunlit studio, with women gathered in the background",
+          "loaded": true
+        },
+        {
+          "src": "assets/katty-cream-portrait.webp",
+          "alt": "Katty in a flowing cream dress, with one hand over her heart",
+          "loaded": true
+        }
+      ],
+      "media": [
+        {
+          "href": "https://thetimes.com.au/lifestyle/health/53105-when-did-we-stop-moving-for-joy",
+          "label": "Read article: When Did We Stop Moving for Joy? on The Times (opens in a new tab)",
+          "type": "article",
+          "title": "When Did We Stop Moving for Joy?"
+        },
+        {
+          "href": "https://open.spotify.com/episode/6fjAUemp1Evoz40N13fkbx",
+          "label": "Listen to podcast: Your Body Is Not a Performance: Feminine Embodiment, Movement & Self-Trust on Spotify (opens in a new tab)",
+          "type": "podcast",
+          "title": "Your Body Is Not a Performance: Feminine Embodiment, Movement & Self-Trust"
+        }
+      ],
+      "videoRatio": 0.5621301775147929,
+      "faqClosed": true,
+      "contactFields": [
+        "name",
+        "email",
+        "phone",
+        "interestCategory",
+        "message",
+        "marketingConsent"
+      ]
+    },
+    {
+      "width": 390,
+      "scrollWidth": 390,
+      "images": [
+        {
+          "src": "assets/katty-studio-landscape.webp",
+          "alt": "Katty seated in a sunlit studio, with women gathered in the background",
+          "loaded": true
+        },
+        {
+          "src": "assets/katty-cream-portrait.webp",
+          "alt": "Katty in a flowing cream dress, with one hand over her heart",
+          "loaded": true
+        }
+      ],
+      "media": [
+        {
+          "href": "https://thetimes.com.au/lifestyle/health/53105-when-did-we-stop-moving-for-joy",
+          "label": "Read article: When Did We Stop Moving for Joy? on The Times (opens in a new tab)",
+          "type": "article",
+          "title": "When Did We Stop Moving for Joy?"
+        },
+        {
+          "href": "https://open.spotify.com/episode/6fjAUemp1Evoz40N13fkbx",
+          "label": "Listen to podcast: Your Body Is Not a Performance: Feminine Embodiment, Movement & Self-Trust on Spotify (opens in a new tab)",
+          "type": "podcast",
+          "title": "Your Body Is Not a Performance: Feminine Embodiment, Movement & Self-Trust"
+        }
+      ],
+      "videoRatio": 0.5621301775147929,
+      "faqClosed": true,
+      "contactFields": [
+        "name",
+        "email",
+        "phone",
+        "interestCategory",
+        "message",
+        "marketingConsent"
+      ]
+    },
+    {
+      "width": 430,
+      "scrollWidth": 430,
+      "images": [
+        {
+          "src": "assets/katty-studio-landscape.webp",
+          "alt": "Katty seated in a sunlit studio, with women gathered in the background",
+          "loaded": true
+        },
+        {
+          "src": "assets/katty-cream-portrait.webp",
+          "alt": "Katty in a flowing cream dress, with one hand over her heart",
+          "loaded": true
+        }
+      ],
+      "media": [
+        {
+          "href": "https://thetimes.com.au/lifestyle/health/53105-when-did-we-stop-moving-for-joy",
+          "label": "Read article: When Did We Stop Moving for Joy? on The Times (opens in a new tab)",
+          "type": "article",
+          "title": "When Did We Stop Moving for Joy?"
+        },
+        {
+          "href": "https://open.spotify.com/episode/6fjAUemp1Evoz40N13fkbx",
+          "label": "Listen to podcast: Your Body Is Not a Performance: Feminine Embodiment, Movement & Self-Trust on Spotify (opens in a new tab)",
+          "type": "podcast",
+          "title": "Your Body Is Not a Performance: Feminine Embodiment, Movement & Self-Trust"
+        }
+      ],
+      "videoRatio": 0.5621301775147929,
+      "faqClosed": true,
+      "contactFields": [
+        "name",
+        "email",
+        "phone",
+        "interestCategory",
+        "message",
+        "marketingConsent"
+      ]
+    },
+    {
+      "width": 768,
+      "scrollWidth": 768,
+      "images": [
+        {
+          "src": "assets/katty-studio-landscape.webp",
+          "alt": "Katty seated in a sunlit studio, with women gathered in the background",
+          "loaded": true
+        },
+        {
+          "src": "assets/katty-cream-portrait.webp",
+          "alt": "Katty in a flowing cream dress, with one hand over her heart",
+          "loaded": true
+        }
+      ],
+      "media": [
+        {
+          "href": "https://thetimes.com.au/lifestyle/health/53105-when-did-we-stop-moving-for-joy",
+          "label": "Read article: When Did We Stop Moving for Joy? on The Times (opens in a new tab)",
+          "type": "article",
+          "title": "When Did We Stop Moving for Joy?"
+        },
+        {
+          "href": "https://open.spotify.com/episode/6fjAUemp1Evoz40N13fkbx",
+          "label": "Listen to podcast: Your Body Is Not a Performance: Feminine Embodiment, Movement & Self-Trust on Spotify (opens in a new tab)",
+          "type": "podcast",
+          "title": "Your Body Is Not a Performance: Feminine Embodiment, Movement & Self-Trust"
+        }
+      ],
+      "videoRatio": 0.5630026809651475,
+      "faqClosed": true,
+      "contactFields": [
+        "name",
+        "email",
+        "phone",
+        "interestCategory",
+        "message",
+        "marketingConsent"
+      ]
+    },
+    {
+      "width": 1024,
+      "scrollWidth": 1024,
+      "images": [
+        {
+          "src": "assets/katty-studio-landscape.webp",
+          "alt": "Katty seated in a sunlit studio, with women gathered in the background",
+          "loaded": true
+        },
+        {
+          "src": "assets/katty-cream-portrait.webp",
+          "alt": "Katty in a flowing cream dress, with one hand over her heart",
+          "loaded": true
+        }
+      ],
+      "media": [
+        {
+          "href": "https://thetimes.com.au/lifestyle/health/53105-when-did-we-stop-moving-for-joy",
+          "label": "Read article: When Did We Stop Moving for Joy? on The Times (opens in a new tab)",
+          "type": "article",
+          "title": "When Did We Stop Moving for Joy?"
+        },
+        {
+          "href": "https://open.spotify.com/episode/6fjAUemp1Evoz40N13fkbx",
+          "label": "Listen to podcast: Your Body Is Not a Performance: Feminine Embodiment, Movement & Self-Trust on Spotify (opens in a new tab)",
+          "type": "podcast",
+          "title": "Your Body Is Not a Performance: Feminine Embodiment, Movement & Self-Trust"
+        }
+      ],
+      "videoRatio": 0.5630026809651475,
+      "faqClosed": true,
+      "contactFields": [
+        "name",
+        "email",
+        "phone",
+        "interestCategory",
+        "message",
+        "marketingConsent"
+      ]
+    },
+    {
+      "width": 1440,
+      "scrollWidth": 1440,
+      "images": [
+        {
+          "src": "assets/katty-studio-landscape.webp",
+          "alt": "Katty seated in a sunlit studio, with women gathered in the background",
+          "loaded": true
+        },
+        {
+          "src": "assets/katty-cream-portrait.webp",
+          "alt": "Katty in a flowing cream dress, with one hand over her heart",
+          "loaded": true
+        }
+      ],
+      "media": [
+        {
+          "href": "https://thetimes.com.au/lifestyle/health/53105-when-did-we-stop-moving-for-joy",
+          "label": "Read article: When Did We Stop Moving for Joy? on The Times (opens in a new tab)",
+          "type": "article",
+          "title": "When Did We Stop Moving for Joy?"
+        },
+        {
+          "href": "https://open.spotify.com/episode/6fjAUemp1Evoz40N13fkbx",
+          "label": "Listen to podcast: Your Body Is Not a Performance: Feminine Embodiment, Movement & Self-Trust on Spotify (opens in a new tab)",
+          "type": "podcast",
+          "title": "Your Body Is Not a Performance: Feminine Embodiment, Movement & Self-Trust"
+        }
+      ],
+      "videoRatio": 0.5630026809651475,
+      "faqClosed": true,
+      "contactFields": [
+        "name",
+        "email",
+        "phone",
+        "interestCategory",
+        "message",
+        "marketingConsent"
+      ]
+    },
+    {
+      "width": 1920,
+      "scrollWidth": 1920,
+      "images": [
+        {
+          "src": "assets/katty-studio-landscape.webp",
+          "alt": "Katty seated in a sunlit studio, with women gathered in the background",
+          "loaded": true
+        },
+        {
+          "src": "assets/katty-cream-portrait.webp",
+          "alt": "Katty in a flowing cream dress, with one hand over her heart",
+          "loaded": true
+        }
+      ],
+      "media": [
+        {
+          "href": "https://thetimes.com.au/lifestyle/health/53105-when-did-we-stop-moving-for-joy",
+          "label": "Read article: When Did We Stop Moving for Joy? on The Times (opens in a new tab)",
+          "type": "article",
+          "title": "When Did We Stop Moving for Joy?"
+        },
+        {
+          "href": "https://open.spotify.com/episode/6fjAUemp1Evoz40N13fkbx",
+          "label": "Listen to podcast: Your Body Is Not a Performance: Feminine Embodiment, Movement & Self-Trust on Spotify (opens in a new tab)",
+          "type": "podcast",
+          "title": "Your Body Is Not a Performance: Feminine Embodiment, Movement & Self-Trust"
+        }
+      ],
+      "videoRatio": 0.5630026809651475,
+      "faqClosed": true,
+      "contactFields": [
+        "name",
+        "email",
+        "phone",
+        "interestCategory",
+        "message",
+        "marketingConsent"
+      ]
+    }
+  ],
+  "pageErrors": [],
+  "accessibility": [
+    {
+      "width": 375,
+      "violations": [],
+      "passes": 18
+    },
+    {
+      "width": 1440,
+      "violations": [],
+      "passes": 18
+    }
+  ],
+  "requests": "Local preview only; external analytics blocked"
+}

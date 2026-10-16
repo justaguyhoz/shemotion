@@ -24,7 +24,7 @@ Three self-hosted, open-license roles: Cormorant Garamond 400/500 and true itali
 
 The wide measure is 1160px; existing shared spacing tokens remain 8, 12, 16, 24, 32 and 40px. Related heading/copy/action gaps are generally 10–16px. Homepage section spacing is generally 26–40px, with explicit optical positioning for collage images and torn-paper overlaps. These placements intentionally differ from standard document flow to reproduce the reference. They are not a second arbitrary paragraph spacing scale.
 
-The hero pairs a large left headline with an expansive torn photograph. The second section combines a sunlit courtyard scene of four women dancing, a small warm-toned smiling portrait, a handwritten paper note and compact copy. Stages form three desktop columns and compact mobile icon/text rows. Events are data-driven horizontal bands without artwork. The dark testimonial band contains real 9:16 footage; the framed player extends outside the panel. Katty retains her original studio photograph, cropped using CSS to focus on her. Media cards retain approved identities only. Instagram precedes Contact, followed by the closed FAQ and a compact three-part footer.
+The hero pairs a large left headline with an expansive torn photograph. The second section combines the supplied studio landscape, a small cream-dress portrait of Katty, a handwritten paper note and compact copy. Stages form three desktop columns and compact mobile icon/text rows. Events are data-driven horizontal bands without artwork. The dark testimonial band contains real 9:16 footage; the framed player extends outside the panel. Katty retains her original studio photograph, cropped using CSS to focus on her. Media cards retain approved identities only. Instagram precedes Contact, followed by the closed FAQ and a compact three-part footer.
 
 ## Decorations and motion
 
@@ -51,3 +51,5 @@ Current review handover: `docs/design-reviews/concept5-refinement/README.md`. Sc
 ## Headline alignment and media paper follow-up
 
 Homepage section headings share the left edge of their supporting copy, following the Come Home composition on mobile and desktop. Explicit margin resets prevent legacy responsive centring from insetting narrower headlines. Experience step headings and copy also align left. The media band uses the existing blush token and paper grain on a separate decorative layer with uneven upper and lower tears; its real publication cards and links remain unclipped.
+
+The approved production mobile footer uses left-aligned brand copy, equal legal/navigation columns, and a distinct social/motion-control row above stacked copyright and ABN details. The existing destinations, business details and reduced-motion control are retained.
