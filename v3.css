@@ -612,8 +612,8 @@ body:not(.home-page) .contact-intro h2 { max-width: 22ch; font-size: var(--type-
 .home-page .section-heading { margin-inline: 0; text-align: left; }
 .home-page .section-heading > p { margin-inline: 0; }
 .home-page main h2 { margin-inline: 0; text-align: left; }
-.home-page .stage-copy { text-align: left; }
-.home-page .stage-copy h3 { margin-inline: 0; text-align: left; }
+.home-page .stage-copy { text-align: center; }
+.home-page .stage-copy h3 { margin-inline: auto; text-align: center; }
 
 /* A blush paper sheet with broad, uneven tears; content remains unclipped. */
 .home-page main > section.media-features { background: transparent; isolation: isolate; z-index: 1; }

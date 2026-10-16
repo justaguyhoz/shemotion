@@ -50,6 +50,6 @@ Current review handover: `docs/design-reviews/concept5-refinement/README.md`. Sc
 
 ## Headline alignment and media paper follow-up
 
-Homepage section headings share the left edge of their supporting copy, following the Come Home composition on mobile and desktop. Explicit margin resets prevent legacy responsive centring from insetting narrower headlines. Experience step headings and copy also align left. The media band uses the existing blush token and paper grain on a separate decorative layer with uneven upper and lower tears; its real publication cards and links remain unclipped.
+Homepage section headings share the left edge of their supporting copy, following the Come Home composition on mobile and desktop. Explicit margin resets prevent legacy responsive centring from insetting narrower headlines. Experience step headings and copy are centred within each step on mobile and desktop. The media band uses the existing blush token and paper grain on a separate decorative layer with uneven upper and lower tears; its real publication cards and links remain unclipped.
 
 The approved production mobile footer uses left-aligned brand copy, equal legal/navigation columns, and a distinct social/motion-control row above stacked copyright and ABN details. The existing destinations, business details and reduced-motion control are retained.

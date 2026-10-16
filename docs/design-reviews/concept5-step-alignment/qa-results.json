@@ -1,0 +1,131 @@
+{
+  "viewports": [
+    {
+      "width": 320,
+      "scroll": 320,
+      "steps": [
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        }
+      ]
+    },
+    {
+      "width": 375,
+      "scroll": 375,
+      "steps": [
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "steps": [
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "scroll": 430,
+      "steps": [
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "scroll": 768,
+      "steps": [
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scroll": 1024,
+      "steps": [
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "steps": [
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        }
+      ]
+    }
+  ],
+  "pageErrors": []
+}
