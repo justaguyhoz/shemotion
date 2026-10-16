@@ -1,0 +1,16 @@
+{
+  "productionUrl": "https://shemotion.com.au/",
+  "deploymentId": "df180cfe-0054-44fd-982d-7e0585128f36",
+  "deploymentUrl": "https://df180cfe.shemotion.pages.dev",
+  "productionCommit": "99f7b5cc2bf662f5478eb9ac49f1dc6b0e5b5592",
+  "productionBranch": "main",
+  "rollbackDeploymentId": "2c3c23c6-e236-41ae-b459-8d59c887bfd7",
+  "rollbackCommit": "157acb82c41e73440c02fd862550bc35b931804c",
+  "rollbackTag": "pre-concept5-20261016",
+  "podcastImport": {"changes": 1,"id": 3,"status": "published","featured": true},
+  "unchangedTimesRecordId": 1,
+  "databaseQuickCheckAfterRelease": "ok",
+  "liveChecksPassed": true,
+  "schemaChanges": false,
+  "customerDataChanged": false
+}
