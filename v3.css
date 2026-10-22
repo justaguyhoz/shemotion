@@ -635,3 +635,93 @@ body:not(.home-page) .contact-intro h2 { max-width: 22ch; font-size: var(--type-
  .home-page .media-feature-grid:not(.is-single) { grid-template-columns: 1fr; }
  .home-page .media-feature-link { grid-template-columns: 76px minmax(0,1fr); }
 }
+
+/* Wide desktop: one shared frame for content and its editorial artwork. */
+@media screen and (min-width:1200px) {
+ :root {
+  --content-wide: clamp(1440px,calc(100vw - 480px),1600px);
+  --desktop-edge: max(var(--gutter),calc((100vw - var(--content-wide))/2));
+  --desktop-body: clamp(15px,.85vw,17px);
+  --type-section: clamp(42px,3.2vw,56px);
+ }
+ .site-header { max-width: none; padding-inline: var(--desktop-edge); grid-template-columns: 195px minmax(0,1fr) auto; }
+ .site-header .brand { width: 195px; }
+ .site-nav a { font-size: 11px; }
+ .site-header .header-cta { font-size: 11px; }
+ .home-page .side-social-links { left: max(20px,calc(var(--desktop-edge) - 58px)); }
+ .home-page .side-manifesto { left: max(30px,calc(var(--desktop-edge) - 48px)); }
+ .home-page .button,.home-page .text-disclosure { font-size: 12px; }
+ .home-page .eyebrow { font-size: 10px; }
+ .home-page main > section.hero { grid-template-columns: 37% 63%; }
+ .hero-content { max-width: none; }
+ .hero-content h1 { font-size: clamp(84px,6.5vw,112px); }
+ .hero-content .hero-subtitle { font-size: var(--desktop-body); max-width: 32ch; }
+ .hero-art { height: clamp(510px,32vw,580px); margin-right: 0; }
+ .home-page main > section.home-body { grid-template-columns: minmax(0,.95fr) minmax(0,1.05fr); gap: var(--space-2xl); }
+ .home-body-art { height: 320px; margin-left: 0; }
+ .home-body-photo { left: -24px; right: 110px; }
+ .joy-inset { width: 150px; height: 220px; top: 50px; }
+ .home-body-copy { max-width: none; padding: var(--space-xl) 100px var(--space-xl) 0; }
+ .home-body-copy h2 { font-size: clamp(42px,3vw,54px); }
+ .home-body-copy p:not(.eyebrow) { font-size: var(--desktop-body); max-width: 60ch; }
+ .body-flower { right: calc(var(--desktop-edge) - 24px); width: 130px; height: 215px; }
+ .home-page main > section.experience { padding-block: var(--space-2xl); }
+ .experience .section-heading { max-width: none; }
+ .experience .section-heading > p:last-child { font-size: var(--desktop-body); }
+ .stage-icon { width: 104px; min-height: 84px; }
+ .stage-icon img { width: 60px; height: 60px; }
+ .home-page .stage-copy { max-width: 38ch; }
+ .stage-copy h3 { font-size: clamp(28px,1.8vw,34px); }
+ .stage-copy p { font-size: var(--desktop-body); }
+ .experience-followup a { font-size: 13px; }
+ .home-page main > section.events { grid-template-columns: 210px minmax(0,1fr); gap: var(--space-xl); }
+ .home-page .events .section-heading h2 { font-size: 42px; }
+ .home-page .events .section-heading p:last-child { font-size: 13px; }
+ .home-page .event-pill-title { font-size: clamp(30px,2.1vw,38px); }
+ .home-page .event-pill-venue { font-size: 10px; }
+ .home-page .event-pill-meta { font-size: 13px; }
+ .home-page .event-carousel .event-pill-description { font-size: 18px; }
+ .home-page .event-detail-hint { font-size: 12px; }
+ .feedback-editorial { grid-template-columns: minmax(0,1.1fr) 280px minmax(0,.8fr); gap: clamp(32px,3vw,56px); }
+ .feedback h2 { font-size: clamp(44px,3vw,56px); max-width: 15ch; }
+ .feedback .section-heading p { font-size: var(--desktop-body); max-width: 42ch; }
+ .testimonial-video { width: 260px; justify-self: center; }
+ .feedback-note { font-size: 38px; margin-right: 0; max-width: 260px; justify-self: center; }
+ .feedback-flower { right: 0; width: 170px; }
+ .coach-grid { max-width: none; grid-template-columns: minmax(300px,.8fr) minmax(0,1.2fr); gap: clamp(40px,4vw,72px); }
+ .coach-image { max-width: 350px; }
+ .coach-image img { height: 360px; }
+ .coach-copy { max-width: none; }
+ .coach-copy p:not(.eyebrow) { font-size: var(--desktop-body); max-width: 68ch; }
+ .home-page main > section.media-features { grid-template-columns: 220px minmax(0,1fr); gap: var(--space-2xl); padding-block: var(--space-2xl); }
+ .media-features .section-heading h2 { font-size: 42px; }
+ .home-page .media-feature-grid:not(.is-single) { grid-template-columns: repeat(auto-fit,minmax(min(240px,100%),1fr)); }
+ .home-page .media-feature-link { grid-template-columns: 76px minmax(0,1fr); padding: 20px; gap: var(--space-md); }
+ .media-feature-title { font-size: 24px; }
+ .media-feature-publisher { font-size: 10px; }
+ .media-feature-subtitle { font-size: 13px; }
+ .home-page main > section.organisations-invitation { padding-block: var(--space-2xl); }
+ .organisations-invitation-inner { max-width: none; padding-right: 340px; }
+ .organisations-invitation-inner::after { width: 280px; top: -40px; bottom: -40px; }
+ .organisations-invitation-inner h2 { font-size: 46px; }
+ .organisations-invitation-inner p { font-size: var(--desktop-body); max-width: 66ch; }
+ .contact-shell { max-width: var(--content-wide); grid-template-columns: minmax(0,.9fr) minmax(0,1.1fr); gap: clamp(48px,5vw,88px); }
+ .contact-intro { max-width: none; padding-left: 0; }
+ .contact-intro h2 { font-size: 56px; max-width: 13ch; }
+ .contact-intro p { font-size: var(--desktop-body); max-width: 44ch; }
+ .home-page .contact-intro::before { left: -90px; top: -40px; width: 80px; height: 180px; }
+ .contact-form label { font-size: 13px; }
+ .contact-form label small { font-size: 11px; }
+ .contact-form input,.contact-form select { min-height: 48px; }
+ .contact-form textarea { min-height: 104px; }
+ .contact-form .contact-consent { font-size: 12px; }
+ .instagram .section-heading { max-width: none; }
+ .instagram .section-heading h2 { font-size: 42px; }
+ .instagram .section-heading p { font-size: var(--desktop-body); }
+ .faq-disclosure { max-width: var(--content-wide); }
+ .faq-section-toggle h2 { font-size: 32px; }
+ .faq-answer p { font-size: var(--desktop-body); max-width: 74ch; }
+ .footer-links a { font-size: 12px; }
+ .footer-details .footer-meta,.footer-details .floral-motion-control { font-size: 11px; }
+ .organisation-intro > p:not(.chapter-lead),.practice-opening p:not(.chapter-lead),.organisation-offering-list p,.organisation-enquiry p,.practice-chapters p,.practice-aside p,.practice-expectations p { font-size: var(--desktop-body); }
+}

@@ -477,7 +477,9 @@ test("public API uses future published filtering and ordered results", async () 
   assert.doesNotMatch(sql, /start_at >=|end_at >=/);
 });
 
-test("published event slugs render crawlable metadata and database-backed Event JSON-LD", async () => {
+test("published event slugs render crawlable metadata and database-backed Event JSON-LD", async (t) => {
+  // Keep this booking-offer fixture upcoming as the real calendar advances.
+  t.mock.timers.enable({ apis: ["Date"], now: Date.UTC(2026, 9, 1) });
   const row = {
     id: 8, slug: "release-and-reconnect-tallai", title: "Release & Reconnect",
     event_type: "Workshop", venue_name: "Example Venue", suburb: "Tallai",

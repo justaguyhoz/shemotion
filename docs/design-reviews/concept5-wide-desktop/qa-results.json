@@ -1,0 +1,877 @@
+{
+  "homepage": [
+    {
+      "width": 320,
+      "scroll": 320,
+      "contentWidth": 276,
+      "edge": 22,
+      "bodyFont": 12,
+      "flowerRight": "20px",
+      "navRight": 176,
+      "ctaLeft": 0,
+      "coachWidth": 276,
+      "mediaCount": 3,
+      "mediaColumns": "276px",
+      "ratio": 0.5621301775147929,
+      "steps": [
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        }
+      ]
+    },
+    {
+      "width": 375,
+      "scroll": 375,
+      "contentWidth": 331,
+      "edge": 22,
+      "bodyFont": 12,
+      "flowerRight": "20px",
+      "navRight": 203.5,
+      "ctaLeft": 180.921875,
+      "coachWidth": 331,
+      "mediaCount": 3,
+      "mediaColumns": "331px",
+      "ratio": 0.5621301775147929,
+      "steps": [
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        }
+      ],
+      "unchangedBaselineGeometry": true
+    },
+    {
+      "width": 390,
+      "scroll": 390,
+      "contentWidth": 346,
+      "edge": 22,
+      "bodyFont": 12,
+      "flowerRight": "20px",
+      "navRight": 211,
+      "ctaLeft": 195.921875,
+      "coachWidth": 346,
+      "mediaCount": 3,
+      "mediaColumns": "346px",
+      "ratio": 0.5621301775147929,
+      "steps": [
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "scroll": 430,
+      "contentWidth": 386,
+      "edge": 22,
+      "bodyFont": 12,
+      "flowerRight": "20px",
+      "navRight": 231,
+      "ctaLeft": 235.921875,
+      "coachWidth": 386,
+      "mediaCount": 3,
+      "mediaColumns": "386px",
+      "ratio": 0.5621301775147929,
+      "steps": [
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "scroll": 768,
+      "contentWidth": 639.6,
+      "edge": 90,
+      "bodyFont": 13,
+      "flowerRight": "20px",
+      "navRight": 400,
+      "ctaLeft": 523.03125,
+      "coachWidth": 691.21875,
+      "mediaCount": 3,
+      "mediaColumns": "337.609px 337.609px",
+      "ratio": 0.5630026809651475,
+      "steps": [
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scroll": 1024,
+      "contentWidth": 882.8,
+      "edge": 90,
+      "bodyFont": 13,
+      "flowerRight": "20px",
+      "navRight": 528,
+      "ctaLeft": 766.234375,
+      "coachWidth": 921.625,
+      "mediaCount": 3,
+      "mediaColumns": "340.312px 340.312px",
+      "ratio": 0.5630026809651475,
+      "steps": [
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        }
+      ],
+      "unchangedBaselineGeometry": true
+    },
+    {
+      "width": 1199,
+      "scroll": 1199,
+      "contentWidth": 1079.1,
+      "edge": 59.95,
+      "bodyFont": 13,
+      "flowerRight": "20px",
+      "navRight": 0,
+      "ctaLeft": 970.484375,
+      "coachWidth": 940,
+      "mediaCount": 3,
+      "mediaColumns": "389.062px 389.062px",
+      "ratio": 0.5630026809651475,
+      "steps": [
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        }
+      ]
+    },
+    {
+      "width": 1200,
+      "scroll": 1200,
+      "contentWidth": 1080,
+      "edge": 60,
+      "bodyFont": 15,
+      "flowerRight": "36px",
+      "navRight": 0,
+      "ctaLeft": 944.1875,
+      "coachWidth": 1080,
+      "mediaCount": 3,
+      "mediaColumns": "262.656px 262.672px 262.656px",
+      "ratio": 0.5630630630630631,
+      "steps": [
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "scroll": 1280,
+      "contentWidth": 1152,
+      "edge": 64,
+      "bodyFont": 15,
+      "flowerRight": "40px",
+      "navRight": 0,
+      "ctaLeft": 1020.1875,
+      "coachWidth": 1152,
+      "mediaCount": 3,
+      "mediaColumns": "286.656px 286.672px 286.656px",
+      "ratio": 0.5630630630630631,
+      "steps": [
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scroll": 1440,
+      "contentWidth": 1296,
+      "edge": 72,
+      "bodyFont": 15,
+      "flowerRight": "48px",
+      "navRight": 0,
+      "ctaLeft": 1172.1875,
+      "coachWidth": 1296,
+      "mediaCount": 3,
+      "mediaColumns": "334.656px 334.672px 334.656px 0px",
+      "ratio": 0.5630630630630631,
+      "steps": [
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        }
+      ]
+    },
+    {
+      "width": 1600,
+      "scroll": 1600,
+      "contentWidth": 1440,
+      "edge": 80,
+      "bodyFont": 15,
+      "flowerRight": "56px",
+      "navRight": 0,
+      "ctaLeft": 1324.1875,
+      "coachWidth": 1440,
+      "mediaCount": 3,
+      "mediaColumns": "382.656px 382.672px 382.656px 0px",
+      "ratio": 0.5630630630630631,
+      "steps": [
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        }
+      ]
+    },
+    {
+      "width": 1920,
+      "scroll": 1920,
+      "contentWidth": 1440,
+      "edge": 240,
+      "bodyFont": 16.32,
+      "flowerRight": "216px",
+      "navRight": 0,
+      "ctaLeft": 1484.1875,
+      "coachWidth": 1440,
+      "mediaCount": 3,
+      "mediaColumns": "382.656px 382.672px 382.656px 0px",
+      "ratio": 0.5630630630630631,
+      "steps": [
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        }
+      ]
+    },
+    {
+      "width": 2000,
+      "scroll": 2000,
+      "contentWidth": 1520,
+      "edge": 240,
+      "bodyFont": 17,
+      "flowerRight": "216px",
+      "navRight": 0,
+      "ctaLeft": 1564.1875,
+      "coachWidth": 1520,
+      "mediaCount": 3,
+      "mediaColumns": "409.328px 409.328px 409.344px 0px",
+      "ratio": 0.5630630630630631,
+      "steps": [
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        }
+      ]
+    },
+    {
+      "width": 2080,
+      "scroll": 2080,
+      "contentWidth": 1600,
+      "edge": 240,
+      "bodyFont": 17,
+      "flowerRight": "216px",
+      "navRight": 0,
+      "ctaLeft": 1644.1875,
+      "coachWidth": 1600,
+      "mediaCount": 3,
+      "mediaColumns": "436px 436px 436px 0px 0px",
+      "ratio": 0.5630630630630631,
+      "steps": [
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        }
+      ]
+    },
+    {
+      "width": 2560,
+      "scroll": 2560,
+      "contentWidth": 1600,
+      "edge": 480,
+      "bodyFont": 17,
+      "flowerRight": "456px",
+      "navRight": 0,
+      "ctaLeft": 1884.1875,
+      "coachWidth": 1600,
+      "mediaCount": 3,
+      "mediaColumns": "436px 436px 436px 0px 0px",
+      "ratio": 0.5630630630630631,
+      "steps": [
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        },
+        {
+          "title": "center",
+          "copy": "center"
+        }
+      ]
+    }
+  ],
+  "baselineGeometry": [
+    {
+      "width": 375,
+      "geometry": {
+        ".site-header": {
+          "x": 0,
+          "y": 0,
+          "width": 375,
+          "height": 77
+        },
+        ".hero": {
+          "x": 0,
+          "y": 77,
+          "width": 375,
+          "height": 594.578125
+        },
+        ".home-body": {
+          "x": 0,
+          "y": 671.578125,
+          "width": 375,
+          "height": 472.359375
+        },
+        ".experience": {
+          "x": 0,
+          "y": 1143.9375,
+          "width": 375,
+          "height": 574.671875
+        },
+        ".stage-list": {
+          "x": 22,
+          "y": 1308.25,
+          "width": 331,
+          "height": 346.9375
+        },
+        ".events": {
+          "x": 0,
+          "y": 1718.609375,
+          "width": 375,
+          "height": 402.6875
+        },
+        ".feedback": {
+          "x": 0,
+          "y": 2141.296875,
+          "width": 375,
+          "height": 519.90625
+        },
+        ".coach-grid": {
+          "x": 22,
+          "y": 2751.203125,
+          "width": 331,
+          "height": 533.390625
+        },
+        ".media-features": {
+          "x": 0,
+          "y": 3314.59375,
+          "width": 375,
+          "height": 533.796875
+        },
+        ".organisations-invitation-inner": {
+          "x": 22,
+          "y": 3873.390625,
+          "width": 331,
+          "height": 275.25
+        },
+        ".contact-shell": {
+          "x": 22,
+          "y": 4568.1875,
+          "width": 331,
+          "height": 603.578125
+        },
+        ".instagram": {
+          "x": 0,
+          "y": 4173.640625,
+          "width": 375,
+          "height": 358.546875
+        },
+        ".site-footer": {
+          "x": 0,
+          "y": 5295.765625,
+          "width": 375,
+          "height": 344.9375
+        }
+      }
+    },
+    {
+      "width": 1024,
+      "geometry": {
+        ".site-header": {
+          "x": 0,
+          "y": 0,
+          "width": 1024,
+          "height": 85.03125
+        },
+        ".hero": {
+          "x": 0,
+          "y": 85.03125,
+          "width": 1024,
+          "height": 466.703125
+        },
+        ".home-body": {
+          "x": 0,
+          "y": 551.734375,
+          "width": 1024,
+          "height": 260
+        },
+        ".experience": {
+          "x": 0,
+          "y": 811.734375,
+          "width": 1024,
+          "height": 395.125
+        },
+        ".stage-list": {
+          "x": 51.1875,
+          "y": 936.4375,
+          "width": 921.625,
+          "height": 194.65625
+        },
+        ".events": {
+          "x": 0,
+          "y": 1206.859375,
+          "width": 1024,
+          "height": 257.796875
+        },
+        ".feedback": {
+          "x": 0,
+          "y": 1494.65625,
+          "width": 1024,
+          "height": 317.328125
+        },
+        ".coach-grid": {
+          "x": 51.1875,
+          "y": 1881.984375,
+          "width": 921.625,
+          "height": 278
+        },
+        ".media-features": {
+          "x": 0,
+          "y": 2191.984375,
+          "width": 1024,
+          "height": 349.625
+        },
+        ".organisations-invitation-inner": {
+          "x": 51.1875,
+          "y": 2571.609375,
+          "width": 921.625,
+          "height": 198.21875
+        },
+        ".contact-shell": {
+          "x": 51.1875,
+          "y": 3242.296875,
+          "width": 921.625,
+          "height": 347
+        },
+        ".instagram": {
+          "x": 0,
+          "y": 2799.828125,
+          "width": 1024,
+          "height": 406.46875
+        },
+        ".site-footer": {
+          "x": 0,
+          "y": 3713.296875,
+          "width": 1024,
+          "height": 118.75
+        }
+      }
+    },
+    {
+      "width": 1920,
+      "geometry": {
+        ".site-header": {
+          "x": 300,
+          "y": 0,
+          "width": 1320,
+          "height": 91.75
+        },
+        ".hero": {
+          "x": 0,
+          "y": 91.75,
+          "width": 1920,
+          "height": 517.203125
+        },
+        ".home-body": {
+          "x": 0,
+          "y": 608.953125,
+          "width": 1920,
+          "height": 264.53125
+        },
+        ".experience": {
+          "x": 0,
+          "y": 873.484375,
+          "width": 1920,
+          "height": 394.671875
+        },
+        ".stage-list": {
+          "x": 380,
+          "y": 1014.828125,
+          "width": 1160,
+          "height": 177.5625
+        },
+        ".events": {
+          "x": 0,
+          "y": 1268.15625,
+          "width": 1920,
+          "height": 264.09375
+        },
+        ".feedback": {
+          "x": 0,
+          "y": 1562.25,
+          "width": 1920,
+          "height": 317.328125
+        },
+        ".coach-grid": {
+          "x": 490,
+          "y": 1949.578125,
+          "width": 940,
+          "height": 298
+        },
+        ".media-features": {
+          "x": 0,
+          "y": 2279.578125,
+          "width": 1920,
+          "height": 333.125
+        },
+        ".organisations-invitation-inner": {
+          "x": 480,
+          "y": 2642.703125,
+          "width": 960,
+          "height": 198.21875
+        },
+        ".contact-shell": {
+          "x": 380,
+          "y": 3369.78125,
+          "width": 1160,
+          "height": 347
+        },
+        ".instagram": {
+          "x": 0,
+          "y": 2870.921875,
+          "width": 1920,
+          "height": 462.859375
+        },
+        ".site-footer": {
+          "x": 0,
+          "y": 3840.78125,
+          "width": 1920,
+          "height": 118.75
+        }
+      }
+    }
+  ],
+  "publicRoutes": [
+    {
+      "path": "/what-is-shemotion/",
+      "width": 375,
+      "status": 200
+    },
+    {
+      "path": "/what-is-shemotion/",
+      "width": 768,
+      "status": 200
+    },
+    {
+      "path": "/what-is-shemotion/",
+      "width": 1200,
+      "status": 200
+    },
+    {
+      "path": "/what-is-shemotion/",
+      "width": 1440,
+      "status": 200
+    },
+    {
+      "path": "/what-is-shemotion/",
+      "width": 1920,
+      "status": 200
+    },
+    {
+      "path": "/what-is-shemotion/",
+      "width": 2560,
+      "status": 200
+    },
+    {
+      "path": "/private-groups-retreats/",
+      "width": 375,
+      "status": 200
+    },
+    {
+      "path": "/private-groups-retreats/",
+      "width": 768,
+      "status": 200
+    },
+    {
+      "path": "/private-groups-retreats/",
+      "width": 1200,
+      "status": 200
+    },
+    {
+      "path": "/private-groups-retreats/",
+      "width": 1440,
+      "status": 200
+    },
+    {
+      "path": "/private-groups-retreats/",
+      "width": 1920,
+      "status": 200
+    },
+    {
+      "path": "/private-groups-retreats/",
+      "width": 2560,
+      "status": 200
+    },
+    {
+      "path": "/events/",
+      "width": 375,
+      "status": 200
+    },
+    {
+      "path": "/events/",
+      "width": 768,
+      "status": 200
+    },
+    {
+      "path": "/events/",
+      "width": 1200,
+      "status": 200
+    },
+    {
+      "path": "/events/",
+      "width": 1440,
+      "status": 200
+    },
+    {
+      "path": "/events/",
+      "width": 1920,
+      "status": 200
+    },
+    {
+      "path": "/events/",
+      "width": 2560,
+      "status": 200
+    },
+    {
+      "path": "/privacy/",
+      "width": 375,
+      "status": 200
+    },
+    {
+      "path": "/privacy/",
+      "width": 768,
+      "status": 200
+    },
+    {
+      "path": "/privacy/",
+      "width": 1200,
+      "status": 200
+    },
+    {
+      "path": "/privacy/",
+      "width": 1440,
+      "status": 200
+    },
+    {
+      "path": "/privacy/",
+      "width": 1920,
+      "status": 200
+    },
+    {
+      "path": "/privacy/",
+      "width": 2560,
+      "status": 200
+    },
+    {
+      "path": "/terms/",
+      "width": 375,
+      "status": 200
+    },
+    {
+      "path": "/terms/",
+      "width": 768,
+      "status": 200
+    },
+    {
+      "path": "/terms/",
+      "width": 1200,
+      "status": 200
+    },
+    {
+      "path": "/terms/",
+      "width": 1440,
+      "status": 200
+    },
+    {
+      "path": "/terms/",
+      "width": 1920,
+      "status": 200
+    },
+    {
+      "path": "/terms/",
+      "width": 2560,
+      "status": 200
+    },
+    {
+      "path": "/cancellations-refunds/",
+      "width": 375,
+      "status": 200
+    },
+    {
+      "path": "/cancellations-refunds/",
+      "width": 768,
+      "status": 200
+    },
+    {
+      "path": "/cancellations-refunds/",
+      "width": 1200,
+      "status": 200
+    },
+    {
+      "path": "/cancellations-refunds/",
+      "width": 1440,
+      "status": 200
+    },
+    {
+      "path": "/cancellations-refunds/",
+      "width": 1920,
+      "status": 200
+    },
+    {
+      "path": "/cancellations-refunds/",
+      "width": 2560,
+      "status": 200
+    }
+  ],
+  "accessibility": [
+    {
+      "width": 375,
+      "violations": [],
+      "passes": 25
+    },
+    {
+      "width": 1440,
+      "violations": [],
+      "passes": 25
+    },
+    {
+      "width": 2560,
+      "violations": [],
+      "passes": 25
+    }
+  ],
+  "pageErrors": []
+}
