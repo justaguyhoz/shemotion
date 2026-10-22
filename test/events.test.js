@@ -515,6 +515,36 @@ test("unpublished or invalid event slugs return a noindex 404", async () => {
   assert.match(html, /<meta name="robots" content="noindex">/);
 });
 
+test("the retired Innerbloom URL redirects to events without making drafts public", async () => {
+  const slug = "shemotion-at-innerbloom-yoga-surfers-paradise-3";
+  let queriedSlug;
+  const env = { DB: { prepare: () => ({ bind: (value) => {
+    queriedSlug = value;
+    return { first: async () => null };
+  } }) } };
+  const response = await getEventPage({ env, params: { slug } });
+  assert.equal(queriedSlug, slug);
+  assert.equal(response.status, 301);
+  assert.equal(response.headers.get("location"), "https://shemotion.com.au/events/");
+  assert.equal(await response.text(), "");
+});
+
+test("a published Innerbloom event takes precedence over its retirement redirect", async () => {
+  const slug = "shemotion-at-innerbloom-yoga-surfers-paradise-3";
+  const row = {
+    id: 3, slug, title: "Shemotion at Innerbloom Yoga", event_type: "Class",
+    venue_name: "Innerbloom Yoga", suburb: "Surfers Paradise", date_status: "scheduled",
+    start_at: "2026-09-20T00:00:00.000Z", timezone: "Australia/Brisbane",
+    audience: "Women only", short_description: "A guided movement experience.",
+    recurrence_frequency: "none", availability_status: "Limited spaces",
+  };
+  const env = { DB: { prepare: () => ({ bind: () => ({ first: async () => row }) }) } };
+  const response = await getEventPage({ env, params: { slug } });
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("location"), null);
+  assert.match(await response.text(), /Shemotion at Innerbloom Yoga/);
+});
+
 test("sitemap retains published historical URLs and excludes non-public routes", async () => {
   let sql = "";
   const env = { DB: { prepare: (query) => { sql = query; return { all: async () => ({ results: [{ slug: "public-event", updated_at: "2026-09-14 02:00:00" }] }) }; } } };

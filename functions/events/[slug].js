@@ -21,8 +21,15 @@ function currentOccurrence(event, now = new Date()) {
 }
 
 export async function onRequestGet({ env, params }) {
-  const event = await getPublishedEventBySlug(env.DB, String(params.slug || ""));
+  const slug = String(params.slug || "");
+  const event = await getPublishedEventBySlug(env.DB, slug);
   if (!event) {
+    // This previously public September event is retired. Keep its discovered URL
+    // useful without exposing drafts or changing the admin publication state.
+    // Pages _redirects rules do not run on this Functions route.
+    if (slug === "shemotion-at-innerbloom-yoga-surfers-paradise-3") {
+      return Response.redirect(`${SITE_URL}/events/`, 301);
+    }
     const body = '<main id="top"><section class="page-hero section-pad"><div class="section-heading"><h1>Event not found</h1><p>This event is not available. Explore the current Shemotion events instead.</p><a class="button" href="/events/">View upcoming events</a></div></section></main>';
     return htmlResponse(pageDocument({ title: "Event Not Found | Shemotion", description: "This Shemotion event is not available.", canonical: `${SITE_URL}/events/`, body, status: 404 }), 404);
   }
