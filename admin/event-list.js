@@ -24,7 +24,7 @@ export function adminEventTiming(event, now = new Date()) {
   const nowAt = timestamp(now);
   const nowIso = nowAt === null ? new Date().toISOString() : new Date(nowAt).toISOString();
 
-  if (event.dateStatus === "tbc" || !event.startAt) {
+  if (event.availabilityStatus === "Postponed" || event.dateStatus === "tbc" || !event.startAt) {
     return { isPast: false, displayStartAt: null, pastAt: null };
   }
 

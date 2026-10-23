@@ -39,6 +39,7 @@ export async function onRequestGet({ env, params }) {
   const isPast = isEventPast(occurrence, now);
   const bookingState = eventBookingState(occurrence);
   const isCancelled = bookingState === "cancelled";
+  const isPostponed = bookingState === "postponed";
   const canonical = `${SITE_URL}/events/${encodeURIComponent(event.slug)}/`;
   const description = eventDescription(occurrence);
   const location = [occurrence.venueName, occurrence.suburb].filter(Boolean).join(", ");
@@ -48,17 +49,21 @@ export async function onRequestGet({ env, params }) {
   const booking = !isPast && presentation.action
     ? `<a class="button booking-button" href="${escapeHtml(presentation.action.href)}" target="_blank" rel="noopener noreferrer" data-event-booking data-event-id="${escapeHtml(event.id)}" data-event-name="${escapeHtml(event.title)}" data-event-type="${escapeHtml(event.eventType)}" data-venue-name="${escapeHtml(event.venueName)}" data-suburb="${escapeHtml(event.suburb || "")}">${escapeHtml(presentation.action.label)}</a>`
     : "";
-  const lifecycleNotice = isPast
+  const lifecycleNotice = isPostponed
+    ? '<aside class="event-lifecycle-notice"><p>This event has been postponed. A new date will be announced. Bookings are currently closed.</p><a class="section-link" href="/#contact">Contact Shemotion</a></aside>'
+    : isCancelled
+    ? '<aside class="event-lifecycle-notice"><p>This event has been cancelled. Bookings are closed.</p><a class="section-link" href="/events/">Explore Shemotion events</a></aside>'
+    : isPast
     ? '<aside class="event-lifecycle-notice"><p>This event has ended.</p><a class="section-link" href="/events/">View upcoming Shemotion events</a></aside>'
     : "";
-  const availability = isCancelled ? "Cancelled" : isPast ? "Ended" : presentation.statusLabel || "Booking Open";
+  const availability = isPostponed ? "Postponed — bookings closed" : isCancelled ? "Cancelled" : isPast ? "Ended" : presentation.statusLabel || "Booking Open";
   const imageUrl = eventImageUrl(occurrence);
   const focal = `--event-focal-x:${Number(event.imageFocalX ?? 50)}%;--event-focal-y:${Number(event.imageFocalY ?? 50)}%`;
   const fit = event.imageFit === "cover" ? "cover" : "contain";
-  const media = imageUrl ? `<div class="event-detail-media event-media-frame fit-${fit}" style="${focal}"><img class="event-detail-media-backdrop" src="${escapeHtml(imageUrl)}" alt="" aria-hidden="true"><img class="event-detail-media-artwork" src="${escapeHtml(imageUrl)}" alt="${escapeHtml(`${event.title} event artwork`)}"></div>` : "";
+  const media = imageUrl ? `${isPostponed ? '<p class="field-help">Original event artwork — the previous date no longer applies.</p>' : ''}<div class="event-detail-media event-media-frame fit-${fit}" style="${focal}"><img class="event-detail-media-backdrop" src="${escapeHtml(imageUrl)}" alt="" aria-hidden="true"><img class="event-detail-media-artwork" src="${escapeHtml(imageUrl)}" alt="${escapeHtml(`${event.title} event artwork`)}"></div>` : "";
   const body = `<main id="top" data-event-detail data-event-id="${escapeHtml(event.id)}" data-event-name="${escapeHtml(event.title)}" data-event-type="${escapeHtml(event.eventType)}" data-venue-name="${escapeHtml(event.venueName)}" data-suburb="${escapeHtml(event.suburb || "")}">
     <article class="event-detail-page section-pad"><h1>${escapeHtml(event.title)}</h1><p class="event-detail-context">${escapeHtml(event.eventType)} &middot; ${escapeHtml(event.audience)}</p><p class="event-detail-intro">${escapeHtml(description)}</p>
-    ${media}${lifecycleNotice}<dl class="event-facts"><div><dt>Date</dt><dd>${escapeHtml(formatEventDate(occurrence))}</dd></div><div><dt>Time</dt><dd>${escapeHtml(formatEventTime(occurrence))}</dd></div><div><dt>Venue</dt><dd>${escapeHtml(location)}</dd></div>${occurrence.address ? `<div><dt>Address</dt><dd>${escapeHtml(occurrence.address)}</dd></div>` : ""}<div><dt>Booking</dt><dd>${escapeHtml(availability)}</dd></div><div><dt>Audience</dt><dd>${escapeHtml(occurrence.audience)}</dd></div></dl>
+    ${lifecycleNotice}${media}<dl class="event-facts"><div><dt>Date</dt><dd>${escapeHtml(formatEventDate(occurrence))}</dd></div>${isPostponed ? "" : `<div><dt>Time</dt><dd>${escapeHtml(formatEventTime(occurrence))}</dd></div>`}<div><dt>Venue</dt><dd>${escapeHtml(location)}</dd></div>${occurrence.address ? `<div><dt>Address</dt><dd>${escapeHtml(occurrence.address)}</dd></div>` : ""}<div><dt>Booking</dt><dd>${escapeHtml(availability)}</dd></div><div><dt>Audience</dt><dd>${escapeHtml(occurrence.audience)}</dd></div></dl>
     <div class="event-detail-actions">${booking}${maps ? `<a class="button button-ghost" href="${escapeHtml(maps)}" target="_blank" rel="noopener noreferrer">Open in Google Maps</a>` : ""}</div><nav class="page-back-link" aria-label="Event navigation"><a href="/events/">All events</a> &middot; <a href="/">Shemotion home</a></nav></article></main>`;
   return htmlResponse(pageDocument({ title, description, canonical, body, structuredData: eventJsonLd(occurrence, canonical, now), bodyAttributes: 'class="event-detail-body"' }), 200, "no-store");
 }

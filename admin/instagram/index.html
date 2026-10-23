@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow"><title>Instagram | Shemotion Admin</title>
+  <link rel="icon" href="/assets/favicon_shemotion.png" type="image/png">
+  <link rel="stylesheet" href="../admin.css?v=20261023"><link rel="stylesheet" href="../admin-navigation.css?v=20261023">
+  <link rel="stylesheet" href="instagram.css?v=20261023">
+</head>
+<body>
+  <header class="admin-header"><a href="/" aria-label="View Shemotion website"><img src="/assets/shemotion-logo.png" alt="Shemotion"></a><nav class="admin-navigation" aria-label="Admin navigation" data-admin-navigation data-current-page="instagram"></nav></header>
+  <main>
+    <div class="dashboard-heading"><div class="page-heading"><p class="eyebrow">Real posts. Fresh covers.</p><h1>Instagram gallery</h1><p>Manage the posts shown on the website. Changes appear without a deployment.</p></div><a class="text-button" href="https://www.instagram.com/shemotion.au/" target="_blank" rel="noopener noreferrer">Open @shemotion.au ↗</a></div>
+    <p class="notice" data-notice role="status" aria-live="polite">Loading Instagram gallery…</p>
+    <section class="instagram-settings" aria-labelledby="connection-heading">
+      <h2 id="connection-heading">Instagram connection</h2>
+      <p data-connection></p><p data-updated></p>
+      <p data-setup hidden>Automatic refresh needs the official Instagram API connected to the @shemotion.au professional account. Ask your website administrator to configure the account connection. You can update covers and links manually below.</p>
+      <label class="checkbox-field"><input type="checkbox" data-automatic> Automatically check for new posts once a day</label>
+      <p class="field-help">Checks run in the background when someone visits the homepage. Refresh failure keeps the previous gallery. Automatic refresh replaces manual selections with the latest account posts.</p>
+      <div class="instagram-actions"><button type="button" class="primary-button" data-refresh disabled>Refresh from Instagram</button><button type="button" class="text-button" data-save-settings disabled>Save refresh setting</button></div>
+    </section>
+    <form data-gallery-form>
+      <h2>Homepage thumbnails</h2><p>Use covers from your real Instagram posts. Upload a JPG, PNG or WebP, add its post link and save the gallery. Up to 12 posts.</p>
+      <div data-posts class="instagram-admin-posts"></div>
+      <div class="instagram-actions"><button type="button" class="text-button" data-add disabled>Add a post</button><button class="primary-button" type="submit" data-save-gallery disabled>Save gallery</button></div>
+    </form>
+  </main>
+  <script type="module" src="../admin-navigation.js?v=20261023"></script><script type="module" src="instagram.js?v=20261023"></script>
+</body></html>

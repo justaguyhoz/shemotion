@@ -25,7 +25,7 @@ export async function getUpcomingPublicEvents(db, now = new Date().toISOString()
   `).all();
 
   return expandRecurringEvents(result.results.map(rowToPublicEvent), now, rangeEnd)
-    .filter((event) => eventBookingState(event) !== "cancelled");
+    .filter((event) => !["cancelled", "postponed"].includes(eventBookingState(event)));
 }
 
 export async function getPublishedEventBySlug(db, slug) {

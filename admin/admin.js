@@ -149,6 +149,7 @@ function eventStatuses(event, now) {
 }
 
 function eventDateParts(event, now) {
+  if (event.availabilityStatus === "Postponed") return { date: "New date to be confirmed", time: "" };
   if (event.dateStatus === "tbc") return { date: "Date to be confirmed", time: "" };
   const date = new Date(adminEventTiming(event, now).displayStartAt || event.startAt);
   return { date: compactDateFormatter.format(date), time: compactTimeFormatter.format(date) };
@@ -420,6 +421,7 @@ function bookingStateValue(event) {
   if (state === "sold_out") return "Sold out";
   if (state === "not_required") return "No booking required";
   if (state === "cancelled") return "Cancelled";
+  if (state === "postponed") return "Postponed";
   return "Coming soon";
 }
 
@@ -556,7 +558,7 @@ function updateBookingFields() {
   const labelField = form.querySelector("[data-booking-label-field]");
   const optional = form.querySelector("[data-booking-url-optional]");
   const help = form.querySelector("[data-booking-help]");
-  urlField.hidden = state === "No booking required" || state === "Cancelled";
+  urlField.hidden = ["No booking required", "Cancelled", "Postponed"].includes(state);
   labelField.hidden = !(open || soldOut);
   form.elements.bookingUrl.required = open;
   optional.textContent = open ? "Required" : "Optional";
@@ -568,7 +570,9 @@ function updateBookingFields() {
         ? "No booking button is shown unless you provide an intentional waitlist URL."
         : state === "No booking required"
           ? "Event information remains visible without a booking button."
-          : "Cancelled events are removed from public upcoming-event lists.";
+          : state === "Postponed"
+            ? "Keep the event published and retain its original date for Google. Its page shows a new-date notice, bookings close, and it is removed from upcoming lists."
+            : "Cancelled events are removed from public upcoming-event lists. Keep published to preserve their event URLs.";
 }
 
 function updateImagePreview() {

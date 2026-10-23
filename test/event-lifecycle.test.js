@@ -4,6 +4,7 @@ import { eventPastAt, isEventPast } from "../event-lifecycle.js";
 import { expandRecurringEvents } from "../recurrence.js";
 import { getUpcomingPublicEvents } from "../shared/event-store.js";
 import { eventJsonLd } from "../shared/public-pages.js";
+import { eventBookingPresentation } from "../event-booking.js";
 import { onRequestGet as getEventPage } from "../functions/events/[slug].js";
 
 const baseEvent = {
@@ -66,6 +67,28 @@ function eventRow(overrides = {}) {
 function detailEnv(row) {
   return { DB: { prepare: () => ({ bind: () => ({ first: async () => row }) }) } };
 }
+
+test("postponed events keep a 200 canonical page and original schema date without bookings", async () => {
+  const event = { ...baseEvent, availabilityStatus: "Postponed" };
+  assert.equal(eventBookingPresentation(event).action, null);
+  const schema = eventJsonLd(event, "https://shemotion.com.au/events/lifecycle-event-tallai/");
+  assert.equal(schema.eventStatus, "https://schema.org/EventPostponed");
+  assert.equal(schema.startDate, baseEvent.startAt);
+  assert.equal(schema.offers, undefined);
+  const response = await getEventPage({ env: detailEnv(eventRow({ availability_status: "Postponed" })), params: { slug: baseEvent.slug } });
+  const html = await response.text();
+  assert.equal(response.status, 200);
+  assert.match(html, /This event has been postponed/);
+  assert.match(html, /New date to be confirmed/);
+  assert.match(html, /rel="canonical" href="https:\/\/shemotion.com.au\/events\/lifecycle-event-tallai\/"/);
+  assert.doesNotMatch(html, /data-event-booking|This event has ended|name="robots" content="noindex"/);
+});
+
+test("postponed and cancelled events are excluded from upcoming lists without unpublishing", async () => {
+  const rows = [eventRow({ availability_status: "Postponed", start_at: "2099-01-01T00:00:00.000Z" }), eventRow({ id: 43, availability_status: "Cancelled", start_at: "2099-01-01T00:00:00.000Z" })];
+  const env = { prepare: () => ({ all: async () => ({ results: rows }) }) };
+  assert.deepEqual(await getUpcomingPublicEvents(env, "2098-12-01T00:00:00.000Z"), []);
+});
 
 test("events with an end time become past exactly one hour after the end", () => {
   const event = { ...baseEvent, startAt: "2026-09-18T00:00:00.000Z", endAt: "2026-09-18T01:00:00.000Z" };

@@ -1,6 +1,7 @@
 const NAV_ITEMS = [
   { key: "events", label: "Events", href: "/admin/" },
   { key: "media", label: "Media & Features", href: "/admin/media/" },
+  { key: "instagram", label: "Instagram", href: "/admin/instagram/" },
   { key: "contacts", label: "Contacts", href: "/admin/contacts/" },
   { key: "outreach", label: "Outreach", href: "/admin/outreach/" },
   { key: "website", label: "View Website", href: "/" },

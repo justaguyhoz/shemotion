@@ -97,7 +97,7 @@ test("event validation requires a real URL only for open booking states", () => 
   const open = validateEventInput(event({ bookingUrl: null }));
   assert.ok(open.errors.some((message) => message.includes("required when booking is open")));
 
-  for (const availabilityStatus of ["Coming soon", "Sold out", "No booking required", "Cancelled"]) {
+  for (const availabilityStatus of ["Coming soon", "Sold out", "No booking required", "Cancelled", "Postponed"]) {
     const result = validateEventInput(event({ availabilityStatus, bookingUrl: null, bookingLabel: "" }));
     assert.equal(result.errors, undefined, availabilityStatus);
   }

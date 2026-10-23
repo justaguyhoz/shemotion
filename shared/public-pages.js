@@ -67,11 +67,13 @@ export function htmlResponse(document, status = 200, cacheControl = "public, max
 }
 
 export function formatEventDate(event) {
+  if (eventBookingState(event) === "postponed") return "New date to be confirmed";
   if (event.dateStatus === "tbc" || !event.startAt) return "Date to be confirmed";
   return new Intl.DateTimeFormat("en-AU", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "Australia/Brisbane" }).format(new Date(event.startAt));
 }
 
 export function formatEventTime(event) {
+  if (eventBookingState(event) === "postponed") return "";
   if (!event.startAt) return "Time to be confirmed";
   const formatter = new Intl.DateTimeFormat("en-AU", { hour: "numeric", minute: "2-digit", timeZone: "Australia/Brisbane" });
   return event.endAt ? `${formatter.format(new Date(event.startAt))} - ${formatter.format(new Date(event.endAt))}` : formatter.format(new Date(event.startAt));
@@ -88,7 +90,7 @@ export function eventJsonLd(event, canonical, now = new Date()) {
   const data = {
     "@context": "https://schema.org", "@type": "Event", name: event.title,
     description: eventDescription(event), startDate: event.startAt,
-    eventStatus: eventBookingState(event) === "cancelled" ? "https://schema.org/EventCancelled" : "https://schema.org/EventScheduled",
+    eventStatus: `https://schema.org/${({ cancelled: "EventCancelled", postponed: "EventPostponed" })[eventBookingState(event)] || "EventScheduled"}`,
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     location: { "@type": "Place", name: event.venueName, address: { "@type": "PostalAddress", ...(event.address ? { streetAddress: event.address } : {}), ...(event.suburb ? { addressLocality: event.suburb } : {}), addressRegion: "QLD", addressCountry: "AU" } },
     organizer: { "@type": "Organization", name: "Shemotion", url: SITE_URL }, url: canonical,

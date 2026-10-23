@@ -3,24 +3,21 @@ import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 import {
   FEATURED_INSTAGRAM_POSTS,
-  INSTAGRAM_GRID_IMAGE,
   INSTAGRAM_PROFILE_URL,
   injectInstagramGallery,
 } from "../shared/instagram-gallery.js";
 
-test("curated Instagram gallery uses nine distinct Shemotion grid covers", async () => {
+test("Instagram gallery uses nine current real-account covers with their post links", async () => {
   assert.equal(FEATURED_INSTAGRAM_POSTS.length, 9);
   assert.equal(INSTAGRAM_PROFILE_URL, "https://www.instagram.com/shemotion.au/");
-  assert.equal(INSTAGRAM_GRID_IMAGE, "assets/instagram-grid-covers.jpg");
   assert.equal(new Set(FEATURED_INSTAGRAM_POSTS.map(({ title }) => title)).size, 9);
-  assert.equal(new Set(FEATURED_INSTAGRAM_POSTS.map(({ spriteLeft, spriteTop }) => `${spriteLeft}:${spriteTop}`)).size, 9);
+  assert.equal(new Set(FEATURED_INSTAGRAM_POSTS.map(({ imageUrl }) => imageUrl)).size, 9);
 
   await Promise.all(FEATURED_INSTAGRAM_POSTS.map(async (post) => {
-    assert.match(post.url, /^https:\/\/www\.instagram\.com\/shemotion\.au\/(?:$|(?:p|reel)\/[A-Za-z0-9_-]+\/$)/);
-    assert.match(post.spriteLeft, /^-(?:100|200)%$|^0%$/);
-    assert.match(post.spriteTop, /^-(?:87\.5|187\.5|287\.5)%$/);
+    assert.match(post.url, /^https:\/\/www\.instagram\.com\/(?:shemotion\.au|charlotte\.pointeaux)\/(?:p|reel)\/[A-Za-z0-9_-]+\/$/);
+    assert.match(post.imageUrl, /^\/assets\/instagram\/[A-Za-z0-9_-]+\.webp$/);
+    await access(new URL(`..${post.imageUrl}`, import.meta.url));
   }));
-  await access(new URL(`../${INSTAGRAM_GRID_IMAGE}`, import.meta.url));
 });
 
 test("homepage build injects accessible static Instagram cards before Contact and FAQs", async () => {

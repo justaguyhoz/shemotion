@@ -1,0 +1,76 @@
+{
+  "checks": [
+    {
+      "path": "/admin/instagram/",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "path": "/admin/instagram/",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "path": "/admin/instagram/",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "path": "/admin/instagram/",
+      "width": 430,
+      "overflow": false
+    },
+    {
+      "path": "/admin/instagram/",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "path": "/admin/instagram/",
+      "width": 1024,
+      "overflow": false
+    },
+    {
+      "path": "/admin/instagram/",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "path": "/",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "path": "/",
+      "width": 375,
+      "overflow": false
+    },
+    {
+      "path": "/",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "path": "/",
+      "width": 430,
+      "overflow": false
+    },
+    {
+      "path": "/",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "path": "/",
+      "width": 1024,
+      "overflow": false
+    },
+    {
+      "path": "/",
+      "width": 1440,
+      "overflow": false
+    }
+  ],
+  "adminSaveUploadHomepage": true,
+  "browserErrors": []
+}
